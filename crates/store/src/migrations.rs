@@ -123,7 +123,8 @@ CREATE TABLE cert_status (
     not_after   INTEGER,
     subject     TEXT,
     issuer      TEXT,
-    error       TEXT
+    error       TEXT,
+    trust_error TEXT
 );
 
 CREATE TABLE users (

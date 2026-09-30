@@ -160,6 +160,12 @@ impl Evaluator {
         }
     }
 
+    /// True when the condition behind `fingerprint` held during the last
+    /// evaluation, even if its `for` duration has not elapsed yet.
+    pub fn is_active(&self, fingerprint: &str) -> bool {
+        self.pending.contains_key(fingerprint) || self.last.contains_key(fingerprint)
+    }
+
     /// Returns all conditions that are firing now.
     pub fn evaluate(&mut self, now: i64, hosts: &[HostInput], certs: &[CertInput]) -> Vec<Firing> {
         let mut out: Vec<Firing> = Vec::new();

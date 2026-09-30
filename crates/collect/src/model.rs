@@ -4,7 +4,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Result of a probe that may be unavailable on a given host.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 #[serde(tag = "status", rename_all = "snake_case")]
 pub enum Probe<T> {
     /// The data was collected. `source` names the tool or file it came from.
@@ -40,7 +40,7 @@ impl<T> Probe<T> {
 }
 
 /// CPU time split, in percent of total capacity (all cores = 100).
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct CpuBreakdown {
     pub user: f64,
     pub nice: f64,
@@ -54,7 +54,7 @@ pub struct CpuBreakdown {
     pub busy: f64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct CpuMetrics {
     pub cores: u32,
     pub total: CpuBreakdown,
@@ -63,7 +63,7 @@ pub struct CpuMetrics {
 }
 
 /// Memory figures in bytes.
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Memory {
     pub total: u64,
     pub free: u64,
@@ -77,7 +77,7 @@ pub struct Memory {
     pub swap_used_pct: f64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct LoadAvg {
     pub one: f64,
     pub five: f64,
@@ -86,7 +86,7 @@ pub struct LoadAvg {
     pub entities: u32,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Filesystem {
     pub device: String,
     pub mount: String,
@@ -100,7 +100,7 @@ pub struct Filesystem {
     pub inodes_used_pct: Option<f64>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct DiskIo {
     pub device: String,
     pub read_bps: f64,
@@ -110,7 +110,7 @@ pub struct DiskIo {
     pub util_pct: f64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct NetIface {
     pub name: String,
     pub rx_bps: f64,
@@ -123,7 +123,7 @@ pub struct NetIface {
     pub tx_drops: f64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct TcpSummary {
     pub established: u64,
     pub listen: u64,
@@ -133,7 +133,7 @@ pub struct TcpSummary {
     pub total: u64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Process {
     pub pid: u32,
     pub name: String,
@@ -147,7 +147,7 @@ pub struct Process {
     pub mem_pct: Option<f64>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct ProcSummary {
     pub total: u32,
     pub running: u32,
@@ -157,7 +157,7 @@ pub struct ProcSummary {
 }
 
 /// Fast-changing metrics collected on every tick.
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Metrics {
     pub remote_time: Option<i64>,
     pub cpu: Option<CpuMetrics>,
@@ -172,7 +172,9 @@ pub struct Metrics {
     pub procs: Option<ProcSummary>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, utoipa::ToSchema,
+)]
 pub struct ListenSocket {
     pub proto: String,
     pub address: String,
@@ -181,7 +183,7 @@ pub struct ListenSocket {
     pub pid: Option<u32>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Service {
     pub unit: String,
     pub load: String,
@@ -196,7 +198,7 @@ impl Service {
     }
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Container {
     pub id: String,
     pub name: String,
@@ -209,7 +211,7 @@ pub struct Container {
     pub mem_pct: Option<f64>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Session {
     pub user: String,
     pub line: String,
@@ -218,7 +220,7 @@ pub struct Session {
 }
 
 /// Medium-rate data (default every 60 s).
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Medium {
     pub listening: Probe<Vec<ListenSocket>>,
     pub services: Probe<Vec<Service>>,
@@ -226,7 +228,7 @@ pub struct Medium {
     pub sessions: Vec<Session>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct OsRelease {
     pub id: Option<String>,
     pub id_like: Option<String>,
@@ -235,7 +237,7 @@ pub struct OsRelease {
     pub pretty_name: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Kernel {
     pub name: Option<String>,
     pub release: Option<String>,
@@ -243,14 +245,16 @@ pub struct Kernel {
     pub machine: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct RebootStatus {
     /// `None` when no detection mechanism is available on the host.
     pub required: Option<bool>,
     pub reasons: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, utoipa::ToSchema,
+)]
 pub struct Package {
     pub name: String,
     pub version: String,
@@ -258,7 +262,7 @@ pub struct Package {
 }
 
 /// Slow-changing inventory (default every 15 minutes).
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Inventory {
     pub os: OsRelease,
     pub kernel: Kernel,
@@ -269,7 +273,7 @@ pub struct Inventory {
     pub enabled_units: Probe<Vec<String>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct AuthFailure {
     /// Unix seconds.
     pub ts: i64,
@@ -279,7 +283,7 @@ pub struct AuthFailure {
     pub method: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct PendingUpdate {
     pub name: String,
     pub current: Option<String>,
@@ -288,7 +292,7 @@ pub struct PendingUpdate {
     pub repo: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct UpdateReport {
     pub total: u32,
     /// `None` when the package manager cannot classify security updates.
@@ -298,7 +302,7 @@ pub struct UpdateReport {
 }
 
 /// Static facts about the SSH session, refreshed with the inventory.
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Basics {
     pub page_size: Option<u64>,
     pub hostname: Option<String>,

@@ -5,26 +5,30 @@ use collect::model::AuthFailure;
 use rusqlite::{OptionalExtension, params};
 use serde::Serialize;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct AuthBucket {
     pub ts: i64,
     pub count: i64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct TopSource {
     pub value: String,
     pub count: i64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct CertStatus {
     pub endpoint: String,
     pub checked_at: i64,
     pub not_after: Option<i64>,
     pub subject: Option<String>,
     pub issuer: Option<String>,
+    /// Connection or handshake failure.
     pub error: Option<String>,
+    /// The certificate was read but does not validate (self-signed, name
+    /// mismatch, unknown issuer ...).
+    pub trust_error: Option<String>,
 }
 
 impl Store {
@@ -165,7 +169,8 @@ impl Store {
     pub async fn cert_statuses(&self) -> Result<Vec<CertStatus>> {
         self.read(|c| {
             let mut stmt = c.prepare(
-                "SELECT endpoint, checked_at, not_after, subject, issuer, error FROM cert_status ORDER BY endpoint",
+                "SELECT endpoint, checked_at, not_after, subject, issuer, error, trust_error
+                 FROM cert_status ORDER BY endpoint",
             )?;
             let rows = stmt
                 .query_map([], |r| {
@@ -176,6 +181,7 @@ impl Store {
                         subject: r.get(3)?,
                         issuer: r.get(4)?,
                         error: r.get(5)?,
+                        trust_error: r.get(6)?,
                     })
                 })?
                 .collect::<rusqlite::Result<Vec<_>>>()?;

@@ -6,7 +6,7 @@ use common::Role;
 use rusqlite::{OptionalExtension, Row, params};
 use serde::Serialize;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct User {
     pub id: i64,
     pub username: String,
@@ -56,7 +56,7 @@ pub struct Session {
     pub last_seen_at: i64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct DisplayToken {
     pub id: i64,
     pub name: String,

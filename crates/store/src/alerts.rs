@@ -4,7 +4,7 @@ use crate::{Result, Store, StoreError};
 use rusqlite::{OptionalExtension, Row, params};
 use serde::Serialize;
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, utoipa::ToSchema)]
 pub struct AlertRecord {
     pub id: i64,
     pub fingerprint: String,
@@ -61,7 +61,7 @@ pub struct NewAlert {
     pub started_at: i64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct Silence {
     pub id: i64,
     pub rule_id: Option<String>,
@@ -81,7 +81,7 @@ impl Silence {
     }
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct Delivery {
     pub alert_id: i64,
     pub channel: String,

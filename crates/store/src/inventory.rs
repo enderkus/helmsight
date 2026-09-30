@@ -10,7 +10,7 @@ use rusqlite::params;
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Snapshot {
     pub os: Option<String>,
     pub kernel: Option<String>,
@@ -72,7 +72,7 @@ impl Snapshot {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, utoipa::ToSchema)]
 pub struct Change {
     /// `package`, `port`, `unit`, `kernel` or `os`.
     pub kind: String,
@@ -152,7 +152,7 @@ pub fn diff(a: &Snapshot, b: &Snapshot) -> Vec<Change> {
     out
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct ChangeRecord {
     pub id: i64,
     pub host_id: i64,

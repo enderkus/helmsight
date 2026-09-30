@@ -7,7 +7,7 @@ use rusqlite::{OptionalExtension, params};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct AuditEntry {
     pub id: i64,
     pub ts: i64,
@@ -42,7 +42,7 @@ fn chain_hash(
 }
 
 /// Result of verifying the hash chain.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, utoipa::ToSchema)]
 pub struct ChainStatus {
     pub entries: i64,
     /// First entry whose hash does not match, if any.

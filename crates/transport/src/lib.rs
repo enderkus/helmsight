@@ -44,7 +44,7 @@ pub enum TransportError {
 }
 
 /// Serializable view of a presented host key.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, utoipa::ToSchema)]
 pub struct HostKeyInfo {
     pub endpoint: String,
     pub algorithm: String,

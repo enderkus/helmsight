@@ -271,6 +271,11 @@ pub struct CollectConfig {
     /// Maximum number of hosts collected concurrently.
     #[serde(default = "default_parallel")]
     pub max_parallel: usize,
+    /// List pending updates with dnf/yum. Off by default because dnf always
+    /// writes its own log files (and, for unprivileged users, a cache under
+    /// /var/tmp) on the monitored host.
+    #[serde(default)]
+    pub dnf_updates: bool,
 }
 
 impl Default for CollectConfig {
@@ -282,6 +287,7 @@ impl Default for CollectConfig {
             auth_interval: d5m(),
             updates_interval: d6h(),
             max_parallel: default_parallel(),
+            dnf_updates: false,
         }
     }
 }
@@ -401,7 +407,19 @@ impl Selectable for HostConfig {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Serialize,
+    Deserialize,
+    utoipa::ToSchema,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum Severity {
     Info,

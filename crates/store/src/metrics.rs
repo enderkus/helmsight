@@ -329,14 +329,15 @@ pub struct SeriesQuery {
     pub retention_minute: i64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct Series {
     pub key: String,
     /// `[ts, avg, min, max]`
+    #[schema(value_type = Vec<Vec<f64>>)]
     pub points: Vec<(i64, f64, f64, f64)>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, utoipa::ToSchema)]
 pub struct QueryResult {
     pub resolution: String,
     pub series: Vec<Series>,
