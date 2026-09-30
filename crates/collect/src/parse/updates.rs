@@ -39,6 +39,10 @@ pub fn updates(text: &str, now: i64) -> Probe<UpdateReport> {
         "dnf" | "yum" => dnf(&src, &main, &security),
         "zypper" => zypper(&main, &security),
         "apk" => apk(&main),
+        "dnf-disabled" => Err(
+            "dnf writes log files on the host; set `collect.dnf_updates = true` to allow this check"
+                .to_string(),
+        ),
         "none" => Err("no supported package manager found".to_string()),
         _ => Err("update data not collected".to_string()),
     };
@@ -381,6 +385,14 @@ FEDORA-2026-abc      security Moderate  xz-1:5.8.1-4.fc41.aarch64 2026-09-01 00:
             panic!()
         };
         assert_eq!(data.security, Some(1));
+    }
+
+    #[test]
+    fn dnf_disabled_explains_why() {
+        let Probe::Na { reason } = updates("#src dnf-disabled\n", 0) else {
+            panic!()
+        };
+        assert!(reason.contains("collect.dnf_updates"));
     }
 
     #[test]

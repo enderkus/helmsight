@@ -16,7 +16,7 @@ distros=${*:-"debian ubuntu rocky fedora opensuse alpine"}
 
 script=$(sed -e 's/__NONCE__/fixture/' \
   -e 's/__GROUPS__/metrics basics medium inventory auth updates/' \
-  -e 's/__SINCE__/0/' "$root/crates/collect/src/remote.sh")
+  -e 's/__SINCE__/0/' -e 's/__OPTS__/dnf/' "$root/crates/collect/src/remote.sh")
 
 for d in $distros; do
   img="helmsight-test-$d"

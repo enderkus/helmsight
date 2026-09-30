@@ -16,6 +16,7 @@ fn request() -> ScriptRequest {
         nonce: "fixture".into(),
         groups: Group::ALL.to_vec(),
         auth_since: 0,
+        options: collect::ScriptOptions { dnf_updates: true },
     }
 }
 

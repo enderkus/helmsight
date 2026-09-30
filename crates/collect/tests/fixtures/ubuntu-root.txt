@@ -4,66 +4,66 @@ v=1
 groups= metrics basics medium inventory auth updates 
 
 @@HS-fixture@@ time
-1790787993
+1790788963
 
 @@HS-fixture@@ stat
-cpu  155541 45 53676 32650973 4826 0 17598 0 0 0
-cpu0 21289 2 8851 3250297 3499 0 12988 0 0 0
-cpu1 22299 6 6430 3257003 247 0 2437 0 0 0
-cpu2 20336 3 5909 3259980 161 0 868 0 0 0
-cpu3 14665 7 5599 3265966 152 0 440 0 0 0
-cpu4 14984 7 5321 3266131 175 0 272 0 0 0
-cpu5 14450 1 5745 3266182 169 0 188 0 0 0
-cpu6 17304 6 5318 3264001 143 0 151 0 0 0
-cpu7 15251 3 5585 3265815 139 0 131 0 0 0
-cpu8 14960 6 4913 3266872 137 0 120 0 0 0
-cpu9 0 0 0 3288722 0 0 0 0 0 0
-intr 21280990 0 120078 11611974 0 0 0 4435 0 0 0 0 8805335 0 25 1 1309 13 547 0 1 0 168094 0 3 561965 6973 235 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-ctxt 65000911
+cpu  156599 45 54317 33618124 5040 0 17885 0 0 0
+cpu0 21360 2 9013 3346749 3665 0 13233 0 0 0
+cpu1 22480 6 6488 3353662 254 0 2465 0 0 0
+cpu2 20497 3 5961 3356671 167 0 875 0 0 0
+cpu3 14751 7 5668 3362719 157 0 443 0 0 0
+cpu4 15131 7 5388 3362825 182 0 274 0 0 0
+cpu5 14637 1 5801 3362849 172 0 189 0 0 0
+cpu6 17361 6 5363 3360810 150 0 151 0 0 0
+cpu7 15312 3 5654 3362599 147 0 131 0 0 0
+cpu8 15067 6 4976 3363587 142 0 120 0 0 0
+cpu9 0 0 0 3385649 0 0 0 0 0 0
+intr 21391317 0 123640 11641035 0 0 0 4601 0 0 0 0 8861482 0 25 1 1341 13 563 0 1 0 173879 0 3 577361 7081 289 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 65157286
 btime 1790755106
-processes 56203
+processes 59238
 procs_running 1
 procs_blocked 0
-softirq 3827561 0 204601 738 986590 168098 0 5756 2298370 1 163407
+softirq 3879777 0 210438 782 1002205 173883 0 6280 2316545 1 169643
 
 @@HS-fixture@@ meminfo
 MemTotal:        8196572 kB
-MemFree:         7157196 kB
-MemAvailable:    7588812 kB
-Buffers:             188 kB
-Cached:           358236 kB
+MemFree:         7169644 kB
+MemAvailable:    7604836 kB
+Buffers:             156 kB
+Cached:           356980 kB
 SwapCached:            0 kB
-Active:           124292 kB
-Inactive:         345952 kB
-Active(anon):      33624 kB
-Inactive(anon):   100992 kB
-Active(file):      90668 kB
-Inactive(file):   244960 kB
+Active:           197028 kB
+Inactive:         273428 kB
+Active(anon):     109108 kB
+Inactive(anon):    27008 kB
+Active(file):      87920 kB
+Inactive(file):   246420 kB
 Unevictable:           0 kB
 Mlocked:               0 kB
 SwapTotal:       9245140 kB
 SwapFree:        9245140 kB
-Dirty:              1660 kB
+Dirty:              1724 kB
 Writeback:             0 kB
-AnonPages:        104752 kB
-Mapped:           123544 kB
+AnonPages:        106132 kB
+Mapped:           114740 kB
 Shmem:             22804 kB
-KReclaimable:     300384 kB
-Slab:             421776 kB
-SReclaimable:     300384 kB
-SUnreclaim:       121392 kB
-KernelStack:        4832 kB
-PageTables:         4192 kB
+KReclaimable:     305248 kB
+Slab:             427008 kB
+SReclaimable:     305248 kB
+SUnreclaim:       121760 kB
+KernelStack:        4848 kB
+PageTables:         5136 kB
 SecPageTables:         0 kB
 NFS_Unstable:          0 kB
 Bounce:                0 kB
 WritebackTmp:          0 kB
 CommitLimit:    13343424 kB
-Committed_AS:    1128160 kB
+Committed_AS:    1052816 kB
 VmallocTotal:   135288315904 kB
 VmallocUsed:       45640 kB
 VmallocChunk:          0 kB
-Percpu:             4680 kB
+Percpu:             3240 kB
 AnonHugePages:         0 kB
 ShmemHugePages:        0 kB
 ShmemPmdMapped:        0 kB
@@ -72,10 +72,10 @@ FilePmdMapped:         0 kB
 Balloon:               0 kB
 
 @@HS-fixture@@ loadavg
-0.14 0.08 0.09 1/294 118
+0.08 0.04 0.04 1/295 117
 
 @@HS-fixture@@ uptime
-32887.25 326509.74
+33856.52 336181.24
 
 @@HS-fixture@@ diskstats
    7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -86,9 +86,9 @@ Balloon:               0 kB
   43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- 254       0 vda 82721 551 14207168 281 0 0 0 0 0 175787 281 0 0 0 0 0 0
- 254      16 vdb 214962 2172 34335970 1811 335040 168311 29856632 110705 0 102105 168133 120165 0 18763568 8130 48804 47485
- 254      17 vdb1 214860 2172 34335016 1811 335040 168311 29856632 110705 0 107921 120648 120165 0 18763568 8130 0 0
+ 254       0 vda 85976 563 14812376 299 0 0 0 0 0 176478 299 0 0 0 0 0 0
+ 254      16 vdb 224259 2196 35322898 1906 347780 173995 30418912 113099 0 106107 172977 121206 0 19136368 8224 53554 49746
+ 254      17 vdb1 224157 2196 35321944 1906 347780 173995 30418912 113099 0 112003 123231 121206 0 19136368 8224 0 0
  254      32 vdc 51 0 2120 0 1 0 8 0 0 12 8 1 0 2097144 8 0 0
  253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
 
@@ -99,7 +99,7 @@ Inter-|   Receive                                                |  Transmit
   eth0:    1130      11    0    0    0     0          0         0      126       3    0    0    0     0       0          0
 
 @@HS-fixture@@ mounts
-overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/EFS3UVMCIHZPZPYFMUSAYWZPWM:/var/lib/docker/overlay2/l/MHP6Y5XHROMY623XCHFGKI7IY7:/var/lib/docker/overlay2/l/CDE63FDWHCOYP2SL6NU2IYP6SN:/var/lib/docker/overlay2/l/WQRUU6RV7S5HQNHJAUAXZRMOEC,upperdir=/var/lib/docker/overlay2/271ad533ccec9d932608d7db366bc32ecc78ad8669d6f70149efd16f92964555/diff,workdir=/var/lib/docker/overlay2/271ad533ccec9d932608d7db366bc32ecc78ad8669d6f70149efd16f92964555/work 0 0
+overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/2M3KXOAXC2UTAS2HILIRT74TLY:/var/lib/docker/overlay2/l/MHP6Y5XHROMY623XCHFGKI7IY7:/var/lib/docker/overlay2/l/CDE63FDWHCOYP2SL6NU2IYP6SN:/var/lib/docker/overlay2/l/WQRUU6RV7S5HQNHJAUAXZRMOEC,upperdir=/var/lib/docker/overlay2/b57961151b3b0d0b3b0925643574ea6e8d8d163034bce70d2459389b4e260950/diff,workdir=/var/lib/docker/overlay2/b57961151b3b0d0b3b0925643574ea6e8d8d163034bce70d2459389b4e260950/work 0 0
 proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
 tmpfs /dev tmpfs rw,nosuid,size=65536k,mode=755 0 0
 devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666 0 0
@@ -113,19 +113,19 @@ tmpfs /tmp tmpfs rw,nosuid,nodev,noexec,relatime 0 0
 /dev/vdb1 /etc/hosts btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
 none /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0
 tmpfs /run/lock tmpfs rw,nosuid,nodev,noexec,relatime,size=5120k 0 0
-systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=30,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=224546 0 0
+systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=30,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=233822 0 0
 debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0
 tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
 fusectl /sys/fs/fuse/connections fusectl rw,nosuid,nodev,noexec,relatime 0 0
 
 @@HS-fixture@@ df
 Filesystem     1024-blocks     Used Available Capacity Mounted on
-overlay           72482816 21477704  51005112      30% /
+overlay           68878336 21561888  47316448      32% /
 tmpfs                65536        0     65536       0% /dev
 shm                4098048        0   4098048       0% /dev/shm
 tmpfs              4098284       32   4098252       1% /run
 tmpfs              4098284        0   4098284       0% /tmp
-/dev/vdb1         72482816 21477704  51005112      30% /etc/hosts
+/dev/vdb1         68878336 21561888  47316448      32% /etc/hosts
 tmpfs                 5120        0      5120       0% /run/lock
 
 @@HS-fixture@@ dfi
@@ -143,30 +143,30 @@ tmpfs          1024571     2 1024569    1% /run/lock
 0A 2
 
 @@HS-fixture@@ procstat
-1 (systemd) S 0 1 1 0 -1 4194560 2894 24013 28 125 3 9 8 23 20 0 1 0 3286726 21192704 2801 18446744073709551615 187650460090368 187650460174820 281473930430144 0 0 0 671173123 4096 1260 1 0 0 17 0 0 0 0 0 0 187650460282784 187650460287088 187651206217728 281473930432383 281473930432394 281473930432394 281473930432493 0
-107 (sh) S 0 107 107 0 -1 4194560 585 870 0 6 0 0 0 0 20 0 1 0 3288724 2449408 390 18446744073709551615 187650429485056 187650429605184 281474394400864 0 0 0 0 0 65536 1 0 0 17 1 0 0 0 0 0 187650429676960 187650429682160 187651274657792 281474394402691 281474394402697 281474394402697 281474394402796 0
-22 (systemd-journal) S 1 22 22 0 -1 4194560 2745 0 2 0 2 2 0 0 19 -1 1 0 3286739 34578432 2878 18446744073709551615 187650009202688 187650009374916 281474573779424 0 0 0 18946 4096 64 1 0 0 17 0 0 0 0 0 0 187650009459152 187650009467576 187650290925568 281474573782571 281474573782605 281474573782605 281474573782998 0
-71 (cron) S 1 71 71 0 -1 4194560 535 0 1 0 0 0 0 0 20 0 1 0 3286752 4272128 560 18446744073709551615 187650084372480 187650084419524 281474437299424 0 0 0 0 0 65537 1 0 0 17 3 0 0 0 0 0 187650084501760 187650084503832 187650370768896 281474437300010 281474437300031 281474437300031 281474437300201 0
-77 (sshd) S 1 77 77 0 -1 4194560 852 1978 0 12 0 0 2 2 20 0 1 0 3286752 12480512 1827 18446744073709551615 187650548760576 187650549636404 281473961140368 0 0 0 0 4096 81925 1 0 0 17 2 0 0 0 0 0 187650549729696 187650549745096 187651565506560 281473961143972 281473961143990 281473961143990 281473961144297 0
+1 (systemd) S 0 1 1 0 -1 4194560 3043 24024 28 125 3 7 8 19 20 0 1 0 3383863 21192704 2805 18446744073709551615 187650217607168 187650217691620 281473998915040 0 0 0 671173123 4096 1260 1 0 0 17 6 0 0 0 0 0 187650217799584 187650217803888 187650898235392 281473998917503 281473998917514 281473998917514 281473998917613 0
+107 (sh) S 0 107 107 0 -1 4194560 618 874 0 6 0 0 0 0 20 0 1 0 3385651 2449408 358 18446744073709551615 187650058158080 187650058278208 281474050634672 0 0 0 0 0 65536 1 0 0 17 0 0 0 0 0 0 187650058349984 187650058355184 187650633764864 281474050637699 281474050637705 281474050637705 281474050637804 0
+22 (systemd-journal) S 1 22 22 0 -1 4194560 2820 0 2 0 1 1 0 0 19 -1 1 0 3383875 34512896 2866 18446744073709551615 187650664497152 187650664669380 281473991930528 0 0 0 18946 4096 64 1 0 0 17 3 0 0 0 0 0 187650664753616 187650664762040 187651434549248 281473991933483 281473991933517 281473991933517 281473991933910 0
+71 (cron) S 1 71 71 0 -1 4194560 534 0 1 0 0 0 0 0 20 0 1 0 3383886 4272128 565 18446744073709551615 187650235367424 187650235414468 281474238903776 0 0 0 0 0 65537 1 0 0 17 0 0 0 0 0 0 187650235496704 187650235498776 187650504347648 281474238906154 281474238906175 281474238906175 281474238906345 0
+76 (sshd) S 1 76 76 0 -1 4194560 858 2023 0 12 0 0 2 2 20 0 1 0 3383887 12480512 1825 18446744073709551615 187650888368128 187650889243956 281473967196592 0 0 0 0 4096 81925 1 0 0 17 0 0 0 0 0 0 187650889337248 187650889352648 187651705606144 281473967197860 281473967197878 281473967197878 281473967198185 0
 
 @@HS-fixture@@ ps
       1 root                             /sbin/init
      22 root                             /usr/lib/systemd/systemd-journald
      71 root                             /usr/sbin/cron -f -P
-     77 root                             sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+     76 root                             sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
     107 root                             sh -s
-    129 root                             ps -eww -o pid=,user:32=,args=
+    128 root                             ps -eww -o pid=,user:32=,args=
 
 @@HS-fixture@@ basics
 pagesize=4096
-hostname=f9644ab791a4
+hostname=860a463e6634
 user=root
 uid=0
 
 @@HS-fixture@@ listen
 #src ss
-tcp LISTEN 0      4096   0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=77,fd=3),("systemd",pid=1,fd=44))
-tcp LISTEN 0      4096      [::]:22    [::]:* users:(("sshd",pid=77,fd=4),("systemd",pid=1,fd=45))
+tcp LISTEN 0      4096   0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=76,fd=3),("systemd",pid=1,fd=44))
+tcp LISTEN 0      4096      [::]:22    [::]:* users:(("sshd",pid=76,fd=4),("systemd",pid=1,fd=45))
 
 @@HS-fixture@@ services
 #src systemd
@@ -286,6 +286,7 @@ dmi_vendor=
 dmi_product=
 
 @@HS-fixture@@ reboot
+running=7.0.14-orbstack-00380-ga7e0a2dc9535
 
 @@HS-fixture@@ packages
 #src dpkg
@@ -435,14 +436,14 @@ motd-news.timer         enabled enabled
 
 @@HS-fixture@@ auth
 tz=+0000
-now=1790787993
+now=1790788963
 #src journal
-1790787982.071265 f9644ab791a4 sshd[94]: Invalid user admin from 127.0.0.1 port 41266
-1790787984.119737 f9644ab791a4 sshd[94]: Failed password for invalid user admin from 127.0.0.1 port 41266 ssh2
-1790787988.085234 f9644ab791a4 sshd[98]: Failed password for root from 127.0.0.1 port 41280 ssh2
-1790787990.286589 f9644ab791a4 sshd[102]: Invalid user oracle from 127.0.0.1 port 33498
-1790787992.093285 f9644ab791a4 sshd[102]: Failed password for invalid user oracle from 127.0.0.1 port 33498 ssh2
-1790787992.762159 f9644ab791a4 sshd[105]: Invalid user ghost from 127.0.0.1 port 33512
+1790788953.426414 860a463e6634 sshd[94]: Invalid user admin from 127.0.0.1 port 50136
+1790788955.441015 860a463e6634 sshd[94]: Failed password for invalid user admin from 127.0.0.1 port 50136 ssh2
+1790788959.207513 860a463e6634 sshd[98]: Failed password for root from 127.0.0.1 port 50142 ssh2
+1790788959.554507 860a463e6634 sshd[102]: Invalid user oracle from 127.0.0.1 port 44758
+1790788961.722372 860a463e6634 sshd[102]: Failed password for invalid user oracle from 127.0.0.1 port 44758 ssh2
+1790788962.025538 860a463e6634 sshd[105]: Invalid user ghost from 127.0.0.1 port 44768
 
 @@HS-fixture@@ updates
 #src apt

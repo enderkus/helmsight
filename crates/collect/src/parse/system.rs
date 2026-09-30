@@ -119,6 +119,8 @@ pub fn reboot(text: &str) -> RebootStatus {
     let mut reasons = Vec::new();
     let mut checked = false;
     let mut pkgs = Vec::new();
+    let mut running: Option<String> = None;
+    let mut rpm_kernel: Option<String> = None;
     for line in text.lines().take(512) {
         let Some((k, v)) = line.split_once('=') else {
             continue;
@@ -137,15 +139,22 @@ pub fn reboot(text: &str) -> RebootStatus {
                     reasons.push("running kernel has no module directory (kernel upgraded)".into());
                 }
             }
-            "needs_restarting" => match v {
-                "0" => checked = true,
-                "1" => {
-                    checked = true;
-                    reasons.push("needs-restarting -r reports a reboot is required".into());
-                }
-                _ => {}
-            },
+            "running" if !v.is_empty() => running = Some(v.to_string()),
+            "rpm_kernel" if !v.is_empty() => rpm_kernel = Some(v.to_string()),
             _ => {}
+        }
+    }
+    if let (Some(run), Some(pkg)) = (&running, &rpm_kernel) {
+        let newest = ["kernel-core-", "kernel-"]
+            .iter()
+            .find_map(|p| pkg.strip_prefix(p))
+            .unwrap_or(pkg);
+        checked = true;
+        if newest != run {
+            reasons.push(clip(
+                &format!("newest installed kernel {newest} is not running (running {run})"),
+                256,
+            ));
         }
     }
     if !pkgs.is_empty() {
@@ -264,7 +273,10 @@ mod tests {
         let r = reboot("flag=reboot-required\npkg=linux-image-6.1.0-26-amd64\nmodules=ok\n");
         assert_eq!(r.required, Some(true));
         assert_eq!(r.reasons.len(), 2);
-        assert_eq!(reboot("needs_restarting=1\n").required, Some(true));
+        let el = "running=5.14.0-427.el9.x86_64\nrpm_kernel=kernel-core-5.14.0-503.el9.x86_64\n";
+        assert_eq!(reboot(el).required, Some(true));
+        let el = "running=5.14.0-503.el9.x86_64\nrpm_kernel=kernel-core-5.14.0-503.el9.x86_64\n";
+        assert_eq!(reboot(el).required, Some(false));
     }
 
     #[test]

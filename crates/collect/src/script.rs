@@ -39,6 +39,14 @@ impl Group {
     }
 }
 
+/// Optional behaviour of the script.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ScriptOptions {
+    /// Run dnf/yum to list pending updates. Off by default because dnf
+    /// always writes its own log files on the host.
+    pub dnf_updates: bool,
+}
+
 /// Parameters for one execution of the script.
 #[derive(Debug, Clone)]
 pub struct ScriptRequest {
@@ -47,6 +55,7 @@ pub struct ScriptRequest {
     pub groups: Vec<Group>,
     /// Only report authentication failures after this unix timestamp.
     pub auth_since: i64,
+    pub options: ScriptOptions,
 }
 
 impl ScriptRequest {
@@ -57,6 +66,7 @@ impl ScriptRequest {
             nonce,
             groups,
             auth_since,
+            options: ScriptOptions::default(),
         }
     }
 
@@ -75,10 +85,12 @@ impl ScriptRequest {
             .map(|g| g.as_str())
             .collect::<Vec<_>>()
             .join(" ");
+        let opts = if self.options.dnf_updates { "dnf" } else { "" };
         TEMPLATE
             .replace("__NONCE__", &nonce)
             .replace("__GROUPS__", &groups)
             .replace("__SINCE__", &self.auth_since.max(0).to_string())
+            .replace("__OPTS__", opts)
     }
 
     pub fn marker(&self) -> String {
@@ -113,10 +125,13 @@ mod tests {
             nonce: "ab'; rm -rf /; '".into(),
             groups: vec![],
             auth_since: -5,
+            options: ScriptOptions { dnf_updates: true },
         };
         let s = req.render();
         assert!(s.contains("M='@@HS-abf@@'"));
         assert!(s.contains("SINCE='0'"));
+        assert!(s.contains("HS_OPTS=' dnf '"));
+        assert!(!s.contains("__OPTS__"));
     }
 
     #[test]

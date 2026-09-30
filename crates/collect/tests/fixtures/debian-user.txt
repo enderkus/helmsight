@@ -4,66 +4,66 @@ v=1
 groups= metrics basics medium inventory auth updates 
 
 @@HS-fixture@@ time
-1790788026
+1790788944
 
 @@HS-fixture@@ stat
-cpu  155971 45 53865 32683036 4937 0 17748 0 0 0
-cpu0 21322 2 8914 3253370 3600 0 13120 0 0 0
-cpu1 22359 6 6447 3260203 248 0 2451 0 0 0
-cpu2 20461 3 5929 3263115 162 0 871 0 0 0
-cpu3 14737 7 5620 3269152 153 0 441 0 0 0
-cpu4 14996 7 5332 3269386 178 0 273 0 0 0
-cpu5 14476 1 5758 3269421 170 0 188 0 0 0
-cpu6 17324 6 5334 3267244 143 0 151 0 0 0
-cpu7 15295 3 5604 3269033 141 0 131 0 0 0
-cpu8 14996 6 4924 3270103 138 0 120 0 0 0
-cpu9 0 0 0 3292004 0 0 0 0 0 0
-intr 21320831 0 121755 11623354 0 0 0 4480 0 0 0 0 8823034 0 25 1 1313 13 548 0 1 0 171851 0 3 567217 6990 244 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-ctxt 65064848
+cpu  156504 45 54257 33599484 5026 0 17866 0 0 0
+cpu0 21353 2 9004 3344896 3654 0 13218 0 0 0
+cpu1 22472 6 6482 3351796 253 0 2463 0 0 0
+cpu2 20478 3 5949 3354824 166 0 874 0 0 0
+cpu3 14747 7 5659 3360854 156 0 443 0 0 0
+cpu4 15095 7 5385 3360985 181 0 273 0 0 0
+cpu5 14624 1 5793 3360987 172 0 189 0 0 0
+cpu6 17358 6 5360 3358934 150 0 151 0 0 0
+cpu7 15309 3 5648 3360728 146 0 131 0 0 0
+cpu8 15064 6 4974 3361710 142 0 120 0 0 0
+cpu9 0 0 0 3383767 0 0 0 0 0 0
+intr 21381369 0 123257 11637710 0 0 0 4551 0 0 0 0 8856676 0 25 1 1340 13 563 0 1 0 173438 0 3 576444 7065 280 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 65141689
 btime 1790755106
-processes 57715
+processes 58922
 procs_running 1
 procs_blocked 0
-softirq 3844002 0 205441 750 992005 171855 0 5869 2303362 1 164719
+softirq 3875589 0 209979 775 1001347 173442 0 6210 2315134 1 168701
 
 @@HS-fixture@@ meminfo
 MemTotal:        8196572 kB
-MemFree:         7148328 kB
-MemAvailable:    7603188 kB
-Buffers:             140 kB
-Cached:           377020 kB
+MemFree:         7165288 kB
+MemAvailable:    7587272 kB
+Buffers:             196 kB
+Cached:           343656 kB
 SwapCached:            0 kB
-Active:           245364 kB
-Inactive:         251120 kB
-Active(anon):     107140 kB
-Inactive(anon):    34984 kB
-Active(file):     138224 kB
-Inactive(file):   216136 kB
+Active:           305524 kB
+Inactive:         155448 kB
+Active(anon):     128624 kB
+Inactive(anon):    11296 kB
+Active(file):     176900 kB
+Inactive(file):   144152 kB
 Unevictable:           0 kB
 Mlocked:               0 kB
 SwapTotal:       9245140 kB
 SwapFree:        9245140 kB
-Dirty:              1320 kB
+Dirty:              1312 kB
 Writeback:             0 kB
-AnonPages:        112032 kB
-Mapped:           112712 kB
-Shmem:             22808 kB
-KReclaimable:     304896 kB
-Slab:             427984 kB
-SReclaimable:     304896 kB
-SUnreclaim:       123088 kB
-KernelStack:        5152 kB
-PageTables:         9972 kB
+AnonPages:        110004 kB
+Mapped:           127772 kB
+Shmem:             22804 kB
+KReclaimable:     305328 kB
+Slab:             427248 kB
+SReclaimable:     305328 kB
+SUnreclaim:       121920 kB
+KernelStack:        4976 kB
+PageTables:         9108 kB
 SecPageTables:         0 kB
 NFS_Unstable:          0 kB
 Bounce:                0 kB
 WritebackTmp:          0 kB
 CommitLimit:    13343424 kB
-Committed_AS:    1087668 kB
+Committed_AS:    1087964 kB
 VmallocTotal:   135288315904 kB
 VmallocUsed:       45648 kB
 VmallocChunk:          0 kB
-Percpu:             4680 kB
+Percpu:             3200 kB
 AnonHugePages:         0 kB
 ShmemHugePages:        0 kB
 ShmemPmdMapped:        0 kB
@@ -72,10 +72,10 @@ FilePmdMapped:         0 kB
 Balloon:               0 kB
 
 @@HS-fixture@@ loadavg
-0.20 0.11 0.10 2/309 171
+0.02 0.03 0.04 1/303 171
 
 @@HS-fixture@@ uptime
-32920.07 326830.36
+33837.70 335994.85
 
 @@HS-fixture@@ diskstats
    7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -86,9 +86,9 @@ Balloon:               0 kB
   43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- 254       0 vda 83154 551 14279720 282 0 0 0 0 0 175841 282 0 0 0 0 0 0
- 254      16 vdb 216514 2176 34482610 1815 343198 172461 30295632 112185 0 103725 171019 120756 0 19021944 8166 51976 48851
- 254      17 vdb1 216412 2176 34481656 1815 343198 172461 30295632 112185 0 109564 122168 120756 0 19021944 8166 0 0
+ 254       0 vda 85492 562 14753112 299 0 0 0 0 0 176441 299 0 0 0 0 0 0
+ 254      16 vdb 223574 2189 35209130 1904 346753 173680 30387416 112943 0 105768 172658 121123 0 19102600 8217 53196 49592
+ 254      17 vdb1 223472 2189 35208176 1904 346753 173680 30387416 112943 0 111653 123066 121123 0 19102600 8217 0 0
  254      32 vdc 51 0 2120 0 1 0 8 0 0 12 8 1 0 2097144 8 0 0
  253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
 
@@ -99,7 +99,7 @@ Inter-|   Receive                                                |  Transmit
   eth0:    1130      11    0    0    0     0          0         0      126       3    0    0    0     0       0          0
 
 @@HS-fixture@@ mounts
-overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/JG5WEPTEY52WALUVAHET4DNEBE:/var/lib/docker/overlay2/l/6GYCG5H2NOTP4ZLOV5STQTBTYH:/var/lib/docker/overlay2/l/3VRQGFVZ4WJV6Y5ORQ4KPQ5WOG:/var/lib/docker/overlay2/l/C4IJCLOBHLDEZJHDLEFCMNXETQ,upperdir=/var/lib/docker/overlay2/60f634b34c16e0525d31395cc808cc00d4aea96ade2bf6a0d458934874ad7021/diff,workdir=/var/lib/docker/overlay2/60f634b34c16e0525d31395cc808cc00d4aea96ade2bf6a0d458934874ad7021/work 0 0
+overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/5HS5KUF5HP46SVY3TUAJGXRQUV:/var/lib/docker/overlay2/l/6GYCG5H2NOTP4ZLOV5STQTBTYH:/var/lib/docker/overlay2/l/3VRQGFVZ4WJV6Y5ORQ4KPQ5WOG:/var/lib/docker/overlay2/l/C4IJCLOBHLDEZJHDLEFCMNXETQ,upperdir=/var/lib/docker/overlay2/5de2afa438380b427beca0f1487107adb1b3f09213ce239a4cba086907356e8f/diff,workdir=/var/lib/docker/overlay2/5de2afa438380b427beca0f1487107adb1b3f09213ce239a4cba086907356e8f/work 0 0
 proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
 tmpfs /dev tmpfs rw,nosuid,size=65536k,mode=755 0 0
 devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666 0 0
@@ -113,19 +113,19 @@ tmpfs /tmp tmpfs rw,nosuid,nodev,noexec,relatime 0 0
 /dev/vdb1 /etc/hosts btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
 none /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0
 tmpfs /run/lock tmpfs rw,nosuid,nodev,noexec,relatime,size=5120k 0 0
-systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=28,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=225757 0 0
-debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0
+systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=28,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=231415 0 0
 tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
+debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0
 fusectl /sys/fs/fuse/connections fusectl rw,nosuid,nodev,noexec,relatime 0 0
 
 @@HS-fixture@@ df
 Filesystem     1024-blocks     Used Available Capacity Mounted on
-overlay           72220672 21561312  50659360      30% /
+overlay           68878336 21561748  47316588      32% /
 tmpfs                65536        0     65536       0% /dev
 shm                4098048        0   4098048       0% /dev/shm
 tmpfs              4098284       28   4098256       1% /run
 tmpfs              4098284        0   4098284       0% /tmp
-/dev/vdb1         72220672 21561312  50659360      30% /etc/hosts
+/dev/vdb1         68878336 21561748  47316588      32% /etc/hosts
 tmpfs                 5120        0      5120       0% /run/lock
 
 @@HS-fixture@@ dfi
@@ -143,29 +143,29 @@ tmpfs          1024571     2 1024569    1% /run/lock
 0A 4
 
 @@HS-fixture@@ procstat
-1 (systemd) S 0 1 1 0 -1 4194560 3209 15116 4 1 12 10 7 4 20 0 1 0 3290289 104603648 2089 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0
-161 (sh) S 0 161 161 0 -1 4194560 544 828 0 0 0 0 0 0 20 0 1 0 3292006 2396160 306 18446744073709551615 187650151481344 187650151600632 281474695803712 0 0 0 0 0 65536 1 0 0 17 1 0 0 0 0 0 187650151672704 187650151678480 187650695106560 281474695806843 281474695806849 281474695806849 281474695806956 0
-27 (systemd-journal) S 1 27 27 0 -1 4194560 2554 0 3 0 1 1 0 0 20 0 1 0 3290295 34164736 2365 18446744073709551615 1 1 0 0 0 0 18946 4096 64 0 0 0 17 6 0 0 0 0 0 0 0 0 0 0 0 0 0
-42 (cron) S 1 42 42 0 -1 4194560 241 0 1 0 0 0 0 0 20 0 1 0 3290299 4214784 601 18446744073709551615 1 1 0 0 0 0 0 0 65537 0 0 0 17 1 0 0 0 0 0 0 0 0 0 0 0 0 0
-49 (nginx) S 1 49 49 0 -1 4194368 74 0 0 0 0 0 0 0 20 0 1 0 3290300 10440704 341 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
-50 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
-51 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 1 0 0 0 0 0 0 0 0 0 0 0 0 0
-52 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
-53 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 5 0 0 0 0 0 0 0 0 0 0 0 0 0
-54 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
-55 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 4 0 0 0 0 0 0 0 0 0 0 0 0 0
-56 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
-57 (nginx) S 49 49 49 0 -1 4194624 185 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 517 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 8 0 0 0 0 0 0 0 0 0 0 0 0 0
-58 (nginx) S 49 49 49 0 -1 4194624 186 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 517 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-59 (nginx) S 49 49 49 0 -1 4194624 183 0 0 0 0 0 0 0 20 0 1 0 3290300 10829824 534 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 5 0 0 0 0 0 0 0 0 0 0 0 0 0
-62 (sshd) S 1 62 62 0 -1 4194560 670 2301 2 20 0 0 3 1 20 0 1 0 3290300 16683008 1520 18446744073709551615 1 1 0 0 0 0 0 4096 81925 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+1 (systemd) S 0 1 1 0 -1 4194560 3204 15120 29 56 15 16 7 11 20 0 1 0 3381819 171634688 2634 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 4 0 0 0 0 0 0 0 0 0 0 0 0 0
+161 (sh) S 0 161 161 0 -1 4194560 557 832 0 0 0 0 0 0 20 0 1 0 3383769 2396160 310 18446744073709551615 187650085093376 187650085212664 281473939983904 0 0 0 0 0 65536 1 0 0 17 5 0 0 0 0 0 187650085284736 187650085290512 187651079626752 281473939988347 281473939988353 281473939988353 281473939988460 0
+27 (systemd-journal) S 1 27 27 0 -1 4194560 2545 0 2 0 1 2 0 0 20 0 1 0 3381831 34164736 2855 18446744073709551615 1 1 0 0 0 0 18946 4096 64 0 0 0 17 5 0 0 0 0 0 0 0 0 0 0 0 0 0
+42 (cron) S 1 42 42 0 -1 4194560 239 0 1 0 0 0 0 0 20 0 1 0 3381836 4214784 598 18446744073709551615 1 1 0 0 0 0 0 0 65537 0 0 0 17 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+48 (nginx) S 1 48 48 0 -1 4194368 76 0 0 0 0 0 0 0 20 0 1 0 3381838 10440704 404 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+49 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+51 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+52 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+53 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+54 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 8 0 0 0 0 0 0 0 0 0 0 0 0 0
+55 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+56 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 614 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+57 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
+58 (nginx) S 48 48 48 0 -1 4194624 190 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 6 0 0 0 0 0 0 0 0 0 0 0 0 0
+59 (nginx) S 48 48 48 0 -1 4194624 188 0 0 0 0 0 0 0 20 0 1 0 3381838 10829824 629 18446744073709551615 1 1 0 0 0 0 0 1073745920 402745863 0 0 0 17 7 0 0 0 0 0 0 0 0 0 0 0 0 0
+62 (sshd) S 1 62 62 0 -1 4194560 649 2301 0 11 0 0 2 1 20 0 1 0 3381839 16683008 2234 18446744073709551615 1 1 0 0 0 0 0 4096 81925 0 0 0 17 8 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 @@HS-fixture@@ ps
       1 root                             /sbin/init
      27 root                             /lib/systemd/systemd-journald
      42 root                             /usr/sbin/cron -f
-     49 root                             nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
-     50 www-data                         nginx: worker process
+     48 root                             nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+     49 www-data                         nginx: worker process
      51 www-data                         nginx: worker process
      52 www-data                         nginx: worker process
      53 www-data                         nginx: worker process
@@ -181,7 +181,7 @@ tmpfs          1024571     2 1024569    1% /run/lock
 
 @@HS-fixture@@ basics
 pagesize=4096
-hostname=421f04767688
+hostname=b18e2d4c6450
 user=monitor
 uid=1000
 
@@ -229,6 +229,7 @@ dmi_vendor=
 dmi_product=
 
 @@HS-fixture@@ reboot
+running=7.0.14-orbstack-00380-ga7e0a2dc9535
 
 @@HS-fixture@@ packages
 #src dpkg
@@ -376,7 +377,7 @@ Failed to connect to bus: No such file or directory
 
 @@HS-fixture@@ auth
 tz=+0000
-now=1790788026
+now=1790788944
 #src journal
 Hint: You are currently not seeing messages from other users and the system.
 No journal files were opened due to insufficient permissions.

@@ -14,7 +14,7 @@ pub mod sections;
 mod util;
 
 pub use sampler::{Collection, Sampler};
-pub use script::{Group, ScriptRequest};
+pub use script::{Group, ScriptOptions, ScriptRequest};
 pub use sections::Sections;
 
 /// Maximum number of bytes accepted from a single remote execution.

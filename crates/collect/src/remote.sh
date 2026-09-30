@@ -12,10 +12,12 @@
 #   __NONCE__   hex string
 #   __GROUPS__  space separated list of group names
 #   __SINCE__   unix timestamp (integer)
+#   __OPTS__    space separated list of option names
 hs_main() {
 M='@@HS-__NONCE__@@'
 HS_GROUPS=' __GROUPS__ '
 SINCE='__SINCE__'
+HS_OPTS=' __OPTS__ '
 LC_ALL=C
 LANG=C
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -24,6 +26,7 @@ export LC_ALL LANG PATH
 s() { printf '\n%s %s\n' "$M" "$1"; }
 have() { command -v "$1" >/dev/null 2>&1; }
 want() { case $HS_GROUPS in *" $1 "*) return 0 ;; esac; return 1; }
+opt() { case $HS_OPTS in *" $1 "*) return 0 ;; esac; return 1; }
 rd() { [ -r "$1" ] && cat "$1" 2>/dev/null; }
 
 TO=''
@@ -175,9 +178,10 @@ if want inventory; then
       echo "modules=missing"
     fi
   fi
-  if have needs-restarting; then
-    t 30 needs-restarting -r >/dev/null 2>&1
-    echo "needs_restarting=$?"
+  printf 'running=%s\n' "$kr"
+  if have rpm; then
+    # Newest installed kernel package (rpm -q is read-only).
+    rpm -q --last kernel-core kernel 2>/dev/null | awk '$1 !~ /^package$/ {print "rpm_kernel=" $1; exit}'
   fi
 
   s packages
@@ -236,16 +240,22 @@ if want updates; then
     m=$(date -r /var/lib/apt/lists +%s 2>/dev/null)
     echo "#lists ${n:-0} ${m:-0}"
     t 120 apt-get -s -o Debug::NoLocking=true dist-upgrade 2>&1 | grep -E '^(Inst |E: )' | head -n 10000
-  elif have dnf; then
-    echo '#src dnf'
-    t 120 dnf -C -q check-update 2>&1 | head -n 10000
-    echo '#security'
-    t 120 dnf -C -q updateinfo list --security --available 2>&1 | head -n 10000
-  elif have yum; then
-    echo '#src yum'
-    t 120 yum -C -q check-update 2>&1 | head -n 10000
-    echo '#security'
-    t 120 yum -C -q updateinfo list security 2>&1 | head -n 10000
+  elif have dnf || have yum; then
+    # dnf and yum always write their own log files (and, for unprivileged
+    # users, a cache under /var/tmp), so they only run when enabled.
+    if ! opt dnf; then
+      echo '#src dnf-disabled'
+    elif have dnf; then
+      echo '#src dnf'
+      t 120 dnf -C -q check-update 2>&1 | head -n 10000
+      echo '#security'
+      t 120 dnf -C -q updateinfo list --security --available 2>&1 | head -n 10000
+    else
+      echo '#src yum'
+      t 120 yum -C -q check-update 2>&1 | head -n 10000
+      echo '#security'
+      t 120 yum -C -q updateinfo list security 2>&1 | head -n 10000
+    fi
   elif have zypper; then
     echo '#src zypper'
     t 120 zypper -n --no-refresh -q list-updates 2>&1 | head -n 10000
