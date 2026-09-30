@@ -1,0 +1,549 @@
+
+@@HS-fixture@@ begin
+v=1
+groups= metrics basics medium inventory auth updates 
+
+@@HS-fixture@@ time
+1790787270
+
+@@HS-fixture@@ stat
+cpu  152924 45 53026 31931422 4658 0 17029 0 0 0
+cpu0 20896 2 8646 3178842 3364 0 12463 0 0 0
+cpu1 21740 6 6356 3185343 243 0 2409 0 0 0
+cpu2 20273 3 5870 3187773 157 0 859 0 0 0
+cpu3 14594 7 5536 3193800 148 0 436 0 0 0
+cpu4 14122 7 5262 3194750 167 0 271 0 0 0
+cpu5 14395 1 5708 3193961 166 0 186 0 0 0
+cpu6 17240 6 5273 3191802 138 0 151 0 0 0
+cpu7 15129 3 5505 3193710 135 0 131 0 0 0
+cpu8 14532 6 4865 3195035 135 0 120 0 0 0
+cpu9 0 0 0 3216401 0 0 0 0 0 0
+intr 21118327 0 116591 11575299 0 0 0 4233 0 0 0 0 8727296 0 25 1 1277 13 536 0 1 0 163983 0 3 522019 6867 181 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 64792986
+btime 1790755106
+processes 53366
+procs_running 1
+procs_blocked 0
+softirq 3748505 0 199357 679 943473 163987 0 5268 2278507 1 157233
+
+@@HS-fixture@@ meminfo
+MemTotal:        8196572 kB
+MemFree:         6752412 kB
+MemAvailable:    7566252 kB
+Buffers:            2952 kB
+Cached:           747228 kB
+SwapCached:            0 kB
+Active:           131448 kB
+Inactive:         742292 kB
+Active(anon):      48212 kB
+Inactive(anon):    98412 kB
+Active(file):      83236 kB
+Inactive(file):   643880 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       9245140 kB
+SwapFree:        9245140 kB
+Dirty:              4860 kB
+Writeback:             0 kB
+AnonPages:        115964 kB
+Mapped:           110348 kB
+Shmem:             23120 kB
+KReclaimable:     291120 kB
+Slab:             412688 kB
+SReclaimable:     291120 kB
+SUnreclaim:       121568 kB
+KernelStack:        5168 kB
+PageTables:         5816 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    13343424 kB
+Committed_AS:    1069976 kB
+VmallocTotal:   135288315904 kB
+VmallocUsed:       46004 kB
+VmallocChunk:          0 kB
+Percpu:             3840 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Balloon:               0 kB
+
+@@HS-fixture@@ loadavg
+0.34 0.27 0.12 1/315 179
+
+@@HS-fixture@@ uptime
+32164.03 319314.22
+
+@@HS-fixture@@ diskstats
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43       0 nbd0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 80225 531 13762080 266 0 0 0 0 0 175404 266 0 0 0 0 0 0
+ 254      16 vdb 210449 2147 33875618 1768 322446 165118 28777688 108519 0 99371 163937 119206 0 18469112 8063 45638 45586
+ 254      17 vdb1 210347 2147 33874664 1768 322446 165118 28777688 108519 0 105077 118351 119206 0 18469112 8063 0 0
+ 254      32 vdc 51 0 2120 0 1 0 8 0 0 12 8 1 0 2097144 8 0 0
+ 253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
+
+@@HS-fixture@@ netdev
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:   19604      93    0    0    0     0          0         0    19604      93    0    0    0     0       0          0
+  eth0:    1238      13    0    0    0     0          0         0      234       5    0    0    0     0       0          0
+
+@@HS-fixture@@ mounts
+overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/O3FGYWNVY35MVVQWX5MVTDO422:/var/lib/docker/overlay2/l/ZY2WZFB2DOUM2PB7QTI3CSAAZ6:/var/lib/docker/overlay2/l/LHAAQNPO5CTGL36FX76PC5RLTD:/var/lib/docker/overlay2/l/PVR6TNZPTOHFDZZPOITWS6DYTW,upperdir=/var/lib/docker/overlay2/011a8239119c4b2c6dc9afd955f61c0c14bc98e080547f696a596b66893abd8f/diff,workdir=/var/lib/docker/overlay2/011a8239119c4b2c6dc9afd955f61c0c14bc98e080547f696a596b66893abd8f/work 0 0
+proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+tmpfs /dev tmpfs rw,nosuid,size=65536k,mode=755 0 0
+devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666 0 0
+sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+mqueue /dev/mqueue mqueue rw,nosuid,nodev,noexec,relatime 0 0
+shm /dev/shm tmpfs rw,nosuid,nodev,noexec,relatime,size=4098048k 0 0
+tmpfs /run tmpfs rw,nosuid,nodev,noexec,relatime,mode=755 0 0
+tmpfs /tmp tmpfs rw,nosuid,nodev,noexec,relatime 0 0
+/dev/vdb1 /etc/resolv.conf btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+/dev/vdb1 /etc/hostname btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+/dev/vdb1 /etc/hosts btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+none /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0
+systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=32,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=208899 0 0
+debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0
+tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
+fusectl /sys/fs/fuse/connections fusectl rw,nosuid,nodev,noexec,relatime 0 0
+
+@@HS-fixture@@ df
+Filesystem     1024-blocks     Used Available Capacity Mounted on
+overlay           74121216 21115504  53005712      29% /
+tmpfs                65536        0     65536       0% /dev
+shm                4098048        0   4098048       0% /dev/shm
+tmpfs              4098284      344   4097940       1% /run
+tmpfs              4098284        0   4098284       0% /tmp
+/dev/vdb1         74121216 21115504  53005712      29% /etc/hosts
+
+@@HS-fixture@@ dfi
+Filesystem      Inodes IUsed   IFree IUse% Mounted on
+overlay              0     0       0     - /
+tmpfs          1024571   257 1024314    1% /dev
+shm            1024571     1 1024570    1% /dev/shm
+tmpfs          1024571   422 1024149    1% /run
+tmpfs          1024571    11 1024560    1% /tmp
+/dev/vdb1            0     0       0     - /etc/hosts
+
+@@HS-fixture@@ tcp
+0A 6
+06 4
+
+@@HS-fixture@@ procstat
+1 (systemd) S 0 1 1 0 -1 4194560 4035 25814 0 15 5 4 27 10 20 0 1 0 3214415 23769088 3123 18446744073709551615 187650339438592 187650339532879 281474123790192 0 0 0 671173123 4096 1260 1 0 0 17 3 0 0 0 0 0 187650339630784 187650339635312 187651231764480 281474123792218 281474123792229 281474123792229 281474123792365 0
+100 (systemd-homed) S 1 100 100 0 -1 4194560 667 0 0 0 0 0 0 0 20 0 1 0 3214449 17117184 1715 18446744073709551615 187650578579456 187650578804107 281474009575536 0 0 0 81922 4096 0 1 0 0 17 3 0 0 0 0 0 187650578898112 187650578907416 187651450150912 281474009579164 281474009579195 281474009579195 281474009579481 0
+115 (systemd-logind) S 1 115 115 0 -1 4194560 654 0 0 0 0 0 0 0 20 0 1 0 3214450 17063936 1657 18446744073709551615 187650496987136 187650497280343 281474325942592 0 0 0 81923 4096 0 1 0 0 17 3 0 0 0 0 0 187650497360928 187650497380576 187651114299392 281474325945881 281474325945913 281474325945913 281474325946328 0
+121 (dbus-broker-lau) S 1 121 121 0 -1 4194560 493 0 0 0 0 0 0 0 20 0 1 0 3214450 9621504 884 18446744073709551615 187649997602816 187649997723386 281473927468176 0 0 0 81923 4096 0 1 0 0 17 5 0 0 0 0 0 187649997796976 187649997799440 187650226061312 281473927470691 281473927470742 281473927470742 281473927471068 0
+136 (dbus-broker) S 121 121 121 0 -1 4194560 180 0 0 0 0 0 0 0 20 0 1 0 3214451 5443584 585 18446744073709551615 187650426994688 187650427205433 281473985819744 0 0 0 81923 4096 0 1 0 0 17 3 0 0 0 0 0 187650427315784 187650427322432 187650574168064 281473985822274 281473985822420 281473985822420 281473985822691 0
+138 (sshd) S 1 138 138 0 -1 4194560 776 3757 0 17 0 0 3 3 20 0 1 0 3214451 7479296 1393 18446744073709551615 187650766209024 187650766569276 281474883783616 0 0 0 0 4096 81925 1 0 0 17 8 0 0 0 0 0 187650766657504 187650766668232 187651052134400 281474883784412 281474883784430 281474883784430 281474883784681 0
+141 (crond) S 1 141 141 0 -1 4194560 407 0 0 0 0 0 0 0 20 0 1 0 3214451 6561792 643 18446744073709551615 187650758868992 187650758907344 281474564501552 0 0 0 0 4096 4276227 1 0 0 17 2 0 0 0 0 0 187650759063536 187650759066024 187651181084672 281474564505338 281474564505357 281474564505357 281474564505576 0
+169 (sh) S 0 169 169 0 -1 4194560 1045 1641 0 6 0 0 0 0 20 0 1 0 3216402 4562944 809 18446744073709551615 187650751135744 187650752079388 281474644077632 0 0 0 65536 4 65538 1 0 0 17 6 0 0 0 0 0 187650752498464 187650752545728 187651614871552 281474644078430 281474644078436 281474644078436 281474644078572 0
+31 (systemd-journal) S 1 31 31 0 -1 4194560 2328 71 1 0 2 1 0 0 20 0 1 0 3214424 34476032 2856 18446744073709551615 187650559049728 187650559242203 281474755292992 0 0 0 18946 4096 64 1 0 0 17 3 0 0 0 0 0 187650559305600 187650559314648 187651499737088 281474755296750 281474755296784 281474755296784 281474755297238 0
+45 (systemd-userdbd) S 1 45 45 0 -1 4194560 680 1323 0 0 1 0 1 0 20 0 1 0 3214425 16506880 1392 18446744073709551615 187650165833728 187650165850969 281474640106704 0 0 0 83970 4096 0 1 0 0 17 4 0 0 0 0 0 187650165963496 187650165964832 187650515968000 281474640109188 281474640109221 281474640109221 281474640109527 0
+77 (systemd-userwor) S 45 45 45 0 -1 4194560 417 0 0 0 0 0 0 0 20 0 1 0 3214432 17125376 1508 18446744073709551615 187650482831360 187650482854505 281474804547552 0 0 0 0 0 0 1 0 0 17 3 0 0 0 0 0 187650482960560 187650482962440 187651487305728 281473791602688 281473791602717 281474804551267 281474804551638 0
+78 (systemd-userwor) S 45 45 45 0 -1 4194560 419 0 0 0 0 0 0 0 20 0 1 0 3214432 17125376 1507 18446744073709551615 187650660564992 187650660588137 281474388092832 0 0 0 0 0 0 1 0 0 17 3 0 0 0 0 0 187650660694192 187650660696072 187651022467072 281473479823360 281473479823389 281474388094563 281474388094934 0
+81 (systemd-resolve) S 1 81 81 0 -1 4194560 884 76 0 0 1 0 0 0 20 0 1 0 3214432 21843968 2981 18446744073709551615 187650357592064 187650358174659 281474082958736 0 0 0 18947 4096 0 1 0 0 17 5 0 0 0 0 0 187650358231088 187650358247768 187651171057664 281474082963001 281474082963035 281474082963035 281474082963414 0
+84 (systemd-userwor) S 45 45 45 0 -1 4194560 422 0 0 0 0 0 0 0 20 0 1 0 3214433 17125376 1492 18446744073709551615 187649984430080 187649984453225 281474377430160 0 0 0 0 0 0 1 0 0 17 3 0 0 0 0 0 187649984559280 187649984561160 187650172973056 281473679699968 281473679699997 281474377432675 281474377433046 0
+88 (systemd-udevd) S 1 88 88 0 -1 4194560 1907 8781 0 0 1 1 3 4 20 0 1 0 3214448 32739328 2124 18446744073709551615 187650063269888 187650063748697 281474673451232 0 0 0 81923 4096 0 1 0 0 17 5 0 0 0 0 0 187650063795168 187650063926360 187650441719808 281474673454694 281474673454725 281474673454725 281474673455065 0
+
+@@HS-fixture@@ ps
+      1 root                             /sbin/init
+     31 root                             /usr/lib/systemd/systemd-journald
+     45 root                             /usr/lib/systemd/systemd-userdbd
+     77 root                             systemd-userwork: waiting...
+     78 root                             systemd-userwork: waiting...
+     81 systemd-resolve                  /usr/lib/systemd/systemd-resolved
+     84 root                             systemd-userwork: waiting...
+     88 root                             /usr/lib/systemd/systemd-udevd
+    100 root                             /usr/lib/systemd/systemd-homed
+    115 root                             /usr/lib/systemd/systemd-logind
+    121 dbus                             /usr/bin/dbus-broker-launch --scope system --audit
+    136 dbus                             dbus-broker --log 4 --controller 9 --machine-id 3dbf709a387d4647acd94aeab797fe00 --max-bytes 536870912 --max-fds 4096 --max-matches 16384 --audit
+    138 root                             sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+    141 root                             /usr/sbin/crond -n
+    169 root                             sh -s
+    190 root                             ps -eww -o pid=,user:32=,args=
+
+@@HS-fixture@@ basics
+pagesize=4096
+hostname=e8a8cd16693e
+user=root
+uid=0
+
+@@HS-fixture@@ listen
+#src ss
+udp UNCONN 0      0            0.0.0.0:5355 0.0.0.0:* users:(("systemd-resolve",pid=81,fd=10))
+udp UNCONN 0      0         127.0.0.54:53   0.0.0.0:* users:(("systemd-resolve",pid=81,fd=18))
+udp UNCONN 0      0      127.0.0.53%lo:53   0.0.0.0:* users:(("systemd-resolve",pid=81,fd=16))
+udp UNCONN 0      0               [::]:5355    [::]:* users:(("systemd-resolve",pid=81,fd=12))
+tcp LISTEN 0      4096   127.0.0.53%lo:53   0.0.0.0:* users:(("systemd-resolve",pid=81,fd=17))
+tcp LISTEN 0      4096         0.0.0.0:5355 0.0.0.0:* users:(("systemd-resolve",pid=81,fd=11))
+tcp LISTEN 0      4096      127.0.0.54:53   0.0.0.0:* users:(("systemd-resolve",pid=81,fd=19))
+tcp LISTEN 0      128          0.0.0.0:22   0.0.0.0:* users:(("sshd",pid=138,fd=7))           
+tcp LISTEN 0      4096            [::]:5355    [::]:* users:(("systemd-resolve",pid=81,fd=13))
+tcp LISTEN 0      128             [::]:22      [::]:* users:(("sshd",pid=138,fd=8))           
+
+@@HS-fixture@@ services
+#src systemd
+auditd.service                           not-found inactive dead    auditd.service
+autofs.service                           not-found inactive dead    autofs.service
+broken.service                           loaded    failed   failed  Deliberately failing unit used by tests
+console-getty.service                    loaded    inactive dead    Console Getty
+crond.service                            loaded    active   running Command Scheduler
+dbus-broker.service                      loaded    active   running D-Bus System Message Bus
+display-manager.service                  not-found inactive dead    display-manager.service
+dnf-makecache.service                    loaded    inactive dead    dnf5 makecache
+emergency.service                        loaded    inactive dead    Emergency Shell
+fstrim.service                           loaded    inactive dead    Discard unused blocks on filesystems from /etc/fstab
+getty@tty1.service                       loaded    inactive dead    Getty on tty1
+initrd-cleanup.service                   loaded    inactive dead    Cleaning Up and Shutting Down Daemons
+initrd-parse-etc.service                 loaded    inactive dead    Mountpoints Configured in the Real Root
+initrd-switch-root.service               loaded    inactive dead    Switch Root
+initrd-udevadm-cleanup-db.service        loaded    inactive dead    Cleanup udev Database
+kmod-static-nodes.service                loaded    inactive dead    Create List of Static Device Nodes
+ldconfig.service                         loaded    active   exited  Rebuild Dynamic Linker Cache
+modprobe@configfs.service                loaded    inactive dead    Load Kernel Module configfs
+modprobe@dm_mod.service                  loaded    inactive dead    Load Kernel Module dm_mod
+modprobe@drm.service                     loaded    inactive dead    Load Kernel Module drm
+modprobe@efi_pstore.service              loaded    inactive dead    Load Kernel Module efi_pstore
+modprobe@fuse.service                    loaded    inactive dead    Load Kernel Module fuse
+modprobe@loop.service                    loaded    inactive dead    Load Kernel Module loop
+plymouth-quit-wait.service               not-found inactive dead    plymouth-quit-wait.service
+plymouth-start.service                   not-found inactive dead    plymouth-start.service
+rc-local.service                         loaded    inactive dead    /etc/rc.d/rc.local Compatibility
+rescue.service                           loaded    inactive dead    Rescue Shell
+rpmdb-migrate.service                    loaded    inactive dead    RPM database migration to /usr
+rpmdb-rebuild.service                    loaded    inactive dead    RPM database rebuild
+ssh-host-keys-migration.service          loaded    active   exited  Update OpenSSH host key permissions
+sshd-keygen@ecdsa.service                loaded    inactive dead    OpenSSH ecdsa Server Key Generation
+sshd-keygen@ed25519.service              loaded    inactive dead    OpenSSH ed25519 Server Key Generation
+sshd-keygen@rsa.service                  loaded    inactive dead    OpenSSH rsa Server Key Generation
+sshd.service                             loaded    active   running OpenSSH server daemon
+syslog.service                           not-found inactive dead    syslog.service
+systemd-ask-password-console.service     loaded    inactive dead    Dispatch Password Requests to Console
+systemd-ask-password-wall.service        loaded    inactive dead    Forward Password Requests to Wall
+systemd-battery-check.service            loaded    inactive dead    Check battery level during early boot
+systemd-binfmt.service                   loaded    inactive dead    Set Up Additional Binary Formats
+systemd-boot-random-seed.service         loaded    inactive dead    Update Boot Loader Random Seed
+systemd-bsod.service                     loaded    inactive dead    Display Boot-Time Emergency Messages In Full Screen
+systemd-confext.service                  loaded    inactive dead    Merge System Configuration Images into /etc/
+systemd-firstboot.service                loaded    inactive dead    First Boot Wizard
+systemd-fsck-root.service                loaded    inactive dead    File System Check on Root Device
+systemd-hibernate-clear.service          loaded    inactive dead    Clear Stale Hibernate Storage Info
+systemd-hibernate-resume.service         loaded    inactive dead    Resume from hibernation
+systemd-homed-activate.service           loaded    active   exited  Home Area Activation
+systemd-homed.service                    loaded    active   running Home Area Manager
+systemd-hostnamed.service                loaded    inactive dead    Hostname Service
+systemd-hwdb-update.service              loaded    active   exited  Rebuild Hardware Database
+systemd-initctl.service                  loaded    inactive dead    initctl Compatibility Daemon
+systemd-journal-catalog-update.service   loaded    active   exited  Rebuild Journal Catalog
+systemd-journal-flush.service            loaded    active   exited  Flush Journal to Persistent Storage
+systemd-journald.service                 loaded    active   running Journal Service
+systemd-logind.service                   loaded    active   running User Login Management
+systemd-machine-id-commit.service        loaded    inactive dead    Save Transient machine-id to Disk
+systemd-modules-load.service             loaded    inactive dead    Load Kernel Modules
+systemd-network-generator.service        loaded    active   exited  Generate network units from Kernel command line
+systemd-oomd.service                     loaded    inactive dead    Userspace Out-Of-Memory (OOM) Killer
+systemd-pcrmachine.service               loaded    inactive dead    TPM PCR Machine ID Measurement
+systemd-pcrphase-initrd.service          loaded    inactive dead    TPM PCR Barrier (initrd)
+systemd-pcrphase-sysinit.service         loaded    inactive dead    TPM PCR Barrier (Initialization)
+systemd-pcrphase.service                 loaded    inactive dead    TPM PCR Barrier (User)
+systemd-pstore.service                   loaded    inactive dead    Platform Persistent Storage Archival
+systemd-quotacheck-root.service          loaded    inactive dead    Root File System Quota Check
+systemd-random-seed.service              loaded    inactive dead    Load/Save OS Random Seed
+systemd-remount-fs.service               loaded    active   exited  Remount Root and Kernel File Systems
+systemd-repart.service                   loaded    inactive dead    Repartition Root Disk
+systemd-resolved.service                 loaded    active   running Network Name Resolution
+systemd-soft-reboot.service              loaded    inactive dead    Reboot System Userspace
+systemd-sysctl.service                   loaded    active   exited  Apply Kernel Variables
+systemd-sysext.service                   loaded    inactive dead    Merge System Extension Images into /usr/ and /opt/
+systemd-sysusers.service                 loaded    active   exited  Create System Users
+systemd-tmpfiles-clean.service           loaded    inactive dead    Cleanup of Temporary Directories
+systemd-tmpfiles-setup-dev-early.service loaded    active   exited  Create Static Device Nodes in /dev gracefully
+systemd-tmpfiles-setup-dev.service       loaded    active   exited  Create Static Device Nodes in /dev
+systemd-tmpfiles-setup.service           loaded    active   exited  Create System Files and Directories
+systemd-tpm2-setup-early.service         loaded    inactive dead    Early TPM SRK Setup
+systemd-tpm2-setup.service               loaded    inactive dead    TPM SRK Setup
+systemd-udev-load-credentials.service    loaded    active   exited  Load udev Rules from Credentials
+systemd-udev-settle.service              loaded    inactive dead    Wait for udev To Complete Device Initialization
+systemd-udev-trigger.service             loaded    active   exited  Coldplug All udev Devices
+systemd-udevd.service                    loaded    active   running Rule-based Manager for Device Events and Files
+systemd-update-done.service              loaded    active   exited  Update is Completed
+systemd-update-utmp-runlevel.service     loaded    inactive dead    Record Runlevel Change in UTMP
+systemd-update-utmp.service              loaded    active   exited  Record System Boot/Shutdown in UTMP
+systemd-user-sessions.service            loaded    active   exited  Permit User Sessions
+systemd-userdbd.service                  loaded    active   running User Database Manager
+systemd-vconsole-setup.service           loaded    inactive dead    Virtual Console Setup
+ypbind.service                           not-found inactive dead    ypbind.service
+
+@@HS-fixture@@ containers
+
+@@HS-fixture@@ who
+
+@@HS-fixture@@ osrelease
+NAME="Fedora Linux"
+VERSION="41 (Container Image)"
+RELEASE_TYPE=stable
+ID=fedora
+VERSION_ID=41
+VERSION_CODENAME=""
+PLATFORM_ID="platform:f41"
+PRETTY_NAME="Fedora Linux 41 (Container Image)"
+ANSI_COLOR="0;38;2;60;110;180"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:fedoraproject:fedora:41"
+DEFAULT_HOSTNAME="fedora"
+HOME_URL="https://fedoraproject.org/"
+DOCUMENTATION_URL="https://docs.fedoraproject.org/en-US/fedora/f41/"
+SUPPORT_URL="https://ask.fedoraproject.org/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+REDHAT_BUGZILLA_PRODUCT="Fedora"
+REDHAT_BUGZILLA_PRODUCT_VERSION=41
+REDHAT_SUPPORT_PRODUCT="Fedora"
+REDHAT_SUPPORT_PRODUCT_VERSION=41
+SUPPORT_END=2025-12-15
+VARIANT="Container Image"
+VARIANT_ID=container
+
+@@HS-fixture@@ uname
+kernel_name=Linux
+kernel_release=7.0.14-orbstack-00380-ga7e0a2dc9535
+kernel_version=#1 SMP PREEMPT Fri Aug  7 03:48:40 UTC 2026
+machine=aarch64
+
+@@HS-fixture@@ cpuinfo
+Vendor ID:                               Apple
+Model name:                              -
+
+@@HS-fixture@@ virt
+detect_virt=docker
+detect_container=docker
+dockerenv=1
+dmi_vendor=
+dmi_product=
+
+@@HS-fixture@@ reboot
+
+@@HS-fixture@@ packages
+#src rpm
+libgcc	(none):14.3.1-4.fc41	aarch64
+publicsuffix-list-dafsa	(none):20250616-1.fc41	noarch
+libssh-config	(none):0.11.3-1.fc41	noarch
+fedora-release-identity-container	(none):41-33	noarch
+fedora-gpg-keys	(none):41-3	noarch
+fedora-repos	(none):41-3	noarch
+fedora-release-common	(none):41-33	noarch
+fedora-release-container	(none):41-33	noarch
+setup	(none):2.15.0-8.fc41	noarch
+filesystem	(none):3.18-23.fc41	aarch64
+basesystem	(none):11-21.fc41	noarch
+pcre2-syntax	(none):10.44-1.fc41.1	noarch
+ncurses-base	(none):6.5-2.20240629.fc41	noarch
+bash	(none):5.2.32-1.fc41	aarch64
+ncurses-libs	(none):6.5-2.20240629.fc41	aarch64
+glibc-minimal-langpack	(none):2.40-28.fc41	aarch64
+glibc-common	(none):2.40-28.fc41	aarch64
+glibc	(none):2.40-28.fc41	aarch64
+zlib-ng-compat	(none):2.2.3-2.fc41	aarch64
+xz-libs	1:5.8.1-2.fc41	aarch64
+libstdc++	(none):14.3.1-4.fc41	aarch64
+bzip2-libs	(none):1.0.8-19.fc41	aarch64
+libzstd	(none):1.5.7-1.fc41	aarch64
+gmp	1:6.3.0-2.fc41	aarch64
+fmt	(none):11.0.2-2.fc41	aarch64
+libxml2	(none):2.12.10-1.fc41	aarch64
+popt	(none):1.19-7.fc41	aarch64
+libxcrypt	(none):4.5.2-1.fc41	aarch64
+libattr	(none):2.5.2-4.fc41	aarch64
+libacl	(none):2.3.2-2.fc41	aarch64
+json-c	(none):0.17-4.fc41	aarch64
+libuuid	(none):2.40.4-1.fc41	aarch64
+pcre2	(none):10.44-1.fc41.1	aarch64
+libffi	(none):3.4.6-3.fc41	aarch64
+libeconf	(none):0.6.2-3.fc41	aarch64
+gdbm-libs	1:1.23-7.fc41	aarch64
+libtasn1	(none):4.20.0-1.fc41	aarch64
+p11-kit	(none):0.25.5-4.fc41	aarch64
+libunistring	(none):1.1-8.fc41	aarch64
+libidn2	(none):2.3.8-1.fc41	aarch64
+crypto-policies	(none):20250707-1.git836bbee.fc41	noarch
+grep	(none):3.11-9.fc41	aarch64
+libblkid	(none):2.40.4-1.fc41	aarch64
+elfutils-libelf	(none):0.194-1.fc41	aarch64
+sqlite-libs	(none):3.46.1-5.fc41	aarch64
+libsmartcols	(none):2.40.4-1.fc41	aarch64
+lz4-libs	(none):1.10.0-1.fc41	aarch64
+libsepol	(none):3.7-2.fc41	aarch64
+libselinux	(none):3.7-5.fc41	aarch64
+sed	(none):4.9-3.fc41	aarch64
+libmount	(none):2.40.4-1.fc41	aarch64
+readline	(none):8.2-10.fc41	aarch64
+lua-libs	(none):5.4.8-1.fc41	aarch64
+libcom_err	(none):1.47.1-6.fc41	aarch64
+gdbm	1:1.23-7.fc41	aarch64
+findutils	1:4.10.0-4.fc41	aarch64
+libpsl	(none):0.21.5-4.fc41	aarch64
+cyrus-sasl-lib	(none):2.1.28-27.fc41	aarch64
+mpfr	(none):4.2.1-5.fc41	aarch64
+gawk	(none):5.3.0-4.fc41	aarch64
+nettle	(none):3.10-3.fc41	aarch64
+file-libs	(none):5.45-7.fc41	aarch64
+libcap-ng	(none):0.8.5-3.fc41	aarch64
+audit-libs	(none):4.1.1-1.fc41	aarch64
+pam-libs	(none):1.6.1-8.fc41	aarch64
+libcap	(none):2.70-4.fc41	aarch64
+systemd-libs	(none):256.17-1.fc41	aarch64
+sdbus-cpp	(none):1.5.0-3.fc41	aarch64
+libsemanage	(none):3.7-2.fc41	aarch64
+shadow-utils	2:4.15.1-12.fc41	aarch64
+libtool-ltdl	(none):2.4.7-12.fc41	aarch64
+libgomp	(none):14.3.1-4.fc41	aarch64
+alternatives	(none):1.31-1.fc41	aarch64
+p11-kit-trust	(none):0.25.5-4.fc41	aarch64
+gnutls	(none):3.8.10-1.fc41	aarch64
+glib2	(none):2.82.5-1.fc41	aarch64
+keyutils-libs	(none):1.6.3-4.fc41	aarch64
+libverto	(none):0.3.2-9.fc41	aarch64
+libyaml	(none):0.2.5-16.fc41	aarch64
+libbrotli	(none):1.1.0-5.fc41	aarch64
+libnghttp2	(none):1.62.1-3.fc41	aarch64
+elfutils-default-yama-scope	(none):0.194-1.fc41	noarch
+elfutils-libs	(none):0.194-1.fc41	aarch64
+vim-data	2:9.1.1914-1.fc41	noarch
+coreutils-common	(none):9.5-12.fc41	aarch64
+openssl-libs	1:3.2.6-2.fc41	aarch64
+coreutils	(none):9.5-12.fc41	aarch64
+ca-certificates	(none):2024.2.69_v8.0.401-1.0.fc41	noarch
+krb5-libs	(none):1.21.3-5.fc41	aarch64
+libtirpc	(none):1.3.6-1.rc3.fc41	aarch64
+zchunk-libs	(none):1.5.1-1.fc41	aarch64
+libnsl2	(none):2.0.1-2.fc41	aarch64
+libssh	(none):0.11.3-1.fc41	aarch64
+gzip	(none):1.13-2.fc41	aarch64
+cracklib	(none):2.9.11-6.fc41	aarch64
+libpwquality	(none):1.4.5-11.fc41	aarch64
+pam	(none):1.6.1-8.fc41	aarch64
+authselect-libs	(none):1.5.0-8.fc41	aarch64
+libevent	(none):2.1.12-14.fc41	aarch64
+openldap	(none):2.6.10-1.fc41	aarch64
+libcurl	(none):8.9.1-4.fc41	aarch64
+curl	(none):8.9.1-4.fc41	aarch64
+rpm-sequoia	(none):1.7.0-5.fc41	aarch64
+rpm-libs	(none):4.20.1-1.fc41	aarch64
+librepo	(none):1.20.0-1.fc41	aarch64
+rpm-build-libs	(none):4.20.1-1.fc41	aarch64
+libmodulemd	(none):2.15.2-1.fc41	aarch64
+libsolv	(none):0.7.35-1.fc41	aarch64
+libdnf5	(none):5.2.17.0-1.fc41	aarch64
+libdnf5-cli	(none):5.2.17.0-1.fc41	aarch64
+dnf5	(none):5.2.17.0-1.fc41	aarch64
+libarchive	(none):3.7.4-4.fc41	aarch64
+rpm	(none):4.20.1-1.fc41	aarch64
+dnf5-plugins	(none):5.2.17.0-1.fc41	aarch64
+sudo	(none):1.9.17-2.p1.fc41	aarch64
+authselect	(none):1.5.0-8.fc41	aarch64
+vim-minimal	2:9.1.1914-1.fc41	aarch64
+util-linux-core	(none):2.40.4-1.fc41	aarch64
+tar	2:1.35-4.fc41	aarch64
+zstd	(none):1.5.7-1.fc41	aarch64
+xz	1:5.8.1-2.fc41	aarch64
+bzip2	(none):1.0.8-19.fc41	aarch64
+tzdata	(none):2025b-1.fc41	noarch
+rootfiles	(none):8.1-37.fc41	noarch
+gpg-pubkey	(none):e99d6ad1-64d2612c	(none)
+libfdisk	(none):2.40.4-1.fc41	aarch64
+libbpf	2:1.4.7-1.fc41	aarch64
+libpkgconf	(none):2.3.0-1.fc41	aarch64
+pkgconf	(none):2.3.0-1.fc41	aarch64
+pkgconf-m4	(none):2.3.0-1.fc41	noarch
+pkgconf-pkg-config	(none):2.3.0-1.fc41	aarch64
+kmod	(none):33-1.fc41	aarch64
+kbd-misc	(none):2.6.4-4.fc41	noarch
+kbd-legacy	(none):2.6.4-4.fc41	noarch
+kbd	(none):2.6.4-4.fc41	aarch64
+kmod-libs	(none):33-1.fc41	aarch64
+xkeyboard-config	(none):2.42-2.fc41	noarch
+expat	(none):2.7.2-1.fc41	aarch64
+dbus-common	1:1.14.10-4.fc41	noarch
+dbus-broker	(none):36-5.fc41	aarch64
+dbus	1:1.14.10-4.fc41	aarch64
+libedit	(none):3.1-55.20251016cvs.fc41	aarch64
+libutempter	(none):1.2.1-15.fc41	aarch64
+util-linux	(none):2.40.4-1.fc41	aarch64
+openssh	(none):9.9p1-4.fc41	aarch64
+libcbor	(none):0.11.0-2.fc41	aarch64
+libfido2	(none):1.15.0-2.fc41	aarch64
+libseccomp	(none):2.5.5-2.fc41	aarch64
+systemd-pam	(none):256.17-1.fc41	aarch64
+systemd	(none):256.17-1.fc41	aarch64
+cronie-anacron	(none):1.7.2-2.fc41	aarch64
+cronie	(none):1.7.2-2.fc41	aarch64
+crontabs	(none):1.11^20190603git9e74f2d-4.fc41	noarch
+device-mapper-libs	(none):1.02.199-4.fc41	aarch64
+device-mapper	(none):1.02.199-4.fc41	aarch64
+cryptsetup-libs	(none):2.8.1-1.fc41	aarch64
+psmisc	(none):23.7-3.fc41	aarch64
+libmnl	(none):1.0.5-6.fc41	aarch64
+iproute	(none):6.10.0-1.fc41	aarch64
+systemd-udev	(none):256.17-1.fc41	aarch64
+openssh-server	(none):9.9p1-4.fc41	aarch64
+systemd-networkd	(none):256.17-1.fc41	aarch64
+systemd-resolved	(none):256.17-1.fc41	aarch64
+openssh-clients	(none):9.9p1-4.fc41	aarch64
+libxkbcommon	(none):1.7.0-4.fc41	aarch64
+tpm2-tss	(none):4.1.3-3.fc41	aarch64
+qrencode-libs	(none):4.1.1-8.fc41	aarch64
+diffutils	(none):3.10-8.fc41	aarch64
+procps-ng	(none):4.0.4-4.fc41.1	aarch64
+sshpass	(none):1.09-8.fc41	aarch64
+
+@@HS-fixture@@ units
+#src systemd
+crond.service                     enabled enabled
+dbus-broker.service               enabled enabled
+getty@.service                    enabled enabled
+rpmdb-migrate.service             enabled enabled
+rpmdb-rebuild.service             enabled enabled
+sshd.service                      enabled enabled
+systemd-confext.service           enabled enabled
+systemd-homed-activate.service    enabled enabled
+systemd-homed.service             enabled enabled
+systemd-network-generator.service enabled enabled
+systemd-oomd.service              enabled enabled
+systemd-pstore.service            enabled enabled
+systemd-resolved.service          enabled enabled
+systemd-sysext.service            enabled enabled
+dbus.socket                       enabled enabled
+systemd-journald-audit.socket     enabled enabled
+systemd-userdbd.socket            enabled enabled
+dnf-makecache.timer               enabled enabled
+fstrim.timer                      enabled enabled
+
+@@HS-fixture@@ auth
+tz=+0000
+now=1790787270
+#src journal
+1790787258.921205 e8a8cd16693e sshd-session[155]: Invalid user admin from 127.0.0.1 port 58806
+1790787260.824025 e8a8cd16693e sshd-session[155]: Failed password for invalid user admin from 127.0.0.1 port 58806 ssh2
+1790787264.685772 e8a8cd16693e sshd-session[159]: Failed password for root from 127.0.0.1 port 56858 ssh2
+1790787266.816046 e8a8cd16693e sshd-session[164]: Invalid user oracle from 127.0.0.1 port 56864
+1790787268.273884 e8a8cd16693e sshd-session[164]: Failed password for invalid user oracle from 127.0.0.1 port 56864 ssh2
+1790787269.528750 e8a8cd16693e sshd-session[167]: Invalid user ghost from 127.0.0.1 port 59774
+
+@@HS-fixture@@ updates
+#src dnf
+xz.aarch64      1:5.8.1-4.fc41 updates
+xz-libs.aarch64 1:5.8.1-4.fc41 updates
+#security
+
+@@HS-fixture@@ end

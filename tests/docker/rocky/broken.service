@@ -1,0 +1,6 @@
+[Unit]
+Description=Deliberately failing unit used by tests
+
+[Service]
+Type=oneshot
+ExecStart=/bin/false

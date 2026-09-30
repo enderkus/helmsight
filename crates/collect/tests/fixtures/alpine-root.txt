@@ -1,0 +1,331 @@
+
+@@HS-fixture@@ begin
+v=1
+groups= metrics basics medium inventory auth updates 
+
+@@HS-fixture@@ time
+1790787372
+
+@@HS-fixture@@ stat
+cpu  155424 45 53461 32030282 4783 0 17537 0 0 0
+cpu0 21274 2 8800 3188314 3467 0 12938 0 0 0
+cpu1 22288 6 6412 3194926 245 0 2431 0 0 0
+cpu2 20323 3 5897 3197896 159 0 866 0 0 0
+cpu3 14658 7 5570 3203898 151 0 439 0 0 0
+cpu4 14969 7 5303 3204057 175 0 272 0 0 0
+cpu5 14440 1 5733 3204093 168 0 187 0 0 0
+cpu6 17294 6 5299 3201922 140 0 151 0 0 0
+cpu7 15228 3 5541 3203775 138 0 131 0 0 0
+cpu8 14946 6 4901 3204789 136 0 120 0 0 0
+cpu9 0 0 0 3226608 0 0 0 0 0 0
+intr 21247822 0 118988 11602985 0 0 0 4349 0 0 0 0 8788124 0 25 1 1286 13 537 0 1 0 167115 0 3 557242 6934 217 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 64955712
+btime 1790755106
+processes 55319
+procs_running 1
+procs_blocked 0
+softirq 3809653 0 201890 713 982141 167119 0 5574 2291517 1 160698
+
+@@HS-fixture@@ meminfo
+MemTotal:        8196572 kB
+MemFree:         6976360 kB
+MemAvailable:    7618996 kB
+Buffers:             184 kB
+Cached:           569912 kB
+SwapCached:            0 kB
+Active:           165436 kB
+Inactive:         505844 kB
+Active(anon):     105196 kB
+Inactive(anon):    18764 kB
+Active(file):      60240 kB
+Inactive(file):   487080 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       9245140 kB
+SwapFree:        9245140 kB
+Dirty:               200 kB
+Writeback:             0 kB
+AnonPages:         94236 kB
+Mapped:            83176 kB
+Shmem:             22784 kB
+KReclaimable:     299712 kB
+Slab:             421408 kB
+SReclaimable:     299712 kB
+SUnreclaim:       121696 kB
+KernelStack:        4944 kB
+PageTables:         4180 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    13343424 kB
+Committed_AS:     963328 kB
+VmallocTotal:   135288315904 kB
+VmallocUsed:       45580 kB
+VmallocChunk:          0 kB
+Percpu:             3080 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Balloon:               0 kB
+
+@@HS-fixture@@ loadavg
+0.37 0.32 0.15 1/300 39
+
+@@HS-fixture@@ uptime
+32266.10 320302.83
+
+@@HS-fixture@@ diskstats
+   7       0 loop0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       1 loop1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       2 loop2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   7       3 loop3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43       0 nbd0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      32 nbd1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      64 nbd2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  43      96 nbd3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 254       0 vda 81652 536 13917256 270 0 0 0 0 0 175514 270 0 0 0 0 0 0
+ 254      16 vdb 212308 2157 34119634 1778 332839 167588 29788424 110279 0 101253 167231 119938 0 18708896 8107 48052 47066
+ 254      17 vdb1 212206 2157 34118680 1778 332839 167588 29788424 110279 0 107024 120164 119938 0 18708896 8107 0 0
+ 254      32 vdc 51 0 2120 0 1 0 8 0 0 12 8 1 0 2097144 8 0 0
+ 253       0 zram0 2 0 16 0 1 0 8 0 0 0 0 0 0 0 0 0 0
+
+@@HS-fixture@@ netdev
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:   29080      90    0    0    0     0          0         0    29080      90    0    0    0     0       0          0
+  eth0:    1130      11    0    0    0     0          0         0      126       3    0    0    0     0       0          0
+
+@@HS-fixture@@ mounts
+overlay / overlay rw,relatime,lowerdir=/var/lib/docker/overlay2/l/FLS46BJ7CR2Z5EERSQUC77R3KC:/var/lib/docker/overlay2/l/VFGMUFP3TSFBDEKTBIZIA76Z73:/var/lib/docker/overlay2/l/RMW5XL7UN7UUUUAGP7JRTQZAMZ:/var/lib/docker/overlay2/l/CBHVYEBOVDFPSB3EFWHFB7NMUN,upperdir=/var/lib/docker/overlay2/840419e3bfee92c807addf5f0b44a56793148e76e3e6523177a69901df12eb4c/diff,workdir=/var/lib/docker/overlay2/840419e3bfee92c807addf5f0b44a56793148e76e3e6523177a69901df12eb4c/work 0 0
+proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+tmpfs /dev tmpfs rw,nosuid,size=65536k,mode=755 0 0
+devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666 0 0
+sysfs /sys sysfs ro,nosuid,nodev,noexec,relatime 0 0
+cgroup /sys/fs/cgroup cgroup2 ro,nosuid,nodev,noexec,relatime,nsdelegate 0 0
+mqueue /dev/mqueue mqueue rw,nosuid,nodev,noexec,relatime 0 0
+shm /dev/shm tmpfs rw,nosuid,nodev,noexec,relatime,size=4098048k 0 0
+/dev/vdb1 /etc/resolv.conf btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+/dev/vdb1 /etc/hostname btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+/dev/vdb1 /etc/hosts btrfs rw,noatime,nodatasum,nodatacow,ssd,discard,space_cache=v2,subvolid=5,subvol=/ 0 0
+proc /proc/bus proc ro,nosuid,nodev,noexec,relatime 0 0
+proc /proc/fs proc ro,nosuid,nodev,noexec,relatime 0 0
+proc /proc/irq proc ro,nosuid,nodev,noexec,relatime 0 0
+proc /proc/sys proc ro,nosuid,nodev,noexec,relatime 0 0
+proc /proc/sysrq-trigger proc ro,nosuid,nodev,noexec,relatime 0 0
+tmpfs /proc/asound tmpfs ro,relatime,size=4k,nr_inodes=1 0 0
+tmpfs /proc/interrupts tmpfs rw,nosuid,size=65536k,mode=755 0 0
+tmpfs /proc/keys tmpfs rw,nosuid,size=65536k,mode=755 0 0
+tmpfs /proc/timer_list tmpfs rw,nosuid,size=65536k,mode=755 0 0
+tmpfs /sys/firmware tmpfs ro,relatime,size=4k,nr_inodes=1 0 0
+
+@@HS-fixture@@ df
+Filesystem           1024-blocks    Used Available Capacity Mounted on
+overlay               73793536  21477440  52316096  29% /
+tmpfs                    65536         0     65536   0% /dev
+shm                    4098048         0   4098048   0% /dev/shm
+/dev/vdb1             73793536  21477440  52316096  29% /etc/resolv.conf
+/dev/vdb1             73793536  21477440  52316096  29% /etc/hostname
+/dev/vdb1             73793536  21477440  52316096  29% /etc/hosts
+tmpfs                        4         0         4   0% /proc/asound
+tmpfs                    65536         0     65536   0% /proc/interrupts
+tmpfs                    65536         0     65536   0% /proc/keys
+tmpfs                    65536         0     65536   0% /proc/timer_list
+tmpfs                        4         0         4   0% /sys/firmware
+
+@@HS-fixture@@ dfi
+Filesystem              Inodes      Used Available Capacity Mounted on
+overlay                      0         0         0   0% /
+tmpfs                  1024571        16   1024555   0% /dev
+shm                    1024571         1   1024570   0% /dev/shm
+/dev/vdb1                    0         0         0   0% /etc/resolv.conf
+/dev/vdb1                    0         0         0   0% /etc/hostname
+/dev/vdb1                    0         0         0   0% /etc/hosts
+tmpfs                        1         1         0 100% /proc/asound
+tmpfs                  1024571        16   1024555   0% /proc/interrupts
+tmpfs                  1024571        16   1024555   0% /proc/keys
+tmpfs                  1024571        16   1024555   0% /proc/timer_list
+tmpfs                        1         1         0 100% /sys/firmware
+
+@@HS-fixture@@ tcp
+06 4
+0A 2
+
+@@HS-fixture@@ procstat
+1 (sshd) S 0 1 1 0 -1 4194560 1387 3074 0 0 0 0 4 1 20 0 1 0 3225638 6991872 1293 18446744073709551615 187650303918080 187650304758132 281474873893648 0 0 0 0 4096 81925 1 0 0 17 0 0 0 0 0 0 187650304822424 187650304836624 187650797240320 281474873896806 281474873896824 281474873896824 281474873896937 0
+28 (sh) S 0 28 28 0 -1 4194560 1062 748 0 0 0 0 0 0 20 0 1 0 3226609 1826816 302 18446744073709551615 187650585001984 187650585888812 281474842430688 0 0 0 0 4 65536 1 0 0 17 8 0 0 0 0 0 187650585970512 187650585985081 187651281252352 281474842431367 281474842431373 281474842431373 281474842431472 0
+35 (timeout) S 1 35 35 0 -1 4194368 13 0 0 0 0 0 0 0 20 0 1 0 3226610 1757184 128 18446744073709551615 187650258108416 187650258995244 281474430061984 0 0 0 0 0 0 1 0 0 17 4 0 0 0 0 0 187650259076944 187650259091513 187650774081536 281474430066519 281474430066534 281474430066534 281474430066663 0
+46 (timeout) S 1 46 46 0 -1 4194368 13 0 0 0 0 0 0 0 20 0 1 0 3226610 1757184 128 18446744073709551615 187650987065344 187650987952172 281474457495856 0 0 0 0 0 0 1 0 0 17 6 0 0 0 0 0 187650988033872 187650988048441 187650994999296 281474457497429 281474457497446 281474457497446 281474457497575 0
+49 (timeout) S 1 49 49 0 -1 4194368 14 0 0 0 0 0 0 0 20 0 1 0 3226610 1757184 128 18446744073709551615 187650552496128 187650553382956 281474621298736 0 0 0 0 0 0 1 0 0 17 5 0 0 0 0 0 187650553464656 187650553479225 187651100594176 281474621300565 281474621300582 281474621300582 281474621300711 0
+7 (syslogd) S 1 7 7 0 -1 4194624 33 0 0 0 0 0 0 0 20 0 1 0 3225641 1773568 205 18446744073709551615 187650356609024 187650357495852 281474083079360 0 0 0 0 1 16386 1 0 0 17 1 0 0 0 0 0 187650357577552 187650357592121 187651420581888 281474083082076 281474083082105 281474083082105 281474083082218 0
+
+@@HS-fixture@@ ps
+PID   USER     COMMAND
+    1 root     sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+    7 root     syslogd -O /var/log/messages
+   28 root     sh -s
+   35 root     timeout 2 true
+   46 root     timeout 5 df -Pk
+   49 root     timeout 5 df -Pi
+   53 root     ps -o pid,user,args
+
+@@HS-fixture@@ basics
+pagesize=4096
+hostname=e99673dc08d9
+user=root
+uid=0
+
+@@HS-fixture@@ listen
+#src netstat
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1/sshd -D [listener
+tcp        0      0 :::22                   :::*                    LISTEN      1/sshd -D [listener
+
+@@HS-fixture@@ services
+#src openrc
+Service `acpid' needs non existent service `dev'
+Service `hwdrivers' needs non existent service `dev'
+Service `machine-id' needs non existent service `dev'
+Service `watchdog' needs non existent service `dev'
+ * Caching service dependencies ... [ ok ]
+Runlevel: boot
+Runlevel: default
+Runlevel: nonetwork
+Runlevel: shutdown
+Runlevel: sysinit
+Dynamic Runlevel: hotplugged
+Dynamic Runlevel: needed/wanted
+Dynamic Runlevel: manual
+
+@@HS-fixture@@ containers
+
+@@HS-fixture@@ who
+
+@@HS-fixture@@ osrelease
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.20.10
+PRETTY_NAME="Alpine Linux v3.20"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+
+@@HS-fixture@@ uname
+kernel_name=Linux
+kernel_release=7.0.14-orbstack-00380-ga7e0a2dc9535
+kernel_version=#1 SMP PREEMPT Fri Aug  7 03:48:40 UTC 2026
+machine=aarch64
+
+@@HS-fixture@@ cpuinfo
+
+@@HS-fixture@@ virt
+dockerenv=1
+dmi_vendor=
+dmi_product=
+
+@@HS-fixture@@ reboot
+
+@@HS-fixture@@ packages
+#src apk
+alpine-baselayout-3.6.5-r0
+alpine-baselayout-data-3.6.5-r0
+alpine-keys-2.4-r1
+apk-tools-2.14.4-r1
+busybox-1.36.1-r31
+busybox-binsh-1.36.1-r31
+busybox-openrc-1.36.1-r31
+ca-certificates-bundle-20260413-r0
+ifupdown-ng-0.12.1-r5
+libcap2-2.78-r0
+libcrypto3-3.3.7-r0
+libedit-20240517.3.1-r0
+libncursesw-6.4_p20240420-r2
+libssl3-3.3.7-r0
+musl-1.2.5-r3
+musl-utils-1.2.5-r3
+ncurses-terminfo-base-6.4_p20240420-r2
+openrc-0.54-r1
+openssh-client-common-9.7_p1-r5
+openssh-client-default-9.7_p1-r5
+openssh-keygen-9.7_p1-r5
+openssh-server-9.7_p1-r5
+openssh-server-common-9.7_p1-r5
+openssh-server-common-openrc-9.7_p1-r5
+scanelf-1.3.7-r2
+sshpass-1.10-r0
+ssl_client-1.36.1-r31
+sudo-1.9.15_p5-r0
+zlib-1.3.2-r0
+
+@@HS-fixture@@ units
+#src openrc
+                acpid |                                        
+               binfmt |                                        
+             bootmisc |                                        
+              cgroups |                                        
+          consolefont |                                        
+                crond |                                        
+                devfs |                                        
+                dmesg |                                        
+            firstboot |                                        
+                 fsck |                                        
+             hostname |                                        
+              hwclock |                                        
+            hwdrivers |                                        
+            killprocs |                                        
+                klogd |                                        
+             loadkmap |                                        
+                local |                                        
+           localmount |                                        
+             loopback |                                        
+           machine-id |                                        
+              modloop |                                        
+              modules |                                        
+             mount-ro |                                        
+                 mtab |                                        
+           net-online |                                        
+             netmount |                                        
+           networking |                                        
+                 ntpd |                                        
+              numlock |                                        
+              osclock |                                        
+               procfs |                                        
+                rdate |                                        
+                 root |                                        
+             runsvdir |                                        
+            s6-svscan |                                        
+         save-keymaps |                                        
+    save-termencoding |                                        
+            savecache |                                        
+              seedrng |                                        
+                 sshd |                                        
+          staticroute |                                        
+                 swap |                                        
+              swclock |                                        
+               sysctl |                                        
+                sysfs |                                        
+            sysfsconf |                                        
+               syslog |                                        
+         termencoding |                                        
+             watchdog |                                        
+
+@@HS-fixture@@ auth
+tz=+0000
+now=1790787372
+#src file /var/log/messages
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[15]: Invalid user admin from 127.0.0.1 port 45894
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[15]: Failed password for invalid user admin from 127.0.0.1 port 45894 ssh2
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[19]: Failed password for root from 127.0.0.1 port 45898 ssh2
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[23]: Invalid user oracle from 127.0.0.1 port 45914
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[23]: Failed password for invalid user oracle from 127.0.0.1 port 45914 ssh2
+Sep 30 16:56:11 e99673dc08d9 auth.info sshd[26]: Invalid user ghost from 127.0.0.1 port 45930
+
+@@HS-fixture@@ updates
+#src apk
+WARNING: opening from cache https://dl-cdn.alpinelinux.org/alpine/v3.20/main: No such file or directory
+WARNING: opening from cache https://dl-cdn.alpinelinux.org/alpine/v3.20/community: No such file or directory
+Installed:                                Available:
+
+@@HS-fixture@@ end
