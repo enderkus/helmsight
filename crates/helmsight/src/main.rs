@@ -1,0 +1,200 @@
+//! Command-line entry point.
+
+mod cli;
+
+use clap::{Parser, Subcommand};
+use std::path::PathBuf;
+use std::process::ExitCode;
+
+#[derive(Parser)]
+#[command(
+    name = "helmsight",
+    version,
+    about = "Watch every server from one screen. Install nothing on them.",
+    long_about = "Agentless monitoring dashboard for Linux servers. Collects metrics and inventory \
+over SSH with read-only commands and serves a web UI."
+)]
+struct Cli {
+    /// Configuration file.
+    #[arg(short, long, global = true, env = "HELMSIGHT_CONFIG")]
+    config: Option<PathBuf>,
+
+    /// Log format.
+    #[arg(long, global = true, default_value = "text", value_parser = ["text", "json"])]
+    log_format: String,
+
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Subcommand)]
+enum Command {
+    /// Run the web server and collectors.
+    Serve {
+        /// Monitor only this machine by reading /proc directly (no SSH, no config needed).
+        #[arg(long)]
+        local: bool,
+        /// Override `server.listen`.
+        #[arg(long)]
+        listen: Option<String>,
+        /// Override `server.data_dir`.
+        #[arg(long)]
+        data_dir: Option<PathBuf>,
+    },
+    /// Create a configuration file, key file and the first administrator.
+    Init {
+        /// Overwrite an existing configuration file.
+        #[arg(long)]
+        force: bool,
+    },
+    /// Manage local user accounts.
+    #[command(subcommand)]
+    User(UserCommand),
+    /// Work with monitored hosts.
+    #[command(subcommand)]
+    Hosts(HostsCommand),
+    /// Validate the configuration.
+    #[command(subcommand)]
+    Config(ConfigCommand),
+    /// Manage secrets stored encrypted in the database.
+    #[command(subcommand)]
+    Secret(SecretCommand),
+    /// Audit log tools.
+    #[command(subcommand)]
+    Audit(AuditCommand),
+}
+
+#[derive(Subcommand)]
+enum UserCommand {
+    /// Add a user. The password is prompted for (or read from stdin with --password-stdin).
+    Add {
+        username: String,
+        #[arg(long, default_value = "viewer", value_parser = ["viewer", "operator", "admin"])]
+        role: String,
+        #[arg(long)]
+        password_stdin: bool,
+    },
+    /// Remove a user.
+    Remove { username: String },
+    /// Set a new password and end the user's sessions.
+    ResetPassword {
+        username: String,
+        #[arg(long)]
+        password_stdin: bool,
+        /// Also remove two-factor authentication.
+        #[arg(long)]
+        reset_totp: bool,
+    },
+    /// List users.
+    List,
+}
+
+#[derive(Subcommand)]
+enum HostsCommand {
+    /// Check connectivity, authentication and host keys of all hosts.
+    Test {
+        /// Only test these hosts.
+        names: Vec<String>,
+        /// Interactively trust unknown host keys after showing their fingerprint.
+        #[arg(long)]
+        trust: bool,
+    },
+}
+
+#[derive(Subcommand)]
+enum ConfigCommand {
+    /// Validate the configuration file and print a summary.
+    Check,
+}
+
+#[derive(Subcommand)]
+enum SecretCommand {
+    /// Store a secret (value prompted for, or read from stdin with --stdin).
+    Set {
+        name: String,
+        #[arg(long)]
+        stdin: bool,
+    },
+    /// List stored secret names.
+    List,
+    /// Delete a stored secret.
+    Delete { name: String },
+}
+
+#[derive(Subcommand)]
+enum AuditCommand {
+    /// Verify the audit log hash chain.
+    Verify,
+}
+
+fn init_logging(format: &str) {
+    use tracing_subscriber::EnvFilter;
+    let filter = EnvFilter::try_from_env("HELMSIGHT_LOG")
+        .unwrap_or_else(|_| EnvFilter::new("info,russh=warn,hyper=warn"));
+    let ansi = std::io::IsTerminal::is_terminal(&std::io::stderr());
+    let builder = tracing_subscriber::fmt()
+        .with_env_filter(filter)
+        .with_target(false)
+        .with_ansi(ansi)
+        .with_writer(std::io::stderr);
+    if format == "json" {
+        builder.json().init();
+    } else {
+        builder.compact().init();
+    }
+}
+
+fn main() -> ExitCode {
+    let cli = Cli::parse();
+    init_logging(&cli.log_format);
+    let rt = match tokio::runtime::Runtime::new() {
+        Ok(rt) => rt,
+        Err(e) => {
+            eprintln!("error: cannot start runtime: {e}");
+            return ExitCode::FAILURE;
+        }
+    };
+    let result = rt.block_on(async move {
+        match cli.command {
+            Command::Serve {
+                local,
+                listen,
+                data_dir,
+            } => cli::serve(cli.config, local, listen, data_dir).await,
+            Command::Init { force } => cli::init(cli.config, force).await,
+            Command::User(c) => match c {
+                UserCommand::Add {
+                    username,
+                    role,
+                    password_stdin,
+                } => cli::user_add(cli.config, username, role, password_stdin).await,
+                UserCommand::Remove { username } => cli::user_remove(cli.config, username).await,
+                UserCommand::ResetPassword {
+                    username,
+                    password_stdin,
+                    reset_totp,
+                } => cli::user_reset(cli.config, username, password_stdin, reset_totp).await,
+                UserCommand::List => cli::user_list(cli.config).await,
+            },
+            Command::Hosts(HostsCommand::Test { names, trust }) => {
+                cli::hosts_test(cli.config, names, trust).await
+            }
+            Command::Config(ConfigCommand::Check) => cli::config_check(cli.config),
+            Command::Secret(c) => match c {
+                SecretCommand::Set { name, stdin } => {
+                    cli::secret_set(cli.config, name, stdin).await
+                }
+                SecretCommand::List => cli::secret_list(cli.config).await,
+                SecretCommand::Delete { name } => cli::secret_delete(cli.config, name).await,
+            },
+            Command::Audit(AuditCommand::Verify) => cli::audit_verify(cli.config).await,
+        }
+    });
+    match result {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("error: {e}");
+            ExitCode::FAILURE
+        }
+    }
+}
