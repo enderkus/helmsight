@@ -142,7 +142,11 @@ pub fn filesystems(
         if fstype.is_none() && PSEUDO_DEVICES.contains(&r.device.as_str()) {
             continue;
         }
+        // Files bind-mounted by container runtimes.
+        let runtime_file =
+            ["/etc/hosts", "/etc/hostname", "/etc/resolv.conf"].contains(&r.mount.as_str());
         if r.a == 0
+            || runtime_file
             || [
                 "/proc",
                 "/sys",
@@ -204,6 +208,7 @@ mod tests {
 tmpfs              4046452         0   4046452       0% /dev/shm
 /dev/sdb1        103081248  92773080   5048456      95% /var/lib/my data
 /dev/sda1         41152736  20576368  18463224      53% /etc/hostname
+/dev/sda2         41152736  20576368  18463224      53% /etc/resolv.conf
 /dev/loop0           56064     56064         0     100% /snap/core18/1
 ";
     const DFI: &str = "Filesystem      Inodes  IUsed   IFree IUse% Mounted on
