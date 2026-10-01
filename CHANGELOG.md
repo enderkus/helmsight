@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `helmsight hosts bootstrap` prints a script that creates the monitoring
+  account on a host, with the public key restricted by `restrict,from=`.
+- `helmsight init` accepts its answers as options (`--listen`,
+  `--public-url`, `--ssh-user`, `--ssh-key`, `--admin`), runs without
+  questions with `--non-interactive`, reads the administrator's password
+  with `--password-stdin` and creates an ed25519 key with `--generate-key`.
+
 - Turkish documentation: `README.tr.md`, `docs/tr/` and a Turkish website
   and documentation under `/tr/`, with language links between them.
 - A troubleshooting page in the documentation.

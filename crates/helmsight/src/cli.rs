@@ -212,23 +212,54 @@ fn read_password(username: &str, from_stdin: bool) -> Result<String, String> {
     }
 }
 
-fn config_template(listen: &str, data_dir: &str, user: &str, key: &str) -> String {
+/// Quotes a value as a TOML basic string.
+fn toml_str(v: &str) -> String {
+    let mut s = String::with_capacity(v.len() + 2);
+    s.push('"');
+    for c in v.chars() {
+        match c {
+            '"' => s.push_str("\\\""),
+            '\\' => s.push_str("\\\\"),
+            c if c.is_control() => s.push_str(&format!("\\u{:04X}", u32::from(c))),
+            c => s.push(c),
+        }
+    }
+    s.push('"');
+    s
+}
+
+fn config_template(
+    listen: &str,
+    data_dir: &str,
+    public_url: &str,
+    user: &str,
+    key: &str,
+) -> String {
     let key_line = if key.is_empty() {
         "# identity_files = [\"/etc/helmsight/id_ed25519\"]".to_string()
     } else {
-        format!("identity_files = [\"{key}\"]")
+        format!("identity_files = [{}]", toml_str(key))
     };
+    let url_line = if public_url.is_empty() {
+        "# public_url = \"https://monitor.example.com\"".to_string()
+    } else {
+        format!("public_url = {}", toml_str(public_url))
+    };
+    let listen = toml_str(listen);
+    let data_dir = toml_str(data_dir);
+    let user = toml_str(user);
     format!(
         r#"# {PRODUCT_NAME} configuration. See examples/helmsight.toml for every option.
 
 [server]
-listen = "{listen}"
-data_dir = "{data_dir}"
-# public_url = "https://monitor.example.com"
+listen = {listen}
+data_dir = {data_dir}
+{url_line}
 
 [ssh]
 # Unprivileged account on the monitored hosts (see docs/security.md).
-user = "{user}"
+# `{PRODUCT_NAME} hosts bootstrap` prints a script that creates it.
+user = {user}
 {key_line}
 use_agent = true
 # Trust keys of hosts seen for the first time. Changed keys are always refused.
@@ -248,33 +279,100 @@ accept_new_host_keys = false
     )
 }
 
-pub async fn init(config: Option<PathBuf>, force: bool) -> Res {
+/// Answers for `init`. Options that are set are used as given; the rest
+/// are asked for, or take their defaults with `non_interactive`.
+pub struct InitOptions {
+    pub force: bool,
+    pub non_interactive: bool,
+    pub listen: Option<String>,
+    pub data_dir: Option<PathBuf>,
+    pub public_url: Option<String>,
+    pub ssh_user: Option<String>,
+    pub ssh_key: Option<PathBuf>,
+    pub generate_key: bool,
+    pub admin: Option<String>,
+    pub password_stdin: bool,
+}
+
+fn yes_no(question: &str, default_yes: bool) -> Result<bool, String> {
+    let a = prompt(question, if default_yes { "Y/n" } else { "y/N" })?;
+    Ok(match a.to_ascii_lowercase().as_str() {
+        "y" | "yes" => true,
+        "n" | "no" => false,
+        _ => default_yes,
+    })
+}
+
+pub async fn init(config: Option<PathBuf>, o: InitOptions) -> Res {
     let path = config_path(config);
-    if path.exists() && !force {
+    if path.exists() && !o.force {
         return Err(format!(
             "{} already exists; use --force to overwrite it",
             path.display()
         ));
     }
+    if o.password_stdin && !o.non_interactive {
+        return Err("--password-stdin requires --non-interactive".into());
+    }
+    let ask = |question: &str, given: Option<String>, default: &str| match given {
+        Some(v) => Ok(v),
+        None if o.non_interactive => Ok(default.to_string()),
+        None => prompt(question, default),
+    };
+    let config_dir = path
+        .parent()
+        .filter(|d| !d.as_os_str().is_empty())
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("."));
+    let config_dir = std::path::absolute(&config_dir).unwrap_or(config_dir);
+
+    // Read the password first so that a rejected password changes nothing.
+    let admin_password = if o.password_stdin {
+        let name = o.admin.clone().unwrap_or_else(|| "admin".into());
+        Some((name.clone(), read_password(&name, true)?))
+    } else {
+        None
+    };
+
     println!("Creating {}.\n", path.display());
-    let listen = prompt("Listen address", "127.0.0.1:8080")?;
+    let listen = ask("Listen address", o.listen.clone(), "127.0.0.1:8080")?;
     let default_dir = if is_root() {
         format!("/var/lib/{PRODUCT_NAME}")
     } else {
         "data".to_string()
     };
-    let data_dir = prompt("Data directory", &default_dir)?;
-    let user = prompt("SSH user on monitored hosts", "monitor")?;
+    let data_dir = ask(
+        "Data directory",
+        o.data_dir.as_ref().map(|d| d.display().to_string()),
+        &default_dir,
+    )?;
+    let public_url = ask(
+        "External URL of the UI, e.g. https://monitor.example.com (empty for none)",
+        o.public_url.clone(),
+        "",
+    )?;
+    let user = ask("SSH user on monitored hosts", o.ssh_user.clone(), "monitor")?;
     let default_key = std::env::var_os("HOME")
         .map(|h| PathBuf::from(h).join(".ssh/id_ed25519"))
-        .filter(|p| p.is_file())
-        .map(|p| p.display().to_string())
-        .unwrap_or_default();
-    let key = prompt(
+        .filter(|p| p.is_file() && !o.generate_key)
+        .unwrap_or_else(|| config_dir.join("id_ed25519"))
+        .display()
+        .to_string();
+    let key = ask(
         "SSH private key file (empty to use ssh-agent only)",
+        o.ssh_key.as_ref().map(|p| p.display().to_string()),
         &default_key,
     )?;
-    let text = config_template(&listen, &data_dir, &user, &key);
+    let generate = !key.is_empty()
+        && !PathBuf::from(&key).exists()
+        && (o.generate_key
+            || (!o.non_interactive
+                && yes_no(
+                    &format!("No key at {key}. Create a new ed25519 key there?"),
+                    true,
+                )?));
+
+    let text = config_template(&listen, &data_dir, &public_url, &user, &key);
     if let Err(e) = Config::from_str_at(&text, &path) {
         return Err(format!(
             "the answers produce an invalid configuration:\n{e}"
@@ -282,6 +380,14 @@ pub async fn init(config: Option<PathBuf>, force: bool) -> Res {
     }
     if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
         std::fs::create_dir_all(dir).map_err(|e| format!("creating {}: {e}", dir.display()))?;
+    }
+    if generate {
+        let key_path = PathBuf::from(&key);
+        if let Some(dir) = key_path.parent().filter(|d| !d.as_os_str().is_empty()) {
+            std::fs::create_dir_all(dir).map_err(|e| format!("creating {}: {e}", dir.display()))?;
+        }
+        transport::keygen::generate_ed25519(&key_path, PRODUCT_NAME)?;
+        println!("Created the SSH key {key} (public key: {key}.pub).");
     }
     std::fs::write(&path, text).map_err(|e| format!("writing {}: {e}", path.display()))?;
     println!("Wrote {}.", path.display());
@@ -295,33 +401,93 @@ pub async fn init(config: Option<PathBuf>, force: bool) -> Res {
         dir.display()
     );
     if store.user_count().await.map_err(|e| e.to_string())? == 0 {
-        println!("\nCreate the first administrator.");
-        let name = prompt("User name", "admin")?;
-        let pw = read_password(&name, false)?;
-        let hash = tokio::task::spawn_blocking(move || server::auth::password::hash(&pw))
-            .await
-            .map_err(|e| e.to_string())??;
-        store
-            .create_user(name.clone(), Some(hash), Role::Admin, None, None)
-            .await
-            .map_err(|e| e.to_string())?;
-        store
-            .audit(
-                "cli",
-                "user.create",
-                Some(&name),
-                serde_json::json!({"role": "admin"}),
-            )
-            .await
-            .map_err(|e| e.to_string())?;
-        println!("Administrator `{name}` created.");
+        let admin = match admin_password {
+            Some(a) => Some(a),
+            None if o.non_interactive => None,
+            None => {
+                println!("\nCreate the first administrator.");
+                let name = ask("User name", o.admin.clone(), "admin")?;
+                let pw = read_password(&name, false)?;
+                Some((name, pw))
+            }
+        };
+        match admin {
+            Some((name, pw)) => {
+                let hash = tokio::task::spawn_blocking(move || server::auth::password::hash(&pw))
+                    .await
+                    .map_err(|e| e.to_string())??;
+                store
+                    .create_user(name.clone(), Some(hash), Role::Admin, None, None)
+                    .await
+                    .map_err(|e| e.to_string())?;
+                store
+                    .audit(
+                        "cli",
+                        "user.create",
+                        Some(&name),
+                        serde_json::json!({"role": "admin"}),
+                    )
+                    .await
+                    .map_err(|e| e.to_string())?;
+                println!("Administrator `{name}` created.");
+            }
+            None => println!(
+                "No administrator created; `{PRODUCT_NAME} serve` prints a setup link, or run `{PRODUCT_NAME} user add <name> --role admin`."
+            ),
+        }
+    }
+    if !key.is_empty()
+        && let Ok(public) = transport::keygen::public_key(&PathBuf::from(&key))
+    {
+        println!("\nPublic key for the monitored hosts:\n  {public}");
     }
     println!(
-        "\nNext steps:\n  1. Add hosts to {}\n  2. {PRODUCT_NAME} hosts test --trust --config {}\n  3. {PRODUCT_NAME} serve --config {}",
+        "\nNext steps:\n  1. Prepare each monitored host: {PRODUCT_NAME} hosts bootstrap --config {} --from <this server's address> | ssh root@<host> sh\n  2. Add hosts to {}\n  3. {PRODUCT_NAME} hosts test --trust --config {}\n  4. {PRODUCT_NAME} serve --config {}",
+        path.display(),
         path.display(),
         path.display(),
         path.display()
     );
+    Ok(())
+}
+
+pub fn hosts_bootstrap(
+    config: Option<PathBuf>,
+    from: Option<String>,
+    user: Option<String>,
+    key: Option<PathBuf>,
+    journal: bool,
+) -> Res {
+    let loaded = if key.is_some() && user.is_some() && !config_path(config.clone()).is_file() {
+        None
+    } else {
+        Some(load(config)?)
+    };
+    let user = user
+        .or_else(|| loaded.as_ref().map(|l| l.config.ssh.user.clone()))
+        .unwrap_or_else(|| "monitor".into());
+    let key = match key {
+        Some(k) => k,
+        None => loaded
+            .as_ref()
+            .and_then(|l| l.config.ssh.identity_files.first())
+            .map(|k| common::config::expand_home(k))
+            .ok_or("no key given; pass --key or set `ssh.identity_files`")?,
+    };
+    let public = transport::keygen::public_key(&key)?;
+    if from.is_none() {
+        eprintln!(
+            "warning: without --from, the key is accepted from any address; pass this server's address to restrict it"
+        );
+    }
+    let script = crate::bootstrap::Bootstrap {
+        user: &user,
+        public_key: &public,
+        from: from.as_deref(),
+        journal,
+    }
+    .render()?;
+    print!("{script}");
     Ok(())
 }
 
@@ -782,10 +948,36 @@ mod tests {
 
     #[test]
     fn template_is_valid() {
-        let t = config_template("127.0.0.1:8080", "data", "monitor", "/root/.ssh/id_ed25519");
+        let t = config_template(
+            "127.0.0.1:8080",
+            "data",
+            "",
+            "monitor",
+            "/root/.ssh/id_ed25519",
+        );
         Config::from_str_at(&t, Path::new("/tmp/x.toml")).unwrap();
-        let t = config_template("0.0.0.0:8443", "/var/lib/helmsight", "monitor", "");
+        let t = config_template(
+            "0.0.0.0:8443",
+            "/var/lib/helmsight",
+            "https://monitor.example.com",
+            "monitor",
+            "",
+        );
         let l = Config::from_str_at(&t, Path::new("/tmp/x.toml")).unwrap();
         assert!(l.config.tls_enabled());
+        assert_eq!(
+            l.config.server.public_url.as_deref(),
+            Some("https://monitor.example.com")
+        );
+    }
+
+    #[test]
+    fn template_quotes_values() {
+        let t = config_template("127.0.0.1:8080", "/srv/data \"x\"\\y", "", "monitor", "");
+        let l = Config::from_str_at(&t, Path::new("/tmp/x.toml")).unwrap();
+        assert_eq!(
+            l.config.server.data_dir,
+            PathBuf::from("/srv/data \"x\"\\y")
+        );
     }
 }

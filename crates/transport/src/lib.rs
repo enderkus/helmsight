@@ -2,6 +2,7 @@
 //! session per host, or locally for `serve --local`.
 
 pub mod hostkeys;
+pub mod keygen;
 mod local;
 mod ssh;
 
