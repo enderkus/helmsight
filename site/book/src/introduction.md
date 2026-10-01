@@ -8,6 +8,15 @@ SSH, collects metrics and inventory with read-only commands, keeps history in
 an embedded SQLite database and serves a fast web UI. Nothing is installed,
 copied or written on the monitored servers.
 
+> **Status: early development (0.x).** helmsight is new. It is tested on Debian, Ubuntu, Rocky, Fedora, openSUSE
+> and Alpine, but it has had little production use and no independent security
+> audit. Configuration options, the API and the database format may change
+> between 0.x releases. Try it on non-critical hosts first, keep a backup of the
+> data directory, and review the [security model](security.md) and the [collection script](https://github.com/enderkus/helmsight/blob/main/crates/collect/src/remote.sh) before deploying widely.
+> Collection is read-only; the opt-in Actions feature runs the commands you
+> configure, so enable it with care. helmsight is provided as is, without
+> warranty, under the [MIT license](https://github.com/enderkus/helmsight/blob/main/LICENSE).
+
 ![Fleet overview](images/fleet.png)
 
 ## What you get

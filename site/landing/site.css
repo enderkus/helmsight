@@ -144,6 +144,20 @@ h3 {
   color: var(--text-2);
   font-size: 18px;
 }
+.status {
+  max-width: 720px;
+  margin: -8px 0 28px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 14px;
+}
+.status strong {
+  color: var(--text);
+}
 .cta {
   display: flex;
   gap: 12px;
