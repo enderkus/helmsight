@@ -1,8 +1,11 @@
 name: Release
 
+# Tags publish a release. A manual run builds and tests everything but
+# publishes nothing (dry run).
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -62,6 +65,19 @@ jobs:
           cp "pkg/$name/helmsight" "image/${{ matrix.arch }}/helmsight"
           cp -r LICENSE README.md CHANGELOG.md examples docs/security.md "pkg/$name/"
           tar -C pkg -czf "$name.tar.gz" "$name"
+      - name: Check the binary is static
+        run: file target/${{ matrix.target }}/release/helmsight | tee /dev/stderr | grep -q "statically linked"
+      - name: Smoke test
+        if: matrix.arch == 'amd64'
+        run: |
+          bin=target/${{ matrix.target }}/release/helmsight
+          "$bin" --version
+          "$bin" serve --local --data-dir "$RUNNER_TEMP/hs" --listen 127.0.0.1:18080 > "$RUNNER_TEMP/serve.log" 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:18080/healthz && break; sleep 1; done
+          curl -sf http://127.0.0.1:18080/api/v1/meta | tee /dev/stderr | grep -q '"local_mode":true'
+          curl -sf http://127.0.0.1:18080/ | grep -q '/assets/index-'
+          grep -q "setup#token=" "$RUNNER_TEMP/serve.log"
+          kill %1
       - uses: actions/upload-artifact@v7
         with:
           name: bin-${{ matrix.arch }}
@@ -71,6 +87,7 @@ jobs:
 
   release:
     needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -108,6 +125,7 @@ jobs:
       - uses: docker/setup-qemu-action@v4
       - uses: docker/setup-buildx-action@v4
       - uses: docker/login-action@v4
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -125,6 +143,6 @@ jobs:
           context: .
           file: Dockerfile.release
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
