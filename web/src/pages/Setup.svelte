@@ -55,4 +55,15 @@
     <label class="field"><span>Repeat password</span><input class="input" type="password" bind:value={confirm} autocomplete="new-password" required /></label>
     <button class="btn primary" type="submit" disabled={busy}>{busy ? 'Creating…' : 'Create administrator'}</button>
   </form>
+  {#if session.meta?.features.oidc}
+    <p class="muted or">or</p>
+    <a class="btn" href="/api/v1/auth/oidc/start" rel="external">{session.meta.features.oidc}</a>
+  {/if}
 </AuthFrame>
+
+<style>
+  .or {
+    text-align: center;
+    font-size: 12px;
+  }
+</style>

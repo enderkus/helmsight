@@ -24,6 +24,7 @@ fn main() {
     let out = PathBuf::from(std::env::var("OUT_DIR").unwrap_or_default()).join("web");
     println!("cargo:rerun-if-changed={}", dist.display());
     println!("cargo:rerun-if-env-changed=HELMSIGHT_WEB_DIST");
+    println!("cargo:rerun-if-env-changed=HELMSIGHT_REQUIRE_WEB");
     let _ = std::fs::remove_dir_all(&out);
     let src = std::env::var_os("HELMSIGHT_WEB_DIST")
         .map(PathBuf::from)
@@ -32,6 +33,11 @@ fn main() {
         if let Err(e) = copy_dir(&src, &out) {
             panic!("copying web UI from {}: {e}", src.display());
         }
+    } else if std::env::var_os("HELMSIGHT_REQUIRE_WEB").is_some() {
+        panic!(
+            "HELMSIGHT_REQUIRE_WEB is set but {} is missing; build the web UI first",
+            src.join("index.html").display()
+        );
     } else {
         println!(
             "cargo:warning=web UI not built ({} missing); embedding a placeholder. Run `npm ci && npm run build` in web/.",

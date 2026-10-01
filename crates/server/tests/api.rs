@@ -169,6 +169,19 @@ async fn setup_creates_first_admin_once() {
 }
 
 #[tokio::test]
+async fn setup_is_closed_once_any_user_exists() {
+    let h = harness();
+    *h.app.setup_token.lock().unwrap() = Some(server::auth::token_hash("t"));
+    // For example created by single sign-on.
+    add_user(&h, "sso-user", common::Role::Operator).await;
+    let meta = call(&h.router, get("/api/v1/meta", None)).await;
+    assert_eq!(meta.body["setup_required"], false);
+    let body = json!({"token": "t", "username": "x", "password": "a long enough passphrase"});
+    let r = call(&h.router, post("/api/v1/auth/setup", body, None, None)).await;
+    assert_eq!(r.status, StatusCode::FORBIDDEN);
+}
+
+#[tokio::test]
 async fn login_session_and_csrf() {
     let h = harness();
     add_user(&h, "alice", common::Role::Admin).await;

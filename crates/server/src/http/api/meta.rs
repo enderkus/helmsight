@@ -31,7 +31,10 @@ pub struct Meta {
 
 #[utoipa::path(get, path = "/meta", tag = "meta", responses((status = 200, body = Meta)))]
 pub async fn meta(State(app): State<Arc<App>>) -> Json<Meta> {
-    let setup_required = app.setup_token.lock().map(|t| t.is_some()).unwrap_or(false);
+    // The setup token only works while no user exists (an SSO sign-in may
+    // have created the first one).
+    let token_set = app.setup_token.lock().map(|t| t.is_some()).unwrap_or(false);
+    let setup_required = token_set && app.store.user_count().await.unwrap_or(1) == 0;
     Json(Meta {
         product: common::PRODUCT_NAME.to_string(),
         version: common::VERSION.to_string(),

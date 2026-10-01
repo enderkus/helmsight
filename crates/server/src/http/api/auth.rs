@@ -116,6 +116,11 @@ pub async fn setup(
     if let Some(wait) = app.limiter.check(&client.ip, "setup") {
         return Err(rate_limited(wait.as_secs()));
     }
+    if app.store.user_count().await? > 0
+        && let Ok(mut t) = app.setup_token.lock()
+    {
+        *t = None;
+    }
     let expected = app.setup_token.lock().ok().and_then(|t| t.clone());
     let Some(expected) = expected else {
         return Err(ApiError::forbidden(

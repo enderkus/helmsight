@@ -101,7 +101,7 @@
     <p>{session.error}</p>
     <button class="btn" type="button" onclick={() => location.reload()}>Reload</button>
   </main>
-{:else if !session.user && (session.meta?.setup_required || router.path === '/setup')}
+{:else if !session.user && router.path !== '/login' && (session.meta?.setup_required || router.path === '/setup')}
   <Setup />
 {:else if !session.user}
   <Login />
