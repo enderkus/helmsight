@@ -279,6 +279,15 @@ mod tests {
     }
 
     #[test]
+    fn every_metric_is_documented() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/configuration.md");
+        let doc = std::fs::read_to_string(path).unwrap();
+        for m in METRICS {
+            assert!(doc.contains(&format!("`{}`", m.name)), "{} missing from docs/configuration.md", m.name);
+        }
+    }
+
+    #[test]
     fn rejects_bad_expressions() {
         assert!(
             Expr::parse("disk_used > 90")
