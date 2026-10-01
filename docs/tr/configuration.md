@@ -390,12 +390,13 @@ Sunulan metrikler `helmsight_` önekini taşır: `host_up`,
 | Komut | Açıklama |
 |---|---|
 | `serve [--local] [--listen ADRES]` | Sunucuyu çalıştırır. `--local` yalnızca bu makineyi `/proc` okuyarak izler (SSH ve yapılandırma gerekmez). |
-| `init [--force]` | Etkileşimli olarak yapılandırma dosyasını, veri dizinini, anahtar dosyasını ve ilk yöneticiyi oluşturur |
+| `init [--force] [--non-interactive] [seçenekler]` | Yapılandırma dosyasını, veri dizinini, anahtar dosyasını ve ilk yöneticiyi oluşturur; seçenek olarak verilmeyen değerleri sorar (`--listen`, `--public-url`, `--ssh-user`, `--ssh-key`, `--generate-key`, `--admin`, `--password-stdin`) |
 | `user add <ad> [--role viewer\|operator\|admin] [--password-stdin]` | Yerel kullanıcı oluşturur |
 | `user remove <ad>` | Kullanıcıyı siler (son yönetici silinemez) |
 | `user reset-password <ad> [--password-stdin] [--reset-totp]` | Yeni parola belirler ve kullanıcının oturumlarını sonlandırır |
 | `user list` | Kullanıcıları listeler |
 | `hosts test [--trust] [adlar...]` | Sunuculara bağlanıp durumlarını bildirir; `--trust` bilinmeyen sunucu anahtarlarını etkileşimli olarak onaylatır |
+| `hosts bootstrap [--from ADRES] [--user KULLANICI] [--key YOL] [--no-journal]` | Bir sunucuda izleme hesabını oluşturan betiği yazdırır, ör. `helmsight hosts bootstrap --from 10.0.0.5 \| ssh root@web-1 sh` |
 | `config check` | Yapılandırmayı doğrular ve başvurulan gizli değerlerin var olduğunu denetler |
 | `secret set <ad> [--stdin]` / `secret list` / `secret delete <ad>` | Şifreli gizli değerleri yönetir |
 | `audit verify` | Denetim kaydının özet zincirini doğrular |

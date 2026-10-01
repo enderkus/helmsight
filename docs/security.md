@@ -111,7 +111,10 @@ Exceptions you control:
 
 ## Creating the monitoring account
 
-On every monitored host:
+`helmsight hosts bootstrap --from 10.0.0.5` prints a script that does
+the following on a host (and unlocks key logins on Alpine); pipe it to
+`ssh root@<host> sh` or review it first. To do it by hand, on every
+monitored host:
 
 ```sh
 # Unprivileged account with a home directory for authorized_keys.

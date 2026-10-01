@@ -382,12 +382,13 @@ Exposed metrics are prefixed with `helmsight_`: `host_up`,
 | Command | Description |
 |---|---|
 | `serve [--local] [--listen ADDR]` | Run the server. `--local` monitors only this machine by reading `/proc` (no SSH, no configuration needed). |
-| `init [--force]` | Interactively create a configuration file, the data directory, the key file and the first administrator |
+| `init [--force] [--non-interactive] [options]` | Create a configuration file, the data directory, the key file and the first administrator; asks for values not given as options (`--listen`, `--public-url`, `--ssh-user`, `--ssh-key`, `--generate-key`, `--admin`, `--password-stdin`) |
 | `user add <name> [--role viewer\|operator\|admin] [--password-stdin]` | Create a local user |
 | `user remove <name>` | Delete a user (the last admin cannot be removed) |
 | `user reset-password <name> [--password-stdin] [--reset-totp]` | Set a new password and end the user's sessions |
 | `user list` | List users |
 | `hosts test [--trust] [names...]` | Connect to hosts and report status; `--trust` confirms unknown host keys interactively |
+| `hosts bootstrap [--from ADDR] [--user USER] [--key PATH] [--no-journal]` | Print a script that creates the monitoring account on a host, e.g. `helmsight hosts bootstrap --from 10.0.0.5 \| ssh root@web-1 sh` |
 | `config check` | Validate the configuration and check that referenced secrets exist |
 | `secret set <name> [--stdin]` / `secret list` / `secret delete <name>` | Manage encrypted secrets |
 | `audit verify` | Verify the audit log hash chain |

@@ -6,6 +6,10 @@ by step. In the examples, the machine running helmsight has the address
 
 ## 1. Create a key for helmsight
 
+If you used the [installation script](installation.md#installation-script)
+or `helmsight init --generate-key`, the key already exists
+(`/etc/helmsight/id_ed25519`); continue with step 2.
+
 On the machine that runs helmsight (the commands assume the `helmsight`
 system user from [Installation](installation.md#running-as-a-service)
 exists):
@@ -24,6 +28,36 @@ Passphrase-protected keys must be loaded into ssh-agent
 (`ssh.use_agent = true`).
 
 ## 2. Create the monitoring account on each host
+
+### With `helmsight hosts bootstrap`
+
+helmsight prints a script that does everything below on a host: it creates
+the account, installs the public key with `restrict,from=`, unlocks key
+logins on Alpine and adds the account to the journal group. Running it
+again is safe.
+
+```sh
+helmsight hosts bootstrap --from 10.0.0.5 | ssh root@web-1 sh
+```
+
+`--from` is the helmsight server's address as the host sees it (several
+addresses or networks can be separated by commas, e.g.
+`10.0.0.5,10.1.0.0/16`). Without it, the key is accepted from anywhere and
+a warning is printed. To check the script before running it, save it to a
+file:
+
+```sh
+helmsight hosts bootstrap --from 10.0.0.5 > monitor-account.sh
+```
+
+| Option | Meaning |
+|---|---|
+| `--from <addr>` | Addresses the key is accepted from |
+| `--user <user>` | Account to create (default: `ssh.user`) |
+| `--key <path>` | Private key whose public key is installed (default: the first of `ssh.identity_files`) |
+| `--no-journal` | Do not add the account to `systemd-journal` or `adm` |
+
+### By hand
 
 On every host to monitor, as root:
 

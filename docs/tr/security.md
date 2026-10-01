@@ -123,7 +123,10 @@ Sizin denetiminizdeki istisnalar:
 
 ## İzleme hesabını oluşturmak
 
-İzlenen her sunucuda:
+`helmsight hosts bootstrap --from 10.0.0.5` bir sunucuda aşağıdakileri
+yapan (ve Alpine'de anahtarla girişin önündeki kilidi açan) bir betik
+yazdırır; bunu `ssh root@<sunucu> sh` komutuna aktarın veya önce inceleyin.
+Elle yapmak için izlenen her sunucuda:
 
 ```sh
 # authorized_keys için ev dizini olan yetkisiz bir hesap.

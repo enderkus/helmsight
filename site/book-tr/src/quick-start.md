@@ -34,6 +34,20 @@ bağlantı üretir.
 Yerel kip `/proc` okuduğu için yalnızca Linux'ta çalışır. Diğer
 platformlarda aşağıda anlatıldığı gibi sunucuları SSH ile izleyin.
 
+## Bir sunucuya kurmak
+
+systemd kullanan bir Linux sunucuda
+[kurulum betiği](installation.md#kurulum-betiği) helmsight'ı servis olarak
+kurar; yapılandırmayı, SSH anahtarını ve ilk yöneticiyi oluşturur ve
+sonraki adımları yazdırır:
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+sudo sh install.sh
+```
+
+Bu sayfanın geri kalanı aynı adımları elle anlatır.
+
 ## Sunucuları SSH ile izlemek
 
 Dört adım yeterlidir:
@@ -63,8 +77,9 @@ $EDITOR helmsight.toml              # [[hosts]] kayıtlarını ekleyin
 3. **`hosts test --trust`** her sunucuya bağlanır, ilk kez görülen sunucu
    anahtarlarının parmak izini gösterip onayınızı ister ve sonucu tek
    satırda yazar. Bu adımdan önce her sunucuda izleme hesabını oluşturmuş
-   olmanız gerekir; ayrıntılar [Sunucuları izlemeye almak](fleet-setup.md)
-   sayfasında.
+   olmanız gerekir, örneğin
+   `helmsight hosts bootstrap --from <bu sunucunun adresi> | ssh root@web-1 sh`
+   ile; ayrıntılar [Sunucuları izlemeye almak](fleet-setup.md) sayfasında.
 4. **`serve`** web sunucusunu ve veri toplayıcıları başlatır.
 
 Tarayıcıda `http://127.0.0.1:8080` adresini açın ve `init` sırasında

@@ -16,6 +16,63 @@ monitored hosts need nothing but an SSH server and a POSIX shell
 Disk usage grows with the number of hosts and the retention periods, which
 are set in the [`[retention]`](configuration.md#retention) section.
 
+## Installation script
+
+On a Linux server with systemd, the installation script sets everything up
+in one go:
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+less install.sh            # read it before running it as root
+sudo sh install.sh
+```
+
+It asks a few questions (web UI address, external URL, account on the
+monitored hosts, this server's address, first administrator and password),
+shows what it is going to do and asks for confirmation. Then it:
+
+1. downloads the release archive for this machine's architecture and
+   verifies its SHA-256 checksum against `SHA256SUMS`; it stops on a
+   mismatch;
+2. installs `/usr/local/bin/helmsight` and creates the `helmsight` system
+   user;
+3. runs `helmsight init`, which writes `/etc/helmsight/helmsight.toml`,
+   creates the SSH key `/etc/helmsight/id_ed25519`, the data directory
+   `/var/lib/helmsight` and the first administrator;
+4. installs and starts the hardened systemd service;
+5. prints the address of the UI and the command that prepares each
+   monitored host (see [Monitoring a fleet](fleet-setup.md)).
+
+It does not touch the firewall, TLS certificates or a reverse proxy, and it
+never overwrites an existing configuration, key or database.
+
+| Option | Meaning |
+|---|---|
+| `--version <tag>` | Release to install, e.g. `v0.2.0` (default: the latest) |
+| `--listen <addr>` | Address and port of the web UI (default `127.0.0.1:8080`) |
+| `--public-url <url>` | External `https://` URL of the UI |
+| `--ssh-user <user>` | Account on the monitored hosts (default `monitor`) |
+| `--admin <name>` | First administrator (default `admin`) |
+| `--from <addr>` | This server's address as the monitored hosts see it |
+| `--archive <file>` / `--sums <file>` | Install from a downloaded archive and its `SHA256SUMS` (offline) |
+| `--no-service` | Do not install the systemd service |
+| `-y`, `--yes` | Do not ask; use the options and defaults |
+| `--dry-run` | Only show what would be done |
+| `--uninstall` | Remove the binary and the service; keep configuration and data |
+
+With `--yes`, no password is asked for: the service prints a one-time setup
+link for the first administrator, and the script shows it at the end.
+This also works in automation such as cloud-init:
+
+```sh
+sh install.sh --yes --listen 0.0.0.0:8443 --public-url https://monitor.example.com --from 10.0.0.5
+```
+
+Running the script again on an installed machine upgrades the binary,
+restarts the service and keeps the configuration and data. Without systemd
+(for example on Alpine), it installs the binary and the configuration and
+tells you how to start helmsight.
+
 ## Prebuilt binaries
 
 Releases provide static Linux binaries for x86_64 and aarch64, with

@@ -6,6 +6,10 @@ hesabının adı `monitor`'dür.
 
 ## 1. helmsight için bir anahtar oluşturun
 
+[Kurulum betiğini](installation.md#kurulum-betiği) veya
+`helmsight init --generate-key` komutunu kullandıysanız anahtar zaten
+vardır (`/etc/helmsight/id_ed25519`); 2. adımla devam edin.
+
 helmsight'ın çalıştığı makinede (komutlar [Kurulum](installation.md#servis-olarak-çalıştırma)
 sayfasındaki `helmsight` sistem kullanıcısının oluşturulduğunu varsayar):
 
@@ -23,6 +27,35 @@ kanalı bulunduğu için ed25519 tercih edilmelidir (ayrıntılar
 anahtarlar ssh-agent'a yüklenmelidir (`ssh.use_agent = true`).
 
 ## 2. Her sunucuda izleme hesabını oluşturun
+
+### `helmsight hosts bootstrap` ile
+
+helmsight, aşağıdaki adımların hepsini bir sunucuda yapan bir betik
+yazdırır: hesabı oluşturur, açık anahtarı `restrict,from=` ile kurar,
+Alpine'de anahtarla girişin önündeki kilidi açar ve hesabı günlük grubuna
+ekler. Yeniden çalıştırmak güvenlidir.
+
+```sh
+helmsight hosts bootstrap --from 10.0.0.5 | ssh root@web-1 sh
+```
+
+`--from`, helmsight sunucusunun izlenen sunucunun gördüğü adresidir (birden
+çok adres veya ağ virgülle ayrılabilir, ör. `10.0.0.5,10.1.0.0/16`).
+Verilmezse anahtar her adresten kabul edilir ve bir uyarı yazdırılır.
+Betiği çalıştırmadan önce incelemek için bir dosyaya kaydedin:
+
+```sh
+helmsight hosts bootstrap --from 10.0.0.5 > monitor-account.sh
+```
+
+| Seçenek | Anlamı |
+|---|---|
+| `--from <adres>` | Anahtarın kabul edildiği adresler |
+| `--user <kullanıcı>` | Oluşturulacak hesap (varsayılan: `ssh.user`) |
+| `--key <yol>` | Açık anahtarı kurulacak özel anahtar (varsayılan: `ssh.identity_files` içindeki ilk anahtar) |
+| `--no-journal` | Hesabı `systemd-journal` veya `adm` grubuna eklemez |
+
+### Elle
 
 İzlenecek her sunucuda root olarak:
 

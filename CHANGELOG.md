@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- An installation script (`install.sh`, published on the website and with
+  each release) that verifies the download, installs the binary and a
+  hardened systemd service, and creates the configuration, an SSH key and
+  the first administrator. Running it again upgrades an installation;
+  `--uninstall` removes it and keeps the data.
 - `helmsight hosts bootstrap` prints a script that creates the monitoring
   account on a host, with the public key restricted by `restrict,from=`.
 - `helmsight init` accepts its answers as options (`--listen`,

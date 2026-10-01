@@ -16,6 +16,63 @@ kabuktan (`/bin/sh`) başka bir şey gerekmez.
 Disk ihtiyacı sunucu sayısı ve saklama süreleriyle orantılıdır; saklama
 süreleri [`[retention]`](configuration.md#retention) bölümünden ayarlanır.
 
+## Kurulum betiği
+
+systemd kullanan bir Linux sunucuda kurulum betiği her şeyi tek seferde
+hazırlar:
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+less install.sh            # root olarak çalıştırmadan önce okuyun
+sudo sh install.sh
+```
+
+Betik birkaç soru sorar (web arayüzünün adresi, dış adres, izlenen
+sunuculardaki hesap, bu sunucunun adresi, ilk yönetici ve parolası),
+yapacaklarını listeler ve onay ister. Ardından:
+
+1. bu makinenin mimarisine uygun sürüm arşivini indirir ve SHA-256
+   sağlama toplamını `SHA256SUMS` ile doğrular; uyuşmazsa durur;
+2. `/usr/local/bin/helmsight` dosyasını kurar ve `helmsight` sistem
+   kullanıcısını oluşturur;
+3. `helmsight init` çalıştırır; bu da `/etc/helmsight/helmsight.toml`
+   dosyasını yazar, `/etc/helmsight/id_ed25519` SSH anahtarını, veri dizini
+   `/var/lib/helmsight`'ı ve ilk yöneticiyi oluşturur;
+4. sıkılaştırılmış systemd servisini kurar ve başlatır;
+5. arayüzün adresini ve izlenen her sunucuyu hazırlayan komutu yazdırır
+   (bkz. [Sunucuları izlemeye almak](fleet-setup.md)).
+
+Güvenlik duvarına, TLS sertifikalarına veya ters vekil sunucuya dokunmaz;
+mevcut bir yapılandırmanın, anahtarın veya veritabanının üzerine asla
+yazmaz.
+
+| Seçenek | Anlamı |
+|---|---|
+| `--version <etiket>` | Kurulacak sürüm, ör. `v0.2.0` (varsayılan: en son sürüm) |
+| `--listen <adres>` | Web arayüzünün adresi ve portu (varsayılan `127.0.0.1:8080`) |
+| `--public-url <url>` | Arayüzün dışarıdan erişilen `https://` adresi |
+| `--ssh-user <kullanıcı>` | İzlenen sunuculardaki hesap (varsayılan `monitor`) |
+| `--admin <ad>` | İlk yönetici (varsayılan `admin`) |
+| `--from <adres>` | Bu sunucunun, izlenen sunucuların gördüğü adresi |
+| `--archive <dosya>` / `--sums <dosya>` | İndirilmiş bir arşivden ve onun `SHA256SUMS` dosyasından kurar (çevrimdışı) |
+| `--no-service` | systemd servisini kurmaz |
+| `-y`, `--yes` | Soru sormaz; seçenekleri ve varsayılanları kullanır |
+| `--dry-run` | Yalnızca yapılacakları gösterir |
+| `--uninstall` | Programı ve servisi kaldırır; yapılandırmayı ve veriyi korur |
+
+`--yes` ile parola sorulmaz: servis ilk yönetici için tek kullanımlık bir
+kurulum bağlantısı yazdırır, betik de bunu sonda gösterir. Bu kullanım
+cloud-init gibi otomasyonlarda da çalışır:
+
+```sh
+sh install.sh --yes --listen 0.0.0.0:8443 --public-url https://monitor.example.com --from 10.0.0.5
+```
+
+Betiği kurulu bir makinede yeniden çalıştırmak programı yükseltir, servisi
+yeniden başlatır, yapılandırmayı ve veriyi korur. systemd olmayan
+sistemlerde (ör. Alpine) programı ve yapılandırmayı kurar ve helmsight'ı
+nasıl başlatacağınızı söyler.
+
 ## Hazır derlenmiş dosyalar
 
 Her sürümde x86_64 ve aarch64 için statik Linux dosyaları ve bunların

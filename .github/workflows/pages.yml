@@ -8,6 +8,7 @@ on:
       - docs/**
       - CHANGELOG.md
       - CONTRIBUTING.md
+      - scripts/install.sh
       - .github/workflows/pages.yml
   workflow_dispatch:
 

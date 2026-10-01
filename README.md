@@ -94,7 +94,18 @@ commands run on hosts and how to create a restricted monitoring account.
 
 ## Quick start
 
-Try it on one Linux machine, without SSH:
+Install on a Linux server with systemd: the
+[installation script](https://enderkus.github.io/helmsight/docs/installation.html#installation-script)
+verifies the download, installs a hardened service and creates the
+configuration, the SSH key and the first administrator.
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+less install.sh
+sudo sh install.sh
+```
+
+Or try it on one Linux machine, without SSH:
 
 ```sh
 curl -LO https://github.com/enderkus/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
@@ -115,8 +126,16 @@ $EDITOR helmsight.toml                # add [[hosts]] entries
 ./helmsight serve
 ```
 
-On each monitored host, create an unprivileged account with your public
-key (see [Creating the monitoring account](docs/security.md#creating-the-monitoring-account)).
+On each monitored host, create an unprivileged account with helmsight's
+public key. `helmsight hosts bootstrap` prints a script that does it:
+
+```sh
+./helmsight hosts bootstrap --from 10.0.0.5 | ssh root@web-1 sh
+```
+
+To do it by hand, see
+[Creating the monitoring account](docs/security.md#creating-the-monitoring-account).
+
 For a long-running installation, use the hardened systemd unit in
 [examples/helmsight.service](examples/helmsight.service), or the container
 image:
@@ -184,6 +203,7 @@ error: /etc/helmsight/helmsight.toml:17:1: `alerts.rules[0].expr`: unknown metri
 | `helmsight init` | Create a configuration, key file and the first administrator |
 | `helmsight user add\|remove\|reset-password\|list` | Manage local accounts |
 | `helmsight hosts test [--trust] [NAME...]` | Check connectivity, authentication and host keys |
+| `helmsight hosts bootstrap [--from ADDR]` | Print a script that prepares the monitoring account on a host |
 | `helmsight config check` | Validate the configuration and stored secrets |
 | `helmsight secret set\|list\|delete` | Manage encrypted secrets referenced as `secret:<name>` |
 | `helmsight audit verify` | Verify the audit log hash chain |

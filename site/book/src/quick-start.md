@@ -31,6 +31,20 @@ exists, helmsight prints a new link at every start.
 Local mode reads `/proc`, so it only works on Linux. On other platforms,
 monitor servers over SSH as described below.
 
+## Install on a server
+
+On a Linux server with systemd, the
+[installation script](installation.md#installation-script) installs
+helmsight as a service, creates the configuration, the SSH key and the
+first administrator, and prints the next steps:
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+sudo sh install.sh
+```
+
+The rest of this page shows the same steps by hand.
+
 ## Monitor servers over SSH
 
 Four steps:
@@ -59,7 +73,9 @@ $EDITOR helmsight.toml              # add [[hosts]] entries
 3. **`hosts test --trust`** connects to every host, shows the fingerprint
    of host keys it has not seen before and asks you to confirm them, then
    prints a one-line result per host. Create the monitoring account on each
-   server first; see [Monitoring a fleet](fleet-setup.md).
+   server first, for example with
+   `helmsight hosts bootstrap --from <this server's address> | ssh root@web-1 sh`;
+   see [Monitoring a fleet](fleet-setup.md).
 4. **`serve`** starts the web server and the collectors.
 
 Open `http://127.0.0.1:8080` and sign in with the administrator you created

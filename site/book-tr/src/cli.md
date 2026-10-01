@@ -7,18 +7,47 @@ helmsight [--config <yol>] [--data-dir <dizin>] [--log-format text|json] <komut>
 | Komut | Açıklama |
 |---|---|
 | `serve [--local] [--listen ADRES]` | Web sunucusunu ve veri toplayıcıları çalıştırır. `--local` yalnızca bu makineyi izler. |
-| `init [--force]` | Yapılandırma dosyasını, veri dizinini, anahtar dosyasını ve ilk yöneticiyi oluşturur |
+| `init [--force] [--non-interactive] [seçenekler]` | Yapılandırma dosyasını, veri dizinini, anahtar dosyasını ve ilk yöneticiyi oluşturur (aşağıya bakın) |
 | `user add <ad> [--role viewer\|operator\|admin] [--password-stdin]` | Yerel kullanıcı oluşturur |
 | `user remove <ad>` | Kullanıcıyı siler; son yönetici silinemez |
 | `user reset-password <ad> [--password-stdin] [--reset-totp]` | Yeni parola belirler ve kullanıcının oturumlarını sonlandırır |
 | `user list` | Kullanıcıları listeler |
 | `hosts test [--trust] [adlar...]` | Bağlantıyı, kimlik doğrulamayı ve sunucu anahtarlarını denetler |
+| `hosts bootstrap [--from ADRES] [--user KULLANICI] [--key YOL] [--no-journal]` | Bir sunucuda izleme hesabını hazırlayan betiği yazdırır ([ayrıntılar](fleet-setup.md#helmsight-hosts-bootstrap-ile)) |
 | `config check` | Yapılandırmayı doğrular ve başvurulan gizli değerlerin var olduğunu denetler |
 | `secret set <ad> [--stdin]` | Şifreli bir gizli değer saklar; `secret:<ad>` olarak başvurulur |
 | `secret list` / `secret delete <ad>` | Saklanan gizli değerleri listeler veya siler |
 | `audit verify` | Denetim kaydının özet zincirini doğrular |
 
 Her komutun ayrıntılı yardımı için `helmsight <komut> --help` kullanın.
+
+## `init` seçenekleri
+
+`init`, seçenek olarak verilmeyen her değeri sorar. `--non-interactive`
+ile hiçbir şey sormaz ve geri kalanlar için varsayılanları kullanır; bu
+durumda ilk yönetici yalnızca `--password-stdin` ile oluşturulur.
+
+| Seçenek | Anlamı |
+|---|---|
+| `--listen <adres>` | Web arayüzünün adresi ve portu |
+| `--public-url <url>` | Arayüzün dışarıdan erişilen `https://` adresi |
+| `--ssh-user <kullanıcı>` | İzlenen sunuculardaki hesap |
+| `--ssh-key <yol>` | İzlenen sunucular için SSH özel anahtarı |
+| `--generate-key` | `--ssh-key` yolunda anahtar yoksa yeni bir ed25519 anahtarı oluşturur |
+| `--admin <ad>` | İlk yöneticinin adı |
+| `--password-stdin` | Yöneticinin parolasını standart girdiden okur (`--non-interactive` gerektirir) |
+| `--non-interactive` | Soru sormaz |
+| `--force` | Mevcut yapılandırma dosyasının üzerine yazar |
+
+Genel `--data-dir` seçeneği yapılandırmaya yazılacak veri dizinini
+belirler. Etkileşimli kipte anahtar dosyası yoksa `init` onu oluşturmayı
+önerir.
+
+```sh
+printf '%s\n' "$PAROLA" | helmsight --config /etc/helmsight/helmsight.toml \
+  --data-dir /var/lib/helmsight init --non-interactive \
+  --ssh-key /etc/helmsight/id_ed25519 --generate-key --admin alice --password-stdin
+```
 
 ## Yapılandırma dosyasının bulunması
 
@@ -38,6 +67,9 @@ helmsight user reset-password alice --reset-totp
 
 # Yalnızca iki sunucuyu denemek
 helmsight hosts test web-1 db-1
+
+# Yeni bir izlenen sunucuyu hazırlamak
+helmsight hosts bootstrap --from 10.0.0.5 | ssh root@web-3 sh
 
 # Slack webhook adresini şifreli saklamak
 helmsight secret set slack-webhook

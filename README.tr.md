@@ -106,7 +106,18 @@ bir izleme hesabının nasıl oluşturulacağı için
 
 ## Hızlı başlangıç
 
-Tek bir Linux makinede, SSH olmadan deneyin:
+systemd kullanan bir Linux sunucuya kurun:
+[kurulum betiği](https://enderkus.github.io/helmsight/tr/docs/installation.html#kurulum-betiği)
+indirilen dosyayı doğrular, sıkılaştırılmış bir servis kurar ve
+yapılandırmayı, SSH anahtarını ve ilk yöneticiyi oluşturur.
+
+```sh
+curl -fsSLO https://enderkus.github.io/helmsight/install.sh
+less install.sh
+sudo sh install.sh
+```
+
+Ya da tek bir Linux makinede, SSH olmadan deneyin:
 
 ```sh
 curl -LO https://github.com/enderkus/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
@@ -128,8 +139,15 @@ $EDITOR helmsight.toml                # [[hosts]] kayıtlarını ekleyin
 ```
 
 İzlenen her sunucuda, helmsight'ın açık anahtarıyla yetkisiz bir hesap
-oluşturun (bkz.
-[İzleme hesabını oluşturmak](https://enderkus.github.io/helmsight/tr/docs/security.html#izleme-hesabını-oluşturmak)).
+oluşturun. `helmsight hosts bootstrap` bunu yapan bir betik yazdırır:
+
+```sh
+./helmsight hosts bootstrap --from 10.0.0.5 | ssh root@web-1 sh
+```
+
+Elle yapmak için bkz.
+[İzleme hesabını oluşturmak](https://enderkus.github.io/helmsight/tr/docs/security.html#izleme-hesabını-oluşturmak).
+
 Kalıcı bir kurulum için
 [examples/helmsight.service](examples/helmsight.service) dosyasındaki
 sıkılaştırılmış systemd birimini veya konteyner imajını kullanın:
@@ -198,6 +216,7 @@ error: /etc/helmsight/helmsight.toml:17:1: `alerts.rules[0].expr`: unknown metri
 | `helmsight init` | Yapılandırma, anahtar dosyası ve ilk yöneticiyi oluşturur |
 | `helmsight user add\|remove\|reset-password\|list` | Yerel hesapları yönetir |
 | `helmsight hosts test [--trust] [AD...]` | Bağlantıyı, kimlik doğrulamayı ve sunucu anahtarlarını denetler |
+| `helmsight hosts bootstrap [--from ADRES]` | Bir sunucuda izleme hesabını hazırlayan betiği yazdırır |
 | `helmsight config check` | Yapılandırmayı ve saklanan gizli değerleri doğrular |
 | `helmsight secret set\|list\|delete` | `secret:<ad>` olarak başvurulan şifreli gizli değerleri yönetir |
 | `helmsight audit verify` | Denetim kaydının özet zincirini doğrular |
