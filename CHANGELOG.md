@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-01
+
+### Fixed
+
+- Sign-in and every other state-changing request were refused as
+  cross-origin when the web UI was served over TLS with HTTP/2.
+- In local mode, processes started by the collection script are terminated
+  together with the shell after a timeout or truncated output.
+
 ## [0.1.0] - 2026-10-01
 
 ### Added
@@ -40,5 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: `serve`, `init`, `user`, `hosts test`, `config check`, `secret`,
   `audit verify`.
 
-[Unreleased]: https://github.com/enderkus/helmsight/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/enderkus/helmsight/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/enderkus/helmsight/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/enderkus/helmsight/releases/tag/v0.1.0
