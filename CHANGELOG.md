@@ -13,8 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sign-in and every other state-changing request were refused as
   cross-origin when the web UI was served over TLS with HTTP/2.
-- In local mode, processes started by the collection script are terminated
-  together with the shell after a timeout or truncated output.
 
 ## [0.1.0] - 2026-10-01
 
