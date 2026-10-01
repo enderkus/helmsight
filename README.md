@@ -94,11 +94,12 @@ Try it on one Linux machine, without SSH:
 ```sh
 curl -LO https://github.com/enderkus/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
 tar xzf helmsight-x86_64-unknown-linux-musl.tar.gz
+cd helmsight-x86_64-unknown-linux-musl
 ./helmsight serve --local
 ```
 
 Open the setup link printed in the terminal to create the first
-administrator.
+administrator. On ARM servers, replace `x86_64` with `aarch64`.
 
 Monitor a fleet:
 
