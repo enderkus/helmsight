@@ -1,0 +1,18 @@
+[book]
+title = "helmsight documentation"
+language = "en"
+src = "src"
+
+[build]
+build-dir = "../_site/docs"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "coal"
+git-repository-url = "https://github.com/enderkus/helmsight"
+edit-url-template = "https://github.com/enderkus/helmsight/edit/main/site/book/{path}"
+site-url = "/helmsight/docs/"
+additional-css = ["theme/custom.css"]
+
+[output.html.search]
+enable = true

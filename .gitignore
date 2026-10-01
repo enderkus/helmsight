@@ -8,3 +8,5 @@
 /data
 /.env
 .DS_Store
+/site/_site
+/site/book/src/images

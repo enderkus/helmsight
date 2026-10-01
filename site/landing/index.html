@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'" />
+    <meta name="description" content="helmsight is an agentless, self-hosted dashboard for monitoring Linux servers over SSH. One binary, nothing installed on the servers." />
+    <title>helmsight — agentless Linux server monitoring</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap bar">
+        <a class="brand" href="./"><span class="logo" aria-hidden="true"></span>helmsight</a>
+        <nav aria-label="Site">
+          <a href="docs/">Documentation</a>
+          <a href="docs/security.html">Security</a>
+          <a href="https://github.com/enderkus/helmsight">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero wrap">
+        <p class="eyebrow">Open source · MIT · Linux</p>
+        <h1>Watch every server from one screen.<br />Install nothing on them.</h1>
+        <p class="lead">
+          helmsight is a single binary that monitors a fleet of Linux servers over plain SSH. It collects
+          metrics and inventory with read-only commands, keeps history locally and serves a fast, calm web
+          dashboard. No agents, no daemons, no files written on your servers.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="docs/quick-start.html">Get started</a>
+          <a class="btn" href="https://github.com/enderkus/helmsight">View on GitHub</a>
+        </div>
+        <pre class="cmd"><code><span class="prompt">$</span> helmsight init
+<span class="prompt">$</span> helmsight hosts test --trust
+<span class="prompt">$</span> helmsight serve</code></pre>
+      </section>
+
+      <section class="shot wrap">
+        <img src="screenshots/fleet.png" width="1440" height="900" alt="Fleet overview listing hosts with status, CPU and memory sparklines, load, disk, network, uptime and alerts" />
+      </section>
+
+      <section class="wrap">
+        <h2>Everything an operator looks at, nothing they have to install</h2>
+        <div class="grid">
+          <article>
+            <h3>Fleet overview</h3>
+            <p>Status, CPU, memory, load, fullest disk, network and alerts for every host. Groups, tags, search and sparklines. "Down", "auth failed", "host key changed" and "partial" are distinct states.</p>
+          </article>
+          <article>
+            <h3>Host detail</h3>
+            <p>Live and historical charts with a synchronized crosshair, per-core CPU heatmap, top processes, listening ports, services, containers and system information.</p>
+          </article>
+          <article>
+            <h3>History</h3>
+            <p>Every sample for 24 hours, 1-minute rollups for 7 days, 5-minute rollups for 90 days, in an embedded SQLite database.</p>
+          </article>
+          <article>
+            <h3>Drift and changes</h3>
+            <p>Packages, kernel, ports, enabled units and OS are snapshotted. See what changed since yesterday and compare a host with another host or its baseline.</p>
+          </article>
+          <article>
+            <h3>Security overview</h3>
+            <p>Failed SSH logins, pending security updates, ports not on the baseline, reboot flags and TLS certificate expiry, across the fleet.</p>
+          </article>
+          <article>
+            <h3>Alerts</h3>
+            <p>Rules like <code>disk_used_pct &gt; 90 for 10m</code>, scoped to groups or tags. Acknowledgements, silences, and webhook, Slack or email notifications.</p>
+          </article>
+          <article>
+            <h3>Actions, opt-in</h3>
+            <p>Let operators restart a service without shell access: fixed commands, a confirmation dialog and a hash-chained, append-only audit log.</p>
+          </article>
+          <article>
+            <h3>Teams and screens</h3>
+            <p>Viewer, operator and admin roles, TOTP, OpenID Connect single sign-on, and a wall display for NOC screens with revocable tokens.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="split wrap">
+        <div>
+          <h2>How it works</h2>
+          <ol class="steps">
+            <li><strong>One persistent SSH session per host.</strong> Every few seconds helmsight runs a single POSIX shell script on it, sent over standard input.</li>
+            <li><strong>Read-only commands only.</strong> <code>/proc</code>, <code>df</code>, <code>ps</code>, <code>ss</code>, <code>systemctl</code>, the package database. Missing tools degrade to "n/a" with a reason.</li>
+            <li><strong>Parsed and stored centrally.</strong> Output is size-limited, parsed in Rust and kept in SQLite with automatic rollups.</li>
+            <li><strong>Served from one binary.</strong> The web UI is embedded. Deployment is copying one file.</li>
+          </ol>
+          <p class="note">Works on Debian, Ubuntu, RHEL, Rocky, Alma, Fedora, openSUSE and Alpine (BusyBox).</p>
+        </div>
+        <figure class="diagram" aria-label="Architecture">
+          <div class="node browser">Browser<span>runs only code served by helmsight</span></div>
+          <div class="link">HTTPS</div>
+          <div class="node core">helmsight<span>one binary · SQLite · web UI</span></div>
+          <div class="link">SSH, read-only</div>
+          <div class="hosts">
+            <div class="node host">web-1</div>
+            <div class="node host">db-1</div>
+            <div class="node host">edge-1</div>
+          </div>
+          <figcaption>Nothing is installed on the hosts.</figcaption>
+        </figure>
+      </section>
+
+      <section class="wrap">
+        <h2>Secure by default</h2>
+        <div class="grid two">
+          <article>
+            <h3>No arbitrary commands</h3>
+            <p>There is no terminal, file manager or command box. Remote output is never rendered as HTML, and a strict Content-Security-Policy forbids inline code.</p>
+          </article>
+          <article>
+            <h3>Verified host keys</h3>
+            <p>OpenSSH <code>known_hosts</code> semantics: unknown keys need an admin to confirm the fingerprint, changed keys stop collection and raise an alert.</p>
+          </article>
+          <article>
+            <h3>Least privilege</h3>
+            <p>An unprivileged account with a restricted key is enough. The integration tests verify that nothing is written on the monitored hosts.</p>
+          </article>
+          <article>
+            <h3>Hardened web app</h3>
+            <p>Loopback by default, automatic TLS elsewhere, Argon2id, TOTP, SSO, CSRF protection, rate limiting and secrets encrypted with XChaCha20-Poly1305.</p>
+          </article>
+        </div>
+        <p><a href="docs/security.html">Read the security model →</a></p>
+      </section>
+
+      <section class="gallery wrap">
+        <figure>
+          <img src="screenshots/host.png" width="1440" height="900" alt="Host detail with CPU, memory, load and disk charts" loading="lazy" />
+          <figcaption>Host detail with synchronized history charts</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/security.png" width="1440" height="900" alt="Fleet security overview" loading="lazy" />
+          <figcaption>Fleet-wide security overview</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/compare.png" width="1440" height="900" alt="Comparison of packages between two hosts" loading="lazy" />
+          <figcaption>Compare two hosts, differences only</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshots/display.png" width="1440" height="900" alt="Wall display with host tiles and firing alerts" loading="lazy" />
+          <figcaption>Wall display for NOC screens</figcaption>
+        </figure>
+      </section>
+
+      <section class="start wrap">
+        <h2>Try it in one command</h2>
+        <p>On any Linux machine, local mode monitors the machine itself, without SSH or configuration:</p>
+        <pre class="cmd"><code><span class="prompt">$</span> ./helmsight serve --local</code></pre>
+        <p>Then follow the <a href="docs/quick-start.html">quick start</a> to add your servers.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap bar">
+        <span>helmsight is open source under the MIT license.</span>
+        <nav aria-label="Footer">
+          <a href="docs/">Documentation</a>
+          <a href="docs/changelog.html">Changelog</a>
+          <a href="https://github.com/enderkus/helmsight">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
