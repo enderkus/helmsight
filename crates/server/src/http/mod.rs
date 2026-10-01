@@ -113,11 +113,16 @@ async fn origin_check(State(app): State<Arc<App>>, req: Request, next: Next) -> 
             .get(header::ORIGIN)
             .and_then(|v| v.to_str().ok())
     {
+        // HTTP/1.1 sends a Host header; HTTP/2 carries the host in the
+        // :authority pseudo-header, which ends up in the request URI.
         let host = req
             .headers()
             .get(header::HOST)
             .and_then(|v| v.to_str().ok())
-            .unwrap_or("");
+            .map(str::to_string)
+            .or_else(|| req.uri().authority().map(|a| a.to_string()))
+            .unwrap_or_default();
+        let host = host.as_str();
         let origin_host = origin
             .split_once("://")
             .map(|(_, rest)| rest)

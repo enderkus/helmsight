@@ -348,6 +348,25 @@ async fn cross_origin_posts_are_refused() {
 }
 
 #[tokio::test]
+async fn same_origin_posts_over_http2_are_accepted() {
+    // HTTP/2 requests carry the host in the URI authority, not in a Host header.
+    let h = harness();
+    let req = |origin: &str| {
+        Request::post("https://monitor.example.com/api/v1/auth/login")
+            .header(header::CONTENT_TYPE, "application/json")
+            .header(header::ORIGIN, origin)
+            .body(Body::from(
+                json!({"username": "a", "password": "b"}).to_string(),
+            ))
+            .unwrap()
+    };
+    let same = call(&h.router, req("https://monitor.example.com")).await;
+    assert_eq!(same.status, StatusCode::UNAUTHORIZED, "{}", same.text);
+    let other = call(&h.router, req("https://evil.example")).await;
+    assert_eq!(other.status, StatusCode::FORBIDDEN);
+}
+
+#[tokio::test]
 async fn security_headers_and_static_fallback() {
     let h = harness();
     let r = call(&h.router, get("/hosts/web-1", None)).await;
