@@ -104,9 +104,14 @@ For a long-running installation, use the hardened systemd unit in
 image:
 
 ```sh
-docker run -d -p 127.0.0.1:8080:8080 -v helmsight:/var/lib/helmsight \
-  -v /etc/helmsight:/etc/helmsight:ro ghcr.io/helmsight/helmsight serve --config /etc/helmsight/helmsight.toml
+docker run -d -p 8443:8080 -v helmsight:/var/lib/helmsight \
+  -v /etc/helmsight:/etc/helmsight:ro ghcr.io/helmsight/helmsight
 ```
+
+In the container, set `listen = "0.0.0.0:8080"` and
+`data_dir = "/var/lib/helmsight"`; TLS is then enabled automatically
+(self-signed unless you configure certificates). The image contains only
+the static binary, so `--local` mode is not available in it.
 
 ## Configuration
 

@@ -1,0 +1,17 @@
+# Image built by the release workflow from prebuilt static binaries in
+# dist/<arch>/helmsight.
+FROM alpine:3 AS certs
+RUN apk add --no-cache ca-certificates \
+ && mkdir -p /out/var/lib/helmsight /out/etc/helmsight
+
+FROM scratch
+ARG TARGETARCH
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=certs --chown=65532:65532 /out/ /
+COPY --chmod=0755 dist/${TARGETARCH}/helmsight /helmsight
+USER 65532:65532
+ENV HELMSIGHT_CONFIG=/etc/helmsight/helmsight.toml
+VOLUME ["/var/lib/helmsight"]
+EXPOSE 8080
+ENTRYPOINT ["/helmsight"]
+CMD ["serve"]
