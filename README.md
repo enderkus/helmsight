@@ -18,7 +18,7 @@ installed, copied or written on the monitored servers.
 > data directory, and review the [security model](docs/security.md) and the [collection script](crates/collect/src/remote.sh) before deploying widely.
 > Collection is read-only; the opt-in Actions feature runs the commands you
 > configure, so enable it with care. helmsight is provided as is, without
-> warranty, under the [MIT license](LICENSE).
+> warranty, under the [MIT license](LICENSE); you use it at your own risk.
 
 **Website and documentation: https://enderkus.github.io/helmsight/**
 
@@ -34,7 +34,9 @@ installed, copied or written on the monitored servers.
 - **Fleet overview**: status, CPU, memory, load, fullest disk, network,
   uptime and alerts for every host, with groups, tags, search and
   sparklines. "Host down", "SSH authentication failed", "host key changed"
-  and "collection partially failed" are distinct states.
+  and "collection partially failed" are distinct states, so a network
+  problem is told apart at a glance from an account problem or a possible
+  security incident.
 - **Host detail**: live and historical charts (CPU including iowait and
   steal, per-core heatmap, memory and swap, load, disk usage and I/O,
   network, TCP), top processes, listening ports with owners, systemd or
@@ -66,11 +68,12 @@ installed, copied or written on the monitored servers.
 
 - **One read-only POSIX shell script per tick.** Every collection is a single
   SSH exec of `sh -s` on a persistent session. The script is sent on standard
-  input, so it never appears in the remote process list. It reads `/proc`,
-  `df`, `ps`, `ss`, `systemctl`, the package database and similar read-only
-  sources. It never writes files and degrades to "n/a" with a reason when a
-  tool is missing or not permitted. It runs on Debian, Ubuntu,
-  RHEL/Rocky/Alma, Fedora, openSUSE and Alpine (BusyBox).
+  input, so it never appears in the remote process list and is never
+  written to disk. It reads `/proc`, `df`, `ps`, `ss`, `systemctl`, the
+  package database and similar read-only sources. It never writes files
+  and degrades to "n/a" with a reason when a tool is missing or not
+  permitted. It runs on Debian, Ubuntu, RHEL/Rocky/Alma, Fedora, openSUSE
+  and Alpine (BusyBox).
 - **The browser only runs code served by helmsight.** Remote hosts return
   plain text, which is parsed and size-limited in Rust. Remote output is
   never rendered as HTML, and a strict Content-Security-Policy forbids
@@ -127,6 +130,11 @@ In the container, set `listen = "0.0.0.0:8080"` and
 `data_dir = "/var/lib/helmsight"`; TLS is then enabled automatically
 (self-signed unless you configure certificates). The image contains only
 the static binary, so `--local` mode is not available in it.
+
+For a step-by-step walkthrough, see the
+[quick start](https://enderkus.github.io/helmsight/docs/quick-start.html)
+and [monitoring a fleet](https://enderkus.github.io/helmsight/docs/fleet-setup.html)
+in the documentation.
 
 ## Configuration
 
@@ -214,8 +222,15 @@ persistent session per host and a configurable limit. Storage uses one
 compact row per host per tick. A few hundred hosts on a small VM are
 expected to be fine.
 
+**Is the UI available in other languages?** The UI is in English for now;
+the documentation is available in English and Turkish.
+
 **Is there a dark mode?** Yes. The UI follows the OS preference, and you
 can override it in the top bar.
+
+See the [FAQ](https://enderkus.github.io/helmsight/docs/faq.html) and
+[troubleshooting](https://enderkus.github.io/helmsight/docs/troubleshooting.html)
+pages for more.
 
 ## Building from source
 

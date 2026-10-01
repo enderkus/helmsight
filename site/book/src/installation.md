@@ -1,12 +1,25 @@
 # Installation
 
 helmsight is a single static binary. It runs on the central machine only;
-monitored hosts need nothing but an SSH server and a POSIX shell.
+monitored hosts need nothing but an SSH server and a POSIX shell
+(`/bin/sh`).
+
+## Requirements
+
+| Side | Requirement |
+|---|---|
+| Central machine | Linux, x86_64 or aarch64. The binary is static, so the glibc version does not matter; it also runs in Docker. |
+| Monitored hosts | An SSH server, `/bin/sh` and an unprivileged account dedicated to monitoring. No extra packages. |
+| Network | The central machine reaches the hosts' SSH port. Hosts never connect to the central machine. |
+| Browser | A current Firefox, Chrome, Edge or Safari. |
+
+Disk usage grows with the number of hosts and the retention periods, which
+are set in the [`[retention]`](configuration.md#retention) section.
 
 ## Prebuilt binaries
 
 Releases provide static Linux binaries for x86_64 and aarch64, with
-checksums:
+SHA-256 checksums:
 
 ```sh
 curl -LO https://github.com/enderkus/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
@@ -14,9 +27,15 @@ curl -LO https://github.com/enderkus/helmsight/releases/latest/download/SHA256SU
 sha256sum --check --ignore-missing SHA256SUMS
 tar xzf helmsight-x86_64-unknown-linux-musl.tar.gz
 sudo install -m 0755 helmsight-x86_64-unknown-linux-musl/helmsight /usr/local/bin/
+helmsight --version
 ```
 
-Replace `x86_64` with `aarch64` on ARM servers.
+On ARM servers (for example AWS Graviton, or a Raspberry Pi 4/5 running
+64-bit Linux), replace `x86_64` with `aarch64`.
+
+The `sha256sum --check` line verifies that the archive is intact and
+identical to the file on the release page; do not continue until it
+prints `OK`.
 
 ## Container image
 
@@ -28,10 +47,25 @@ docker run -d --name helmsight -p 8443:8080 \
 ```
 
 In the container, set `listen = "0.0.0.0:8080"` and
-`data_dir = "/var/lib/helmsight"` in `/etc/helmsight/helmsight.toml`. TLS is
-then enabled automatically with a self-signed certificate unless you provide
-one. The image contains only the binary and CA certificates, so `--local`
-mode is not available in it.
+`data_dir = "/var/lib/helmsight"` in `/etc/helmsight/helmsight.toml`.
+Because it listens on a non-loopback address, TLS is enabled
+automatically: unless you provide a certificate, a self-signed one is
+generated and its fingerprint is logged at start-up. Open
+`https://<machine>:8443` in the browser.
+
+The image contains only the binary and CA certificates (not even a
+shell). `--local` mode is therefore not available in it, and commands run
+as `docker exec helmsight /helmsight <command>`, for example:
+
+```sh
+docker exec -it helmsight /helmsight user add alice --role admin
+docker exec -it helmsight /helmsight hosts test --trust
+```
+
+Keep the SSH key and the configuration under `/etc/helmsight`, mounted
+read-only, and the database in a named volume (`helmsight`). The image runs
+as an unprivileged user with UID 65532; mounted files must be readable by
+that user.
 
 ## Building from source
 
@@ -45,9 +79,12 @@ cargo build --release
 ./target/release/helmsight --version
 ```
 
-The web UI is embedded into the binary at compile time. To build a static
-Linux binary on another platform, build the container image and copy the
-binary out of it:
+The web UI is embedded into the binary at compile time, so build it in
+`web` first. A `cargo build` without a built UI prints a warning and embeds
+a simple placeholder page instead.
+
+To build a static Linux binary on another platform (for example macOS),
+build the container image and copy the binary out of it:
 
 ```sh
 docker build --platform linux/amd64 -t helmsight .
@@ -61,14 +98,68 @@ The repository ships a hardened systemd unit,
 [`examples/helmsight.service`](https://github.com/enderkus/helmsight/blob/main/examples/helmsight.service):
 
 ```sh
+# A dedicated system user
 sudo useradd --system --home-dir /var/lib/helmsight --shell /usr/sbin/nologin helmsight
+
+# Configuration and SSH key: owned by root, readable by the helmsight group
 sudo install -d -m 0750 -o root -g helmsight /etc/helmsight
 sudo install -m 0640 -o root -g helmsight helmsight.toml /etc/helmsight/
 sudo install -m 0640 -o root -g helmsight id_ed25519 /etc/helmsight/
+
 sudo cp helmsight.service /etc/systemd/system/
+sudo systemctl daemon-reload
 sudo systemctl enable --now helmsight
 journalctl -u helmsight -f
 ```
 
 The unit runs helmsight as an unprivileged user with a read-only file
-system, a private state directory and a restricted set of system calls.
+system, a private state directory (`/var/lib/helmsight`) and a restricted
+set of system calls. Use `data_dir = "/var/lib/helmsight"` in the
+configuration.
+
+To create the first user, either open the setup link printed in the
+service log, or run:
+
+```sh
+sudo -u helmsight helmsight --config /etc/helmsight/helmsight.toml user add alice --role admin
+```
+
+## Upgrading
+
+1. Read the [changelog](changelog.md) of the new release; 0.x releases may
+   contain incompatible changes.
+2. Back up the data directory (see below).
+3. Install the new binary over the old one and restart the service:
+   `sudo systemctl restart helmsight`. The database schema is migrated
+   automatically at start-up when needed.
+
+With the container image, pull the new image and recreate the container
+with the same volumes.
+
+## Backups
+
+The data directory contains:
+
+| File | Contents |
+|---|---|
+| `helmsight.db` | Metrics, inventory, users, alerts, audit log |
+| `secret.key` | Key that encrypts stored secrets and TOTP seeds |
+| `known_hosts` | Approved SSH host keys |
+| `tls/` | Self-signed certificate (if one was generated) |
+
+For a consistent database backup, stop the service briefly and copy the
+files, or use SQLite's backup command while it runs:
+
+```sh
+sqlite3 /var/lib/helmsight/helmsight.db ".backup '/backup/helmsight.db'"
+```
+
+Store `secret.key` **separately** from the database: without it, stored
+secrets cannot be decrypted, and anyone who obtains both can read them.
+
+## Uninstalling
+
+helmsight installs nothing on monitored hosts, so uninstalling only touches
+the central machine: stop the service and delete the binary,
+`/etc/helmsight` and the data directory. You can also remove the
+monitoring account and its `authorized_keys` line from the hosts.

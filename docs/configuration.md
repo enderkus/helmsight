@@ -21,7 +21,8 @@ error: helmsight.toml:41:8: `alerts.rules[0].expr`: unknown operator `=>` (use >
 Unknown keys are errors, so typos never pass silently.
 
 **Durations** are strings such as `"500ms"`, `"30s"`, `"5m"`, `"1h30m"`,
-`"7d"`, `"2w"`.
+`"7d"`, `"2w"` (`ms` milliseconds, `s` seconds, `m` minutes, `h` hours,
+`d` days, `w` weeks).
 
 **Secrets** may be literal strings, but references are preferred:
 
@@ -31,7 +32,48 @@ Unknown keys are errors, so typos never pass silently.
 | `"env:<VAR>"` | Value of an environment variable |
 | `"file:<path>"` | Contents of a file (trailing newline removed) |
 
+`env:` works well with systemd's `EnvironmentFile=` or container
+environment variables, and `file:` with Docker or Kubernetes secret files
+(`/run/secrets/...`).
+
 Changes to the configuration take effect after a restart.
+
+## A complete example
+
+```toml
+# Top-level keys must come before any [section] header.
+hosts_file = "hosts.toml"
+
+[server]
+listen = "127.0.0.1:8080"
+data_dir = "/var/lib/helmsight"
+public_url = "https://monitor.example.com"
+trusted_proxies = ["127.0.0.1"]
+
+[auth]
+require_totp_for_admins = true
+
+[ssh]
+user = "monitor"
+identity_files = ["/etc/helmsight/id_ed25519"]
+
+[[alerts.rules]]
+id = "disk-full"
+expr = "disk_used_pct > 90 for 10m"
+severity = "critical"
+
+[[notify]]
+id = "ops"
+type = "slack"
+url = "secret:slack-webhook"
+
+[[certs]]
+endpoint = "www.example.com:443"
+```
+
+In TOML, every key written after a `[section]` header belongs to that
+section. Write top-level keys such as `hosts_file` at the very top of the
+file; in the wrong place, `config check` reports them as unknown keys.
 
 ## `[server]`
 
@@ -42,6 +84,10 @@ Changes to the configuration take effect after a restart.
 | `public_url` | none | External `https://` URL; required for OIDC, used in notification links and origin checks |
 | `trusted_proxies` | `[]` | IP addresses whose `X-Forwarded-For` header is trusted |
 
+`trusted_proxies` matters for identifying clients correctly: sign-in rate
+limiting works per client address. Behind a proxy without this setting,
+every user appears to come from the proxy's address.
+
 ### `[server.tls]`
 
 | Key | Default | Description |
@@ -49,6 +95,10 @@ Changes to the configuration take effect after a restart.
 | `mode` | `"auto"` | `auto` (HTTP on loopback, self-signed otherwise), `self-signed`, `files` or `off` |
 | `cert`, `key` | none | PEM files for `mode = "files"` |
 | `allow_insecure_http` | `false` | Permit `mode = "off"` on a non-loopback address (behind a TLS proxy) |
+
+With a Let's Encrypt certificate, point `cert` at `fullchain.pem` and
+`key` at `privkey.pem`, and restart helmsight after renewal (for example
+with certbot's `--deploy-hook`).
 
 ## `[auth]`
 
@@ -73,7 +123,24 @@ Changes to the configuration take effect after a restart.
 | `label` | `"Single sign-on"` | Text of the sign-in button |
 
 Register `<public_url>/api/v1/auth/oidc/callback` as the redirect URI.
-Roles are updated from the claim at every sign-in.
+Roles are updated from the claim at every sign-in, so changing a user's
+groups at the identity provider changes their role at their next sign-in.
+
+Example (Keycloak):
+
+```toml
+[auth.oidc]
+issuer = "https://sso.example.com/realms/ops"
+client_id = "helmsight"
+client_secret = "secret:oidc"
+role_claim = "realm_access.roles"
+role_map = { "helmsight-admin" = "admin", "sre" = "operator", "dev" = "viewer" }
+label = "Sign in with company account"
+```
+
+Keeping a local administrator account for emergencies is recommended; use
+`disable_local_login` with care so that you do not lose access to the UI
+when SSO is down.
 
 ## `[ssh]`
 
@@ -104,6 +171,10 @@ Failed hosts are retried with backoff: exponential up to 5 minutes when
 unreachable, 1 to 5 minutes after authentication failures (to avoid
 triggering intrusion prevention) and every minute for host key problems.
 
+Lowering `interval` increases chart resolution, but also increases the load
+on the hosts and the database proportionally. For large fleets, 10 to 15
+seconds is a reasonable starting point.
+
 ## `[retention]`
 
 | Key | Default | Description |
@@ -114,6 +185,8 @@ triggering intrusion prevention) and every minute for host key problems.
 | `events` | `"90d"` | Inventory changes, resolved alerts, failed logins, notifications |
 
 Charts pick the finest resolution that covers the requested range.
+Longer retention grows the database proportionally. Expired data is deleted
+automatically every hour; rollups are computed every minute.
 
 ## Hosts
 
@@ -264,7 +337,8 @@ Webhook payload:
 | `interval` | `"6h"` | |
 
 The certificate is read even when it does not validate; trust problems are
-shown separately from connection failures.
+shown separately from connection failures. Checks run from the helmsight
+server, so only endpoints that helmsight can reach can be checked.
 
 ## `[[actions]]`
 

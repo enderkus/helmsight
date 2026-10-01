@@ -5,6 +5,10 @@ checks every change must pass and the rules that keep helmsight safe.
 
 *[Türkçe sürüm](https://enderkus.github.io/helmsight/tr/docs/contributing.html)*
 
+Questions, bug reports and suggestions are welcome in English or Turkish
+on [GitHub Issues](https://github.com/enderkus/helmsight/issues). Code,
+code comments and commit messages are written in English.
+
 ## Development setup
 
 Requirements: Rust stable (see `rust-toolchain.toml`), Node.js 22, npm and,

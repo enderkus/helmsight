@@ -46,6 +46,18 @@ helmsight is designed so that:
 Out of scope: an attacker with root on the central server can read the SSH
 keys and the database. Protect that machine accordingly.
 
+### What this means in practice
+
+- If helmsight's monitoring key is stolen, the attacker can only log in as
+  the unprivileged `monitor` account and (with `from=`) only from the
+  helmsight server's address. Do not skip the `restrict,from=` options.
+- If a monitored host is compromised, the worst outcome is false metrics
+  for that host; the attacker cannot use it to move on to helmsight or to
+  other hosts.
+- The central server has read access to the whole fleet; protect it as
+  carefully as a bastion host: keep it updated, open only the ports it
+  needs and restrict access to the UI.
+
 ## What helmsight runs on monitored hosts
 
 Every tick, helmsight opens a channel on the host's persistent SSH session
@@ -68,6 +80,8 @@ Properties of the script:
 - Every output redirection targets `/dev/null` (enforced by a unit test).
 - Missing or forbidden tools produce "n/a" with a reason, never an error.
 - Long-running commands are bounded with `timeout` where available.
+- The script is never saved on the remote host; it is read from standard
+  input and appears in the process list only as `sh -s`.
 
 ### What gets written on the host
 
@@ -115,6 +129,10 @@ chmod 600 ~monitor/.ssh/authorized_keys
 helmsight needs none of them. Replace `10.0.0.5` with the address of the
 helmsight server.
 
+Do not give the account a password; it should only log in with the key.
+Setting `PasswordAuthentication no` in `sshd_config` on your hosts is also
+recommended.
+
 Optional group memberships, each adding visibility:
 
 | Group | Gives | Notes |
@@ -143,7 +161,9 @@ New hosts are refused until their key is trusted. Either:
   if it matches the key presented.
 
 Approved keys are stored in `<data_dir>/known_hosts`. Existing OpenSSH
-files can be consulted read-only with `ssh.known_hosts_files`.
+files can be consulted read-only with `ssh.known_hosts_files`. If you
+already distribute your hosts' keys with a configuration management tool,
+pointing helmsight at that file is the safest option.
 
 ## Actions
 
@@ -187,8 +207,8 @@ unless configured.
   behind a TLS-terminating reverse proxy (set `server.public_url` to its
   `https://` URL and `server.trusted_proxies` to its address).
 - Passwords are hashed with Argon2id (19 MiB, 2 iterations); unknown users
-  take the same time as wrong passwords. The minimum length is 12
-  characters.
+  take the same time as wrong passwords, so user names cannot be guessed
+  from response times. The minimum length is 12 characters.
 - Optional TOTP (RFC 6238); codes cannot be reused. Admins can be required
   to enrol (`auth.require_totp_for_admins`).
 - OpenID Connect uses the authorization code flow with PKCE, state and
@@ -210,12 +230,32 @@ unless configured.
   logs) and can be revoked at any time.
 - The Prometheus endpoint is disabled unless a bearer token is configured.
 
+## Security checklist before deployment
+
+- [ ] helmsight runs as a dedicated system user, with the systemd unit or
+      in a container.
+- [ ] The monitoring key is an ed25519 key used only by helmsight, and its
+      file is not readable by others.
+- [ ] The `authorized_keys` line has `restrict,from="…"`.
+- [ ] The monitoring account is not in the `docker` group (or was added
+      knowing that this is equivalent to root).
+- [ ] Host keys were approved after comparing fingerprints;
+      `accept_new_host_keys` is only enabled on a trusted network.
+- [ ] The UI is on loopback behind a TLS proxy, or served directly with
+      TLS; `public_url` is set.
+- [ ] TOTP is required for administrators
+      (`auth.require_totp_for_admins = true`), or sign-in uses SSO.
+- [ ] Secrets are written as `secret:`, `env:` or `file:` references; the
+      configuration file contains no plain-text passwords.
+- [ ] `secret.key` is backed up separately from the database.
+- [ ] If actions are used, sudoers only allows the exact commands.
+
 ## Reporting a vulnerability
 
 Please report security problems privately via GitHub's **Report a
 vulnerability** button on the repository's Security tab. Do not open a
 public issue. Include the version (`helmsight --version`), a description,
-and steps to reproduce.
+and steps to reproduce. Reports can be written in English or Turkish.
 
 We aim to acknowledge reports within three working days and to publish a
 fix and advisory as soon as possible. We credit reporters unless they prefer

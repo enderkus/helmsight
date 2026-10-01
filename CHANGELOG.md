@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Turkish documentation: `README.tr.md`, `docs/tr/` and a Turkish website
   and documentation under `/tr/`, with language links between them.
 - A troubleshooting page in the documentation.
+- More detailed documentation in both languages: requirements, upgrades,
+  backups, reverse proxy setup, example alert rules and notification
+  channels, safe action design and a security checklist.
 
 ### Fixed
 

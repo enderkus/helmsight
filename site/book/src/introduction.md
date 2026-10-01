@@ -16,6 +16,7 @@ copied or written on the monitored servers.
 > Collection is read-only; the opt-in Actions feature runs the commands you
 > configure, so enable it with care. helmsight is provided as is, without
 > warranty, under the [MIT license](https://github.com/enderkus/helmsight/blob/main/LICENSE).
+> You use it at your own risk.
 
 ![Fleet overview](images/fleet.png)
 
@@ -38,6 +39,25 @@ copied or written on the monitored servers.
 - **Wall display** for NOC screens, a JSON API with OpenAPI, server-sent
   events and a Prometheus endpoint.
 
+## How it works
+
+1. helmsight keeps **one persistent SSH session** per host. Every few
+   seconds it runs `sh -s` on that session and sends a short POSIX shell
+   script on standard input. The script is never written to a file on the
+   remote host and does not appear in its process list.
+2. The script only reads: `/proc` files, `df`, `ps`, `ss`, `systemctl`, the
+   package database and similar sources. When a tool is missing or not
+   permitted, it reports "n/a" with the reason instead of failing.
+3. The output is size-limited, parsed in Rust on the central machine and
+   written to SQLite. Older data is condensed into 1-minute and 5-minute
+   rollups.
+4. The web UI is embedded in the binary. The browser only runs code served
+   by helmsight; text coming from remote hosts is never rendered as HTML.
+
+Heavier checks (pending updates, the package inventory) run less often.
+The [security model](security.md#what-helmsight-runs-on-monitored-hosts)
+lists every command and how often it runs.
+
 ## Design principles
 
 1. **Agentless.** Nothing is installed or written on monitored hosts.
@@ -53,6 +73,15 @@ copied or written on the monitored servers.
 7. **Portable.** Debian, Ubuntu, RHEL/Rocky/Alma, Fedora, openSUSE and
    Alpine (BusyBox).
 8. **Single binary.** The web UI is embedded; deployment is copying one file.
+
+## About this documentation
+
+The documentation is available in English and
+[Turkish](https://enderkus.github.io/helmsight/tr/docs/); the link in the
+top bar of every page opens the same page in the other language. The UI
+itself is in English. Menu and button names are written in bold as they
+appear in the UI, for example **Host keys**. Configuration keys, commands
+and API paths are written as code.
 
 Continue with [Installation](installation.md) or jump straight to the
 [Quick start](quick-start.md).

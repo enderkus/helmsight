@@ -93,7 +93,9 @@ sayfasında komut komut listelenmiştir.
 
 ## Bu belgeler hakkında
 
-helmsight'ın arayüzü İngilizcedir. Bu belgelerde menü ve düğme adları
+Belgeler Türkçe ve [İngilizce](https://enderkus.github.io/helmsight/docs/)
+olarak sunulur; her sayfanın üst çubuğundaki bağlantı aynı sayfayı diğer
+dilde açar. helmsight'ın arayüzü İngilizcedir. Menü ve düğme adları
 arayüzde göründükleri gibi, kalın yazıyla ve gerektiğinde Türkçe
 karşılıklarıyla verilir; örneğin **Host keys** (sunucu anahtarları).
 Yapılandırma anahtarları, komutlar ve API yolları değişmeden, kod olarak
