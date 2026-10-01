@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-01
+
 ### Added
 
 - An installation script (`install.sh`, published on the website and with
@@ -20,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `--public-url`, `--ssh-user`, `--ssh-key`, `--admin`), runs without
   questions with `--non-interactive`, reads the administrator's password
   with `--password-stdin` and creates an ed25519 key with `--generate-key`.
-
 - Turkish documentation: `README.tr.md`, `docs/tr/` and a Turkish website
   and documentation under `/tr/`, with language links between them.
 - A troubleshooting page in the documentation.
@@ -73,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: `serve`, `init`, `user`, `hosts test`, `config check`, `secret`,
   `audit verify`.
 
-[Unreleased]: https://github.com/enderkus/helmsight/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/enderkus/helmsight/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/enderkus/helmsight/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/enderkus/helmsight/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/enderkus/helmsight/releases/tag/v0.1.0
