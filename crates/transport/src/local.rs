@@ -20,8 +20,8 @@ impl Executor for LocalExecutor {
         timeout: Duration,
     ) -> Result<ExecOutput, TransportError> {
         let start = Instant::now();
-        let mut child = Command::new("/bin/sh")
-            .arg("-c")
+        let mut cmd = Command::new("/bin/sh");
+        cmd.arg("-c")
             .arg(command)
             .stdin(if stdin.is_some() {
                 Stdio::piped()
@@ -30,11 +30,14 @@ impl Executor for LocalExecutor {
             })
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
-            .kill_on_drop(true)
-            .spawn()
-            .map_err(|e| TransportError::Protocol {
-                message: format!("cannot start /bin/sh: {e}"),
-            })?;
+            .kill_on_drop(true);
+        // Own process group, so that children of the shell are killed too.
+        #[cfg(unix)]
+        cmd.process_group(0);
+        let mut child = cmd.spawn().map_err(|e| TransportError::Protocol {
+            message: format!("cannot start /bin/sh: {e}"),
+        })?;
+        let pid = child.id();
 
         if let (Some(input), Some(mut pipe)) = (stdin, child.stdin.take()) {
             let input = input.to_vec();
@@ -45,8 +48,10 @@ impl Executor for LocalExecutor {
         }
         let mut stdout = child.stdout.take();
         let mut stderr = child.stderr.take();
-        let run = async {
-            let mut out = ExecOutput::default();
+        // Read both pipes concurrently so that a chatty stderr cannot block.
+        let read_out = async {
+            let mut data = Vec::new();
+            let mut truncated = false;
             let mut buf = vec![0u8; 64 * 1024];
             if let Some(so) = stdout.as_mut() {
                 loop {
@@ -54,38 +59,42 @@ impl Executor for LocalExecutor {
                     if n == 0 {
                         break;
                     }
-                    let room = limit.saturating_sub(out.stdout.len());
-                    out.stdout
-                        .extend_from_slice(buf.get(..n.min(room)).unwrap_or(&[]));
+                    let room = limit.saturating_sub(data.len());
+                    data.extend_from_slice(buf.get(..n.min(room)).unwrap_or(&[]));
                     if n > room {
-                        out.truncated = true;
+                        truncated = true;
+                        kill_group(pid);
                         break;
                     }
                 }
             }
-            if out.truncated {
-                let _ = child.start_kill();
-            }
-            if let Some(se) = stderr.as_mut() {
-                let mut err = Vec::new();
-                let _ = se.take(STDERR_LIMIT as u64).read_to_end(&mut err).await;
-                out.stderr = err;
-            }
-            out
+            (data, truncated)
         };
-        let result = tokio::time::timeout(timeout, run).await;
-        match result {
-            Ok(mut out) => {
+        let read_err = async {
+            let mut err = Vec::new();
+            if let Some(se) = stderr.as_mut() {
+                let _ = se.take(STDERR_LIMIT as u64).read_to_end(&mut err).await;
+            }
+            err
+        };
+        let run = async { tokio::join!(read_out, read_err) };
+        match tokio::time::timeout(timeout, run).await {
+            Ok(((stdout, truncated), stderr)) => {
                 let status = tokio::time::timeout(Duration::from_secs(5), child.wait()).await;
-                out.exit_status = status
-                    .ok()
-                    .and_then(|s| s.ok())
-                    .and_then(|s| s.code())
-                    .and_then(|c| u32::try_from(c).ok());
-                out.duration = start.elapsed();
-                Ok(out)
+                Ok(ExecOutput {
+                    stdout,
+                    stderr,
+                    exit_status: status
+                        .ok()
+                        .and_then(|s| s.ok())
+                        .and_then(|s| s.code())
+                        .and_then(|c| u32::try_from(c).ok()),
+                    truncated,
+                    duration: start.elapsed(),
+                })
             }
             Err(_) => {
+                kill_group(pid);
                 let _ = child.kill().await;
                 Err(TransportError::Timeout {
                     secs: timeout.as_secs(),
@@ -94,6 +103,19 @@ impl Executor for LocalExecutor {
         }
     }
 }
+
+/// Kills the whole process group started for a command.
+#[cfg(unix)]
+fn kill_group(pid: Option<u32>) {
+    use nix::sys::signal::{Signal, killpg};
+    use nix::unistd::Pid;
+    if let Some(pid) = pid.and_then(|p| i32::try_from(p).ok()) {
+        let _ = killpg(Pid::from_raw(pid), Signal::SIGKILL);
+    }
+}
+
+#[cfg(not(unix))]
+fn kill_group(_pid: Option<u32>) {}
 
 #[cfg(test)]
 mod tests {
@@ -125,6 +147,22 @@ mod tests {
         assert_eq!(out.stdout.len(), 1000);
         let err = LocalExecutor
             .exec("sleep 5", None, 1000, Duration::from_millis(200))
+            .await
+            .unwrap_err();
+        assert!(matches!(err, TransportError::Timeout { .. }));
+    }
+
+    #[tokio::test]
+    async fn kills_children_of_the_shell() {
+        // The shell forks `yes` instead of exec'ing it; truncation must still
+        // terminate it, otherwise stderr never reaches end-of-file.
+        let out = LocalExecutor
+            .exec("yes; true", None, 1000, Duration::from_secs(5))
+            .await
+            .unwrap();
+        assert!(out.truncated);
+        let err = LocalExecutor
+            .exec("sleep 30; true", None, 1000, Duration::from_millis(300))
             .await
             .unwrap_err();
         assert!(matches!(err, TransportError::Timeout { .. }));

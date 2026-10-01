@@ -4480,6 +4480,7 @@ dependencies = [
  "async-trait",
  "collect",
  "common",
+ "nix",
  "russh",
  "serde",
  "tempfile",
