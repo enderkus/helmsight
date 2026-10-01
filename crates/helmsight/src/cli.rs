@@ -64,10 +64,41 @@ fn load(given: Option<PathBuf>) -> Result<Loaded, String> {
     Ok(loaded)
 }
 
-/// Opens the database and key file of a configuration.
-fn open_data(given: Option<PathBuf>) -> Result<(Loaded, Store, Arc<SecretKey>), String> {
-    let loaded = load(given)?;
-    let dir = loaded.config.data_dir(&loaded.path);
+static DATA_DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+
+/// Sets the global `--data-dir` override.
+pub fn set_data_dir(dir: PathBuf) {
+    let _ = DATA_DIR.set(dir);
+}
+
+/// Opens the database and key file. Uses the configuration file when it
+/// exists; otherwise the `--data-dir` override or the local-mode default,
+/// so that `serve --local` installations can be administered too.
+fn open_data(given: Option<PathBuf>) -> Result<(Option<Loaded>, Store, Arc<SecretKey>), String> {
+    let path = config_path(given.clone());
+    let (loaded, dir) = if path.is_file() {
+        let l = load(given)?;
+        let d = DATA_DIR
+            .get()
+            .cloned()
+            .unwrap_or_else(|| l.config.data_dir(&l.path));
+        (Some(l), d)
+    } else if given.is_some() {
+        return Err(format!("configuration file {} not found", path.display()));
+    } else {
+        let d = DATA_DIR
+            .get()
+            .cloned()
+            .unwrap_or_else(default_local_data_dir);
+        if !d.is_dir() {
+            return Err(format!(
+                "no configuration file ({}) and no data directory at {}; pass --config or --data-dir",
+                path.display(),
+                d.display()
+            ));
+        }
+        (None, d)
+    };
     server::app::create_private_dir(&dir)?;
     let key = SecretKey::load_or_create(&dir.join("secret.key")).map_err(|e| e.to_string())?;
     let store = Store::open(&dir.join(format!("{PRODUCT_NAME}.db"))).map_err(|e| e.to_string())?;
@@ -256,7 +287,9 @@ pub async fn init(config: Option<PathBuf>, force: bool) -> Res {
     println!("Wrote {}.", path.display());
 
     let (loaded, store, _key) = open_data(Some(path.clone()))?;
-    let dir = loaded.config.data_dir(&loaded.path);
+    let dir = loaded
+        .map(|l| l.config.data_dir(&l.path))
+        .unwrap_or_default();
     println!(
         "Data directory {} ready (key file secret.key created).",
         dir.display()

@@ -305,7 +305,7 @@ Exposed metrics are prefixed with `helmsight_`: `host_up`,
 
 | Command | Description |
 |---|---|
-| `serve [--local] [--listen ADDR] [--data-dir DIR]` | Run the server. `--local` monitors only this machine by reading `/proc` (no SSH, no configuration needed). |
+| `serve [--local] [--listen ADDR]` | Run the server. `--local` monitors only this machine by reading `/proc` (no SSH, no configuration needed). |
 | `init [--force]` | Interactively create a configuration file, the data directory, the key file and the first administrator |
 | `user add <name> [--role viewer\|operator\|admin] [--password-stdin]` | Create a local user |
 | `user remove <name>` | Delete a user (the last admin cannot be removed) |
@@ -316,7 +316,10 @@ Exposed metrics are prefixed with `helmsight_`: `host_up`,
 | `secret set <name> [--stdin]` / `secret list` / `secret delete <name>` | Manage encrypted secrets |
 | `audit verify` | Verify the audit log hash chain |
 
-Global options: `--config <path>`, `--log-format text|json`.
+Global options: `--config <path>`, `--data-dir <dir>` (overrides
+`server.data_dir`; without a configuration file, commands use the
+local-mode default `~/.local/share/helmsight`, or `/var/lib/helmsight` for
+root), `--log-format text|json`.
 
 When no user exists, `serve` prints a one-time setup link
 (`/setup#token=...`) for creating the first administrator in the browser.
@@ -326,6 +329,7 @@ When no user exists, `serve` prints a one-time setup link
 | Variable | Description |
 |---|---|
 | `HELMSIGHT_CONFIG` | Configuration file path |
+| `HELMSIGHT_DATA_DIR` | Same as `--data-dir` |
 | `HELMSIGHT_LOG` | Log filter, e.g. `info`, `debug`, `info,server=debug` |
 | `SSH_AUTH_SOCK` | ssh-agent socket used when `ssh.use_agent = true` |
 

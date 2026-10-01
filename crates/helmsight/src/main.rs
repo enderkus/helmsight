@@ -19,6 +19,11 @@ struct Cli {
     #[arg(short, long, global = true, env = "HELMSIGHT_CONFIG")]
     config: Option<PathBuf>,
 
+    /// Data directory; overrides `server.data_dir`. Without a configuration
+    /// file, commands use the local-mode default directory.
+    #[arg(long, global = true, env = "HELMSIGHT_DATA_DIR")]
+    data_dir: Option<PathBuf>,
+
     /// Log format.
     #[arg(long, global = true, default_value = "text", value_parser = ["text", "json"])]
     log_format: String,
@@ -37,9 +42,6 @@ enum Command {
         /// Override `server.listen`.
         #[arg(long)]
         listen: Option<String>,
-        /// Override `server.data_dir`.
-        #[arg(long)]
-        data_dir: Option<PathBuf>,
     },
     /// Create a configuration file, key file and the first administrator.
     Init {
@@ -147,6 +149,9 @@ fn init_logging(format: &str) {
 fn main() -> ExitCode {
     let cli = Cli::parse();
     init_logging(&cli.log_format);
+    if let Some(d) = &cli.data_dir {
+        cli::set_data_dir(d.clone());
+    }
     let rt = match tokio::runtime::Runtime::new() {
         Ok(rt) => rt,
         Err(e) => {
@@ -156,11 +161,9 @@ fn main() -> ExitCode {
     };
     let result = rt.block_on(async move {
         match cli.command {
-            Command::Serve {
-                local,
-                listen,
-                data_dir,
-            } => cli::serve(cli.config, local, listen, data_dir).await,
+            Command::Serve { local, listen } => {
+                cli::serve(cli.config, local, listen, cli.data_dir).await
+            }
             Command::Init { force } => cli::init(cli.config, force).await,
             Command::User(c) => match c {
                 UserCommand::Add {
