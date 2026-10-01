@@ -187,6 +187,7 @@ if want inventory; then
   s packages
   if have dpkg-query; then
     echo '#src dpkg'
+    # shellcheck disable=SC2016 # dpkg format fields, not shell expansions
     t 60 dpkg-query -W -f='${db:Status-Abbrev}\t${Package}\t${Version}\t${Architecture}\n' 2>/dev/null
   elif have rpm; then
     echo '#src rpm'
@@ -236,7 +237,10 @@ if want updates; then
   s updates
   if have apt-get; then
     echo '#src apt'
-    n=$(ls /var/lib/apt/lists 2>/dev/null | grep -c '_Packages')
+    n=0
+    for x in /var/lib/apt/lists/*_Packages*; do
+      [ -e "$x" ] && n=$((n + 1))
+    done
     m=$(date -r /var/lib/apt/lists +%s 2>/dev/null)
     echo "#lists ${n:-0} ${m:-0}"
     t 120 apt-get -s -o Debug::NoLocking=true dist-upgrade 2>&1 | grep -E '^(Inst |E: )' | head -n 10000
