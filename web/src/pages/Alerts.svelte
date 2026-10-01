@@ -22,6 +22,8 @@
 
   const tab = $derived(router.query.get('tab') ?? 'firing');
   const hostFilter = $derived(router.query.get('host') ?? '');
+  // Notifications link to /alerts?id=<id>.
+  const focusId = $derived(Number(router.query.get('id')) || null);
   let alerts = $state<Alert[] | null>(null);
   let silences = $state<Silence[] | null>(null);
   let rules = $state<RulesView | null>(null);
@@ -115,6 +117,14 @@
     }
   }
 
+  $effect(() => {
+    const id = focusId;
+    if (!id || !alerts) return;
+    const a = alerts.find((x) => x.id === id);
+    if (a && a.state === 'resolved' && tab !== 'recent') router.setQuery({ tab: 'recent', id: String(id) });
+    queueMicrotask(() => document.getElementById(`alert-${id}`)?.scrollIntoView({ block: 'center' }));
+  });
+
   const ruleIds = $derived([...new Set((alerts ?? []).map((a) => a.rule_id))].sort());
   const hostNames = $derived(Object.keys(fleet.hosts).sort());
 </script>
@@ -191,7 +201,7 @@
             <thead><tr><th>Severity</th><th>Host</th><th>Alert</th><th>Since</th><th>State</th>{#if can('operator')}<th class="num">Actions</th>{/if}</tr></thead>
             <tbody>
               {#each firing as a (a.id)}
-                <tr>
+                <tr id={`alert-${a.id}`} class:selected={a.id === focusId}>
                   <td><SeverityBadge severity={a.severity} /></td>
                   <td>{#if a.host}<a class="mono" href={`/hosts/${encodeURIComponent(a.host)}`}>{a.host}</a>{:else}<span class="muted">–</span>{/if}</td>
                   <td class="summary">
@@ -227,7 +237,7 @@
             <thead><tr><th>Severity</th><th>Host</th><th>Alert</th><th>Started</th><th>Resolved</th><th class="num">Duration</th></tr></thead>
             <tbody>
               {#each recent as a (a.id)}
-                <tr>
+                <tr id={`alert-${a.id}`} class:selected={a.id === focusId}>
                   <td><SeverityBadge severity={a.severity} /></td>
                   <td>{#if a.host}<a class="mono" href={`/hosts/${encodeURIComponent(a.host)}`}>{a.host}</a>{:else}–{/if}</td>
                   <td class="summary"><span>{a.summary}</span><span class="muted mono small">{a.rule_id}{a.instance ? ` · ${a.instance}` : ''}</span></td>
