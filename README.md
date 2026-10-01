@@ -1,5 +1,7 @@
 # helmsight
 
+**English** · [Türkçe](README.tr.md)
+
 **Watch every server from one screen. Install nothing on them.**
 
 helmsight is an agentless, self-hosted web dashboard for a fleet of Linux

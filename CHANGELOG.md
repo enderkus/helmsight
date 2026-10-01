@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Turkish documentation: `README.tr.md`, `docs/tr/` and a Turkish website
+  and documentation under `/tr/`, with language links between them.
+- A troubleshooting page in the documentation.
+
 ### Fixed
 
 - The README quick start now changes into the directory unpacked from the

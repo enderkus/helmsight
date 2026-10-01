@@ -24,6 +24,17 @@ chmod 600 ~monitor/.ssh/authorized_keys
 Replace `10.0.0.5` with the address of the helmsight server. `restrict`
 disables forwarding and terminal allocation, which helmsight does not need.
 
+On Alpine, create the account with `adduser -D -s /bin/sh monitor`. Alpine
+creates accounts locked (`!`), and OpenSSH refuses key logins to locked
+accounts. Mark the password as unusable without locking the account:
+
+```sh
+sed -i 's/^monitor:!/monitor:*/' /etc/shadow
+```
+
+Do not use `passwd -u`: on BusyBox it can leave the account with an empty
+password.
+
 Optional groups give helmsight more visibility:
 
 | Group | Enables |

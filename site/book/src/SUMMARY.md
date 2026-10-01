@@ -25,5 +25,6 @@
 # Project
 
 - [FAQ](faq.md)
+- [Troubleshooting](troubleshooting.md)
 - [Contributing](contributing.md)
 - [Changelog](changelog.md)

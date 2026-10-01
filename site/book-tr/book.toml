@@ -1,17 +1,17 @@
 [book]
-title = "helmsight documentation"
-language = "en"
+title = "helmsight belgeleri"
+language = "tr"
 src = "src"
 
 [build]
-build-dir = "../_site/docs"
+build-dir = "../_site/tr/docs"
 
 [output.html]
 default-theme = "light"
 preferred-dark-theme = "coal"
 git-repository-url = "https://github.com/enderkus/helmsight"
-edit-url-template = "https://github.com/enderkus/helmsight/edit/main/site/book/{path}"
-site-url = "/helmsight/docs/"
+edit-url-template = "https://github.com/enderkus/helmsight/edit/main/site/book-tr/{path}"
+site-url = "/helmsight/tr/docs/"
 additional-css = ["theme/custom.css"]
 additional-js = ["theme/lang.js"]
 

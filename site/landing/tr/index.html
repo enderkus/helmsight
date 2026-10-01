@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'" />
+    <meta name="description" content="helmsight, Linux sunucularını SSH üzerinden izleyen ajansız ve kendi altyapınızda çalışan bir panel. Tek dosya; sunuculara hiçbir şey kurulmaz." />
+    <title>helmsight — ajansız Linux sunucu izleme</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../site.css" />
+    <link rel="alternate" hreflang="en" href="https://enderkus.github.io/helmsight/" />
+    <link rel="alternate" hreflang="tr" href="https://enderkus.github.io/helmsight/tr/" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap bar">
+        <a class="brand" href="./"><span class="logo" aria-hidden="true"></span>helmsight</a>
+        <nav aria-label="Site">
+          <a href="docs/">Belgeler</a>
+          <a href="docs/security.html">Güvenlik</a>
+          <a href="https://github.com/enderkus/helmsight">GitHub</a>
+          <a href="../" lang="en" hreflang="en">English</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero wrap">
+        <p class="eyebrow">Açık kaynak · MIT · Linux</p>
+        <h1>Tüm sunucularınızı tek ekrandan izleyin.<br />Sunuculara hiçbir şey kurmayın.</h1>
+        <p class="lead">
+          helmsight, Linux sunucu filonuzu sıradan SSH ile izleyen tek bir program. Metrikleri ve envanteri
+          yalnızca okuma yapan komutlarla toplar, geçmişi kendi veritabanında saklar ve hızlı, sade bir web
+          paneli sunar. Ajan yok, servis yok, sunucularınıza yazılan dosya yok.
+        </p>
+        <p class="status">
+          <strong>Erken geliştirme aşaması (0.x).</strong> Altı Linux dağıtımında test ediliyor; ancak
+          üretimde henüz az kullanıldı ve bağımsız bir güvenlik denetiminden geçmedi. Yapılandırma ve veri
+          biçimleri değişebilir. Önce kritik olmayan sunucularda deneyin. <a href="docs/introduction.html">Proje durumu</a>
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="docs/quick-start.html">Hemen başlayın</a>
+          <a class="btn" href="https://github.com/enderkus/helmsight">GitHub'da inceleyin</a>
+        </div>
+        <pre class="cmd"><code><span class="prompt">$</span> helmsight init
+<span class="prompt">$</span> helmsight hosts test --trust
+<span class="prompt">$</span> helmsight serve</code></pre>
+      </section>
+
+      <section class="shot wrap">
+        <img src="../screenshots/fleet.png" width="1440" height="900" alt="Sunucuları durum, CPU ve bellek eğilimleri, yük, disk, ağ, çalışma süresi ve alarmlarla listeleyen filo görünümü" />
+      </section>
+
+      <section class="wrap">
+        <h2>Bir operatörün baktığı her şey; kurması gereken hiçbir şey</h2>
+        <div class="grid">
+          <article>
+            <h3>Filo görünümü</h3>
+            <p>Her sunucu için durum, CPU, bellek, yük, en dolu disk, ağ ve alarmlar. Gruplar, etiketler, arama ve eğilim grafikleri. "Erişilemiyor", "kimlik doğrulama başarısız", "anahtar değişti" ve "kısmi" ayrı durumlardır.</p>
+          </article>
+          <article>
+            <h3>Sunucu ayrıntısı</h3>
+            <p>Eş zamanlı imleçli canlı ve geçmiş grafikler, çekirdek başına CPU ısı haritası, süreçler, dinlenen portlar, servisler, konteynerler ve sistem bilgileri.</p>
+          </article>
+          <article>
+            <h3>Geçmiş</h3>
+            <p>24 saat boyunca her örnek, 7 gün dakikalık, 90 gün beş dakikalık özetler; gömülü bir SQLite veritabanında.</p>
+          </article>
+          <article>
+            <h3>Sapma ve değişiklikler</h3>
+            <p>Paketler, çekirdek, portlar, etkin servisler ve işletim sistemi kaydedilir. Dünden beri neyin değiştiğini görün, bir sunucuyu diğeriyle veya referansıyla karşılaştırın.</p>
+          </article>
+          <article>
+            <h3>Güvenlik görünümü</h3>
+            <p>Başarısız SSH girişleri, bekleyen güvenlik güncellemeleri, referansta olmayan portlar, yeniden başlatma gerektiren sunucular ve TLS sertifika süreleri; filonun tamamında.</p>
+          </article>
+          <article>
+            <h3>Alarmlar</h3>
+            <p><code>disk_used_pct &gt; 90 for 10m</code> gibi, gruplara veya etiketlere göre kapsamlanan kurallar. Onaylama, susturma ve webhook, Slack veya e-posta bildirimleri.</p>
+          </article>
+          <article>
+            <h3>Eylemler, isteğe bağlı</h3>
+            <p>Operatörler kabuk erişimi olmadan bir servisi yeniden başlatabilir: sabit komutlar, onay penceresi ve özet zincirli, yalnızca eklenebilen bir denetim kaydı.</p>
+          </article>
+          <article>
+            <h3>Ekipler ve ekranlar</h3>
+            <p>İzleyici, operatör ve yönetici rolleri, TOTP, OpenID Connect ile tek oturum açma ve iptal edilebilir belirteçli NOC duvar ekranı.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="split wrap">
+        <div>
+          <h2>Nasıl çalışır</h2>
+          <ol class="steps">
+            <li><strong>Sunucu başına tek kalıcı SSH oturumu.</strong> helmsight birkaç saniyede bir bu oturumda, standart girdiden gönderilen tek bir POSIX kabuk betiği çalıştırır.</li>
+            <li><strong>Yalnızca okuma yapan komutlar.</strong> <code>/proc</code>, <code>df</code>, <code>ps</code>, <code>ss</code>, <code>systemctl</code>, paket veritabanı. Eksik araçlar gerekçesiyle "n/a" olarak görünür.</li>
+            <li><strong>Merkezde ayrıştırılır ve saklanır.</strong> Çıktının boyutu sınırlanır, Rust ile ayrıştırılır ve otomatik özetlemeyle SQLite'ta tutulur.</li>
+            <li><strong>Tek dosyadan sunulur.</strong> Web arayüzü programa gömülüdür. Kurulum tek bir dosyayı kopyalamaktır.</li>
+          </ol>
+          <p class="note">Debian, Ubuntu, RHEL, Rocky, Alma, Fedora, openSUSE ve Alpine (BusyBox) üzerinde çalışır.</p>
+        </div>
+        <figure class="diagram" aria-label="Mimari">
+          <div class="node browser">Tarayıcı<span>yalnızca helmsight'ın sunduğu kodu çalıştırır</span></div>
+          <div class="link">HTTPS</div>
+          <div class="node core">helmsight<span>tek dosya · SQLite · web arayüzü</span></div>
+          <div class="link">SSH, salt okunur</div>
+          <div class="hosts">
+            <div class="node host">web-1</div>
+            <div class="node host">db-1</div>
+            <div class="node host">edge-1</div>
+          </div>
+          <figcaption>Sunuculara hiçbir şey kurulmaz.</figcaption>
+        </figure>
+      </section>
+
+      <section class="wrap">
+        <h2>Varsayılan olarak güvenli</h2>
+        <div class="grid two">
+          <article>
+            <h3>Rastgele komut yok</h3>
+            <p>Terminal, dosya yöneticisi veya komut kutusu yok. Uzak çıktı asla HTML olarak gösterilmez; sıkı bir İçerik Güvenliği Politikası satır içi kodu yasaklar.</p>
+          </article>
+          <article>
+            <h3>Doğrulanan sunucu anahtarları</h3>
+            <p>OpenSSH <code>known_hosts</code> kuralları: bilinmeyen anahtarlar için yönetici onayı gerekir, değişen anahtarlar veri toplamayı durdurur ve alarm üretir.</p>
+          </article>
+          <article>
+            <h3>En az yetki</h3>
+            <p>Kısıtlı bir anahtarla yetkisiz bir hesap yeterlidir. Entegrasyon testleri izlenen sunuculara hiçbir şey yazılmadığını doğrular.</p>
+          </article>
+          <article>
+            <h3>Sıkılaştırılmış web uygulaması</h3>
+            <p>Varsayılan olarak yalnızca yerel adres, diğer adreslerde otomatik TLS, Argon2id, TOTP, SSO, CSRF koruması, hız sınırlama ve XChaCha20-Poly1305 ile şifrelenen gizli değerler.</p>
+          </article>
+        </div>
+        <p><a href="docs/security.html">Güvenlik modelini okuyun →</a></p>
+      </section>
+
+      <section class="gallery wrap">
+        <figure>
+          <img src="../screenshots/host.png" width="1440" height="900" alt="CPU, bellek, yük ve disk grafikleriyle sunucu ayrıntısı" loading="lazy" />
+          <figcaption>Eş zamanlı geçmiş grafikleriyle sunucu ayrıntısı</figcaption>
+        </figure>
+        <figure>
+          <img src="../screenshots/security.png" width="1440" height="900" alt="Filo genelinde güvenlik görünümü" loading="lazy" />
+          <figcaption>Filo genelinde güvenlik görünümü</figcaption>
+        </figure>
+        <figure>
+          <img src="../screenshots/compare.png" width="1440" height="900" alt="İki sunucu arasındaki paket farklarının karşılaştırması" loading="lazy" />
+          <figcaption>İki sunucuyu karşılaştırın, yalnızca farklar</figcaption>
+        </figure>
+        <figure>
+          <img src="../screenshots/display.png" width="1440" height="900" alt="Sunucu kutucukları ve etkin alarmlarla duvar ekranı" loading="lazy" />
+          <figcaption>NOC ekranları için duvar ekranı</figcaption>
+        </figure>
+      </section>
+
+      <section class="start wrap">
+        <h2>Tek komutla deneyin</h2>
+        <p>Herhangi bir Linux makinede yerel kip, SSH ve yapılandırma olmadan makinenin kendisini izler:</p>
+        <pre class="cmd"><code><span class="prompt">$</span> ./helmsight serve --local</code></pre>
+        <p>Ardından sunucularınızı eklemek için <a href="docs/quick-start.html">hızlı başlangıç</a> rehberini izleyin.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap bar">
+        <span>helmsight, MIT lisansıyla açık kaynaklıdır.</span>
+        <nav aria-label="Alt bilgi">
+          <a href="docs/">Belgeler</a>
+          <a href="docs/changelog.html">Değişiklik günlüğü</a>
+          <a href="https://github.com/enderkus/helmsight">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

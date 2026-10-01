@@ -4,6 +4,8 @@ This document describes what helmsight does on monitored hosts, what it
 cannot do, how to run it with least privilege, and how to report a
 vulnerability.
 
+*[Türkçe sürüm](https://enderkus.github.io/helmsight/tr/docs/security.html)*
+
 ## Threat model
 
 helmsight has three parties:

@@ -3,6 +3,8 @@
 Thank you for helping. This document covers the development setup, the
 checks every change must pass and the rules that keep helmsight safe.
 
+*[Türkçe sürüm](https://enderkus.github.io/helmsight/tr/docs/contributing.html)*
+
 ## Development setup
 
 Requirements: Rust stable (see `rust-toolchain.toml`), Node.js 22, npm and,
@@ -40,6 +42,7 @@ warning, so Rust-only work does not need Node.js.
 | `web` | Svelte and TypeScript UI |
 | `tests/docker` | Container images used for fixtures and integration tests |
 | `scripts` | Maintenance scripts |
+| `site` | Website and documentation (mdBook; `site/book` in English, `site/book-tr` in Turkish) |
 
 ## Checks
 
@@ -100,7 +103,10 @@ Review the diff of the fixtures; they are part of the test suite.
   `feat(collect): parse /proc/pressure`, `fix(ui): keep table header sticky`.
 - Keep commits small and buildable; every commit passes the checks above.
 - Update `CHANGELOG.md` under "Unreleased" for user-visible changes, and
-  the documentation when behaviour or configuration changes.
+  the documentation when behaviour or configuration changes. The
+  documentation exists in English and Turkish (`README.tr.md`, `docs/tr/`,
+  `site/book-tr`); update both if you can, or mention in the pull request
+  that the Turkish text needs updating.
 
 ## Renaming the project
 
