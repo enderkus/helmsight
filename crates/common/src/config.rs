@@ -1465,6 +1465,15 @@ token = "secret:prometheus"
     }
 
     #[test]
+    fn shipped_example_is_valid() {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../examples/helmsight.toml");
+        let l = Config::load(&path).unwrap_or_else(|e| panic!("{e}"));
+        assert!(l.warnings.is_empty(), "{:?}", l.warnings);
+        assert_eq!(l.config.hosts.len(), 3);
+        assert!(!l.config.alerts.rules.is_empty());
+    }
+
+    #[test]
     fn plaintext_secrets_warn() {
         let l = load("[prometheus]\nenabled = true\ntoken = \"abc\"\n").unwrap();
         assert_eq!(l.warnings.len(), 1);

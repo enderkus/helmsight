@@ -1,0 +1,217 @@
+# helmsight configuration
+#
+# Every key is optional unless marked "required". Values shown are the
+# defaults. Durations are written like "5s", "10m", "1h30m", "7d".
+#
+# Secrets (webhook URLs, SMTP passwords, tokens) can be given as:
+#   "secret:<name>"  stored encrypted in the database: `helmsight secret set <name>`
+#   "env:<VAR>"      read from an environment variable
+#   "file:<path>"    read from a file
+# Plain values work too, but `helmsight config check` warns about them.
+#
+# Validate with: helmsight config check --config /etc/helmsight/helmsight.toml
+
+[server]
+# Address to listen on. Loopback by default; use a reverse proxy or TLS
+# before exposing it.
+listen = "127.0.0.1:8080"
+# Database, key file, known_hosts and TLS files. Relative paths are
+# resolved against the directory of this file.
+data_dir = "/var/lib/helmsight"
+# External address. Required for single sign-on; used in notification links.
+# public_url = "https://monitor.example.com"
+# Reverse proxies whose X-Forwarded-For header is trusted.
+# trusted_proxies = ["127.0.0.1"]
+
+[server.tls]
+# auto:        plain HTTP on loopback addresses, self-signed TLS otherwise
+# self-signed: generate a certificate in <data_dir>/tls on first run
+# files:       use `cert` and `key` below
+# off:         plain HTTP (refused on non-loopback addresses unless
+#              allow_insecure_http = true, for use behind a TLS proxy)
+mode = "auto"
+# cert = "/etc/helmsight/tls/cert.pem"
+# key = "/etc/helmsight/tls/key.pem"
+# allow_insecure_http = false
+
+[auth]
+session_ttl = "12h"
+idle_timeout = "2h"
+# Administrators must enable TOTP before they can use the UI.
+require_totp_for_admins = false
+# Allow only single sign-on (requires [auth.oidc]).
+disable_local_login = false
+
+# [auth.oidc]
+# issuer = "https://id.example.com/realms/ops"
+# client_id = "helmsight"
+# client_secret = "secret:oidc"
+# scopes = ["openid", "profile", "email"]
+# # Claim with group or role names; dotted paths such as
+# # "realm_access.roles" are supported.
+# role_claim = "groups"
+# # Claim value -> role (viewer, operator, admin). The highest match wins.
+# role_map = { "ops-admins" = "admin", "ops" = "operator", "staff" = "viewer" }
+# # Role for users without a matching claim. Unset denies access.
+# # default_role = "viewer"
+# label = "Single sign-on"
+
+[ssh]
+# Unprivileged account on the monitored hosts (see docs/security.md).
+user = "monitor"
+# Private keys, tried in order. Passphrase-protected keys must be loaded
+# into ssh-agent instead.
+identity_files = ["/etc/helmsight/id_ed25519"]
+# Also use keys from ssh-agent (SSH_AUTH_SOCK).
+use_agent = true
+# Extra known_hosts files consulted read-only, in addition to
+# <data_dir>/known_hosts where approved keys are stored.
+# known_hosts_files = ["~/.ssh/known_hosts"]
+# Trust keys of hosts seen for the first time (like OpenSSH
+# StrictHostKeyChecking=accept-new). Changed keys are always refused.
+accept_new_host_keys = false
+connect_timeout = "10s"
+command_timeout = "30s"
+keepalive = "30s"
+
+[collect]
+interval = "5s"               # CPU, memory, disks, network, processes
+medium_interval = "60s"       # listening ports, services, containers, sessions
+inventory_interval = "15m"    # packages, enabled units, OS, kernel
+auth_interval = "5m"          # failed SSH logins
+updates_interval = "6h"       # pending updates (expensive)
+max_parallel = 64
+# dnf and yum always write their own log files (and, for unprivileged
+# users, a cache under /var/tmp). Enable to list pending updates on
+# RHEL, Rocky, Alma and Fedora anyway.
+dnf_updates = false
+
+[retention]
+raw = "24h"           # every sample
+minute = "7d"         # 1-minute averages, minimum and maximum
+five_minute = "90d"   # 5-minute averages, minimum and maximum
+events = "90d"        # changes, resolved alerts, failed logins
+
+# Hosts can also live in a separate file with [[hosts]] entries.
+# hosts_file = "hosts.toml"
+
+# Import hosts from an OpenSSH client config. Explicit [[hosts]] entries
+# with the same name take precedence. ProxyJump hosts are skipped.
+# [ssh_config_import]
+# path = "~/.ssh/config"
+# hosts = ["web-*", "db-*"]
+# groups = ["imported"]
+# tags = ["source:ssh-config"]
+
+[[hosts]]
+name = "web-1"              # required, unique
+address = "10.0.0.11"       # defaults to the name
+# port = 22
+# user = "monitor"          # overrides ssh.user
+# identity_file = "/etc/helmsight/web-1_ed25519"
+groups = ["web"]
+tags = ["env:prod", "role:web"]
+
+[[hosts]]
+name = "web-2"
+address = "10.0.0.12"
+groups = ["web"]
+tags = ["env:prod", "role:web"]
+# Drift and "ports not on baseline" are compared against this host.
+baseline = "web-1"
+
+[[hosts]]
+name = "db-1"
+address = "db-1.internal"
+groups = ["db"]
+tags = ["env:prod", "role:db"]
+
+[alerts]
+# Built-in rules: host unreachable (after this delay), host key changed or
+# not trusted, failed units, certificate expiry.
+unreachable_after = "2m"
+failed_units = true
+cert_warning_days = 21
+cert_critical_days = 7
+# Re-notify for firing, unacknowledged alerts. "0s" disables reminders.
+repeat_interval = "4h"
+
+# Rules: `<metric> <op> <threshold> [for <duration>]`. Metrics are listed
+# in the UI under Alerts > Rules and in docs/configuration.md. An empty
+# scope applies the rule to every host.
+[[alerts.rules]]
+id = "disk-full"
+expr = "disk_used_pct > 90 for 10m"
+severity = "critical"
+summary = "Filesystem almost full"
+
+[[alerts.rules]]
+id = "memory-pressure"
+expr = "mem_used_pct > 92 for 15m"
+severity = "warning"
+
+[[alerts.rules]]
+id = "load-high"
+expr = "load1_per_core > 2 for 15m"
+severity = "warning"
+groups = ["web"]
+
+[[alerts.rules]]
+id = "security-updates"
+expr = "pending_security_updates > 0 for 3d"
+severity = "warning"
+tags = ["env:prod"]
+
+[[alerts.rules]]
+id = "ssh-bruteforce"
+expr = "ssh_failed_logins_1h > 100"
+severity = "warning"
+
+# Notification channels. `min_severity` defaults to "warning"; hosts,
+# groups and tags restrict a channel to some hosts.
+# [[notify]]
+# id = "ops-webhook"
+# type = "webhook"
+# url = "secret:ops-webhook"
+# headers = { Authorization = "secret:ops-webhook-auth" }
+
+# [[notify]]
+# id = "ops-slack"
+# type = "slack"
+# url = "secret:slack-webhook"
+# min_severity = "critical"
+
+# [[notify]]
+# id = "ops-mail"
+# type = "email"
+# smtp_host = "smtp.example.com"
+# smtp_port = 587
+# smtp_security = "starttls"   # starttls, tls, or none (localhost relays only)
+# smtp_username = "helmsight"
+# smtp_password = "secret:smtp"
+# from = "helmsight@example.com"
+# to = ["ops@example.com"]
+
+# TLS certificates checked from this server.
+# [[certs]]
+# endpoint = "www.example.com:443"
+# server_name = "www.example.com"   # defaults to the endpoint host
+# interval = "6h"
+
+# Actions: pre-approved commands operators may run from the UI. The UI
+# cannot pass arguments. Privileged commands must use `sudo -n` with a
+# sudoers rule for exactly that command (see examples/sudoers).
+# When no actions are configured, the actions UI is hidden.
+# [[actions]]
+# id = "restart-nginx"
+# label = "Restart nginx"
+# description = "Restarts the web server. Takes about two seconds."
+# command = "sudo -n /usr/bin/systemctl restart nginx.service"
+# groups = ["web"]          # required: hosts, groups and/or tags
+# role = "operator"         # operator or admin
+# timeout = "60s"
+
+# Prometheus exposition at /metrics, protected by a bearer token.
+[prometheus]
+enabled = false
+# token = "secret:prometheus"

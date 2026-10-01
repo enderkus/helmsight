@@ -1,0 +1,19 @@
+# /etc/sudoers.d/helmsight-actions on a monitored host.
+#
+# Collection never needs sudo. This file is only for the opt-in Actions
+# feature: it lets the monitoring account run exactly the commands listed
+# in the [[actions]] section of helmsight.toml, without a password, and
+# nothing else.
+#
+# Install with `visudo -f /etc/sudoers.d/helmsight-actions` and keep the
+# commands byte-for-byte identical to the `command` values after `sudo -n`.
+# Use absolute paths and fixed arguments; never allow wildcards, shells,
+# editors or anything that can spawn a shell.
+
+Cmnd_Alias HELMSIGHT_ACTIONS = \
+    /usr/bin/systemctl restart nginx.service, \
+    /usr/bin/systemctl reload nginx.service, \
+    /usr/bin/systemctl restart php8.2-fpm.service
+
+Defaults:monitor !requiretty
+monitor ALL=(root) NOPASSWD: HELMSIGHT_ACTIONS
