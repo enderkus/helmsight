@@ -64,7 +64,9 @@ yes=0
 dry_run=0
 uninstall=0
 
-need_arg() { [ $# -ge 2 ] && [ -n "$2" ] || die "$1 needs a value"; }
+need_arg() {
+  if [ $# -lt 2 ] || [ -z "$2" ]; then die "$1 needs a value"; fi
+}
 while [ $# -gt 0 ]; do
   case "$1" in
     --version) need_arg "$@"; version=$2; shift 2 ;;
@@ -96,7 +98,9 @@ case "$version" in
 esac
 case "$version" in *[!A-Za-z0-9.-]*) die "--version must look like v0.2.0" ;; esac
 if [ -n "$archive" ] || [ -n "$sums" ]; then
-  [ -n "$archive" ] && [ -n "$sums" ] || die "--archive and --sums must be used together"
+  if [ -z "$archive" ] || [ -z "$sums" ]; then
+    die "--archive and --sums must be used together"
+  fi
   [ -f "$archive" ] || die "$archive not found"
   [ -f "$sums" ] || die "$sums not found"
 fi
@@ -144,7 +148,9 @@ confirm() { # question -> 0 for yes
   case "$a" in y | Y | yes | YES) return 0 ;; *) return 1 ;; esac
 }
 
-restore_tty() { [ "$tty" = 1 ] && stty echo </dev/tty 2>/dev/null || true; }
+restore_tty() {
+  if [ "$tty" = 1 ]; then stty echo </dev/tty 2>/dev/null || true; fi
+}
 
 read_secret() { # prompt -> REPLY
   printf '%s' "$1" >/dev/tty
