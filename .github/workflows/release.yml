@@ -73,7 +73,7 @@ jobs:
           bin=target/${{ matrix.target }}/release/helmsight
           "$bin" --version
           "$bin" serve --local --data-dir "$RUNNER_TEMP/hs" --listen 127.0.0.1:18080 > "$RUNNER_TEMP/serve.log" 2>&1 &
-          for i in $(seq 1 30); do curl -sf http://127.0.0.1:18080/healthz && break; sleep 1; done
+          for _ in $(seq 1 30); do curl -sf http://127.0.0.1:18080/healthz && break; sleep 1; done
           curl -sf http://127.0.0.1:18080/api/v1/meta | tee /dev/stderr | grep -q '"local_mode":true'
           curl -sf http://127.0.0.1:18080/ | grep -q '/assets/index-'
           grep -q "setup#token=" "$RUNNER_TEMP/serve.log"
