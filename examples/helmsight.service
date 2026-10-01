@@ -9,7 +9,7 @@
 
 [Unit]
 Description=helmsight agentless server monitoring
-Documentation=https://github.com/helmsight/helmsight
+Documentation=https://enderkus.github.io/helmsight/docs/
 After=network-online.target
 Wants=network-online.target
 

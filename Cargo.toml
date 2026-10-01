@@ -8,7 +8,7 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
-repository = "https://github.com/helmsight/helmsight"
+repository = "https://github.com/enderkus/helmsight"
 publish = false
 
 [workspace.lints.rust]

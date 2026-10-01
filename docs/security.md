@@ -49,7 +49,7 @@ keys and the database. Protect that machine accordingly.
 Every tick, helmsight opens a channel on the host's persistent SSH session
 and runs `sh -s`, sending the collection script on standard input. The
 script is in
-[`crates/collect/src/remote.sh`](../crates/collect/src/remote.sh); review it
+[`crates/collect/src/remote.sh`](https://github.com/enderkus/helmsight/blob/main/crates/collect/src/remote.sh); review it
 before deploying. It contains only reads:
 
 | Group | Interval | Reads |
@@ -153,7 +153,7 @@ unless configured.
 - Every action must list its target hosts, groups or tags explicitly.
 - The UI shows the exact command and host in a confirmation dialog.
 - Privileged commands must use `sudo -n`. Grant exactly those commands in
-  sudoers ([examples/sudoers](../examples/sudoers)); never grant shells,
+  sudoers ([examples/sudoers](https://github.com/enderkus/helmsight/blob/main/examples/sudoers)); never grant shells,
   editors, wildcards or `ALL`.
 - Every run is written to the audit log twice: before it starts and with its
   exit status and truncated output.
@@ -165,7 +165,7 @@ unless configured.
 ## The central server
 
 - Run helmsight as a dedicated system user with the hardened systemd unit in
-  [examples/helmsight.service](../examples/helmsight.service).
+  [examples/helmsight.service](https://github.com/enderkus/helmsight/blob/main/examples/helmsight.service).
 - The data directory is created with mode 0700; the database, key file and
   self-signed TLS key with mode 0600. helmsight refuses to use a key file
   readable by other users.

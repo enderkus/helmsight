@@ -7,7 +7,7 @@ helmsight reads one TOML file. The first of these is used:
 3. `/etc/helmsight/helmsight.toml`
 4. `./helmsight.toml`
 
-[`examples/helmsight.toml`](../examples/helmsight.toml) is a commented
+[`examples/helmsight.toml`](https://github.com/enderkus/helmsight/blob/main/examples/helmsight.toml) is a commented
 example of every option. Validate a file with `helmsight config check`;
 errors show the file, line, column and key:
 

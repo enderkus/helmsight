@@ -112,4 +112,4 @@ Prometheus metrics) and `PRODUCT_NAME` in `web/src/lib/brand.ts`.
 ## Reporting security issues
 
 Please do not open public issues for vulnerabilities; see
-[docs/security.md](docs/security.md#reporting-a-vulnerability).
+[docs/security.md](https://enderkus.github.io/helmsight/docs/security.html#reporting-a-vulnerability).

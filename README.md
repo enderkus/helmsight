@@ -8,6 +8,8 @@ plain SSH, collects metrics and inventory with read-only commands, keeps
 history in an embedded database and serves a fast web UI. Nothing is
 installed, copied or written on the monitored servers.
 
+**Website and documentation: https://enderkus.github.io/helmsight/**
+
 ![Fleet overview](docs/screenshots/fleet.png)
 
 | | |
@@ -80,7 +82,7 @@ commands run on hosts and how to create a restricted monitoring account.
 Try it on one Linux machine, without SSH:
 
 ```sh
-curl -LO https://github.com/helmsight/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
+curl -LO https://github.com/enderkus/helmsight/releases/latest/download/helmsight-x86_64-unknown-linux-musl.tar.gz
 tar xzf helmsight-x86_64-unknown-linux-musl.tar.gz
 ./helmsight serve --local
 ```
@@ -105,7 +107,7 @@ image:
 
 ```sh
 docker run -d -p 8443:8080 -v helmsight:/var/lib/helmsight \
-  -v /etc/helmsight:/etc/helmsight:ro ghcr.io/helmsight/helmsight
+  -v /etc/helmsight:/etc/helmsight:ro ghcr.io/enderkus/helmsight
 ```
 
 In the container, set `listen = "0.0.0.0:8080"` and
