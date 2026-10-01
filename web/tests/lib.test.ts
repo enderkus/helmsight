@@ -118,3 +118,12 @@ describe('api client', () => {
     expect(qs({})).toBe('');
   });
 });
+
+describe('series gaps', () => {
+  it('inserts a break where samples are missing', () => {
+    const pts = (ts: number[]) => ts.map((t) => [t, 1, 1, 1] as [number, number, number, number]);
+    const a = align({ resolution: '1m', series: [{ key: 'load.1', points: pts([0, 60, 120, 180, 1800, 1860]) }] });
+    expect(a.xs).toEqual([0, 60, 120, 180, 240, 1800, 1860]);
+    expect(values(a, 'load.1')[4]).toBeNull();
+  });
+});

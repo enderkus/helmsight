@@ -179,7 +179,7 @@
     <div class="with-select">
       {#if disks.length > 1}
         <label class="picker"><span class="sr-only">Device</span>
-          <select class="select" bind:value={disk}>{#each disks as d (d)}<option value={d}>{d}</option>{/each}</select>
+          <select class="select" value={diskSel} onchange={(e) => (disk = (e.target as HTMLSelectElement).value)}>{#each disks as d (d)}<option value={d}>{d}</option>{/each}</select>
         </label>
       {/if}
       <TimeSeries
@@ -199,7 +199,7 @@
     <div class="with-select">
       {#if ifaces.length > 1}
         <label class="picker"><span class="sr-only">Interface</span>
-          <select class="select" bind:value={iface}>{#each ifaces as i (i)}<option value={i}>{i}</option>{/each}</select>
+          <select class="select" value={ifaceSel} onchange={(e) => (iface = (e.target as HTMLSelectElement).value)}>{#each ifaces as i (i)}<option value={i}>{i}</option>{/each}</select>
         </label>
       {/if}
       <TimeSeries
